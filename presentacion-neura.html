@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Competencia de monedas — Neura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@400..900&display=swap">
   <style>
     :root{
       --bg:#070a0f; --panel:#0e1624; --ink:#f3f0e8; --muted:#9aa6b2;
@@ -13,7 +16,7 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
-    body{background:radial-gradient(circle at 70% 30%,#14213b 0,#070a0f 42%,#020307 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;overflow:hidden}
+    body{background:radial-gradient(circle at 70% 30%,#14213b 0,#070a0f 42%,#020307 100%);color:var(--ink);font-family:'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
     .deck{width:100vw;height:100vh;position:relative}
     .slide{position:absolute;inset:0;padding:5vw 6vw;display:none;grid-template-columns:1.05fr .95fr;gap:4vw;align-items:center}
@@ -21,9 +24,9 @@
     @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
     .kicker{font:700 13px/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:18px;display:flex;align-items:center;gap:14px}
     .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 14px var(--orange)}
-    .headline{font-size:clamp(52px,7.4vw,128px);line-height:.86;letter-spacing:-.07em;margin:0;max-width:950px}
-    .metric{font-size:clamp(82px,13vw,220px);line-height:.78;letter-spacing:-.1em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
-    .sub{font:500 clamp(18px,2vw,34px)/1.22 ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:28px}
+    .headline{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-optical-sizing:auto;font-variation-settings:"opsz" 144,"SOFT" 100;font-weight:600;font-size:clamp(52px,7.4vw,128px);line-height:.88;letter-spacing:-.04em;margin:0;max-width:950px}
+    .metric{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;font-weight:900;font-size:clamp(82px,13vw,220px);line-height:.82;letter-spacing:-.06em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
+    .sub{font:500 clamp(18px,2vw,34px)/1.35 'Inter',ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:28px}
     .source{position:absolute;left:6vw;bottom:34px;font:600 12px/1.4 ui-monospace,monospace;color:#728092;letter-spacing:.04em;max-width:60vw}
 
     .visual{min-height:60vh;border:1px solid var(--line);border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015));position:relative;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,.45)}
@@ -122,8 +125,24 @@
     .vsgrid .row .l{color:#9aa6b2;font:600 clamp(10px,.95vw,12px)/1.3}
     .vsgrid .row .v{color:var(--ink);font:800 clamp(11px,1.05vw,14px)/1.3;text-align:right}
 
+    /* headlines collage: portadas/recortes de prensa */
+    .headlines{position:absolute;inset:5% 5% 13% 5%;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px}
+    .headlines .hl{position:relative;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.015));display:flex;flex-direction:column;justify-content:space-between;transform:rotate(var(--r,0deg));box-shadow:0 10px 24px rgba(0,0,0,.35);transition:transform .25s ease}
+    .headlines .hl:hover{transform:rotate(0deg) translateY(-2px);z-index:5}
+    .headlines .hl .src{font:800 9.5px ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#c2cad3;display:flex;align-items:center;gap:6px}
+    .headlines .hl .src:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+    .headlines .hl .h{font:600 clamp(11px,1.15vw,15.5px)/1.18 'Fraunces',Georgia,serif;color:var(--ink);margin:6px 0 0;font-variation-settings:"opsz" 24,"SOFT" 0}
+    .headlines .hl .d{font:700 9px ui-monospace,monospace;color:#728092;margin-top:6px;letter-spacing:.06em}
+    .headlines .hl.big{grid-column:span 2;grid-row:span 2}
+    .headlines .hl.wide{grid-column:span 2}
+    .headlines .hl.tall{grid-row:span 2}
+    .headlines .hl.p1{border-left:3px solid var(--p1)} .headlines .hl.p1 .src{color:#ff9c8a}
+    .headlines .hl.p2{border-left:3px solid var(--p2)} .headlines .hl.p2 .src{color:#7b9eff}
+    .headlines .hl.p3{border-left:3px solid var(--p3)} .headlines .hl.p3 .src{color:#f0d18a}
+    .headlines .hl.big .h{font-size:clamp(15px,1.9vw,28px);line-height:1.05;font-weight:700;font-variation-settings:"opsz" 90,"SOFT" 50}
+
     .title-slide{grid-template-columns:1fr}
-    .title-slide .headline{font-size:clamp(64px,9.2vw,150px)}
+    .title-slide .headline{font-size:clamp(64px,9.2vw,150px);font-variation-settings:"opsz" 144,"SOFT" 50;letter-spacing:-.05em}
     .title-slide .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:.72}
 
     /* Máscara de dólar: la palabra se rellena con un gradiente verde billete USD */
@@ -220,7 +239,61 @@
     <div class="source">Mayo 2026 · 20 slides</div>
   </section>
 
-  <!-- 2 · P1 — El dólar en 2000 (pico histórico) -->
+  <!-- 2 · P1 — Titulares de prensa: el dólar bajo presión -->
+  <section class="slide" data-p="1" data-title="Titulares · El dólar bajo presión">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 1 · Cómo entró en agenda</div>
+      <h2 class="headline">El dólar<br/>en los diarios</h2>
+      <p class="sub">De-dollarization dejó de ser tesis de minoría.<br/>Está en portadas, balances soberanos y debate académico.</p>
+    </div>
+    <div class="visual">
+      <div class="headlines">
+        <div class="hl big p1" style="--r:-1.2deg">
+          <div class="src">Financial Times</div>
+          <div class="h">Moody's strips US of last triple-A as deficit hits $1.8T</div>
+          <div class="d">Feb 2026</div>
+        </div>
+        <div class="hl p1" style="--r:1.4deg">
+          <div class="src">Bloomberg</div>
+          <div class="h">Treasury auction tail widens as foreign buyers fade</div>
+          <div class="d">Abr 2026</div>
+        </div>
+        <div class="hl p1" style="--r:-.6deg">
+          <div class="src">WSJ</div>
+          <div class="h">Interest costs surpass defense spending for first time</div>
+          <div class="d">Mar 2026</div>
+        </div>
+        <div class="hl p1" style="--r:.8deg">
+          <div class="src">The Economist</div>
+          <div class="h">The exorbitant burden</div>
+          <div class="d">Cover · Dic 2025</div>
+        </div>
+        <div class="hl wide p1" style="--r:-.4deg">
+          <div class="src">Reuters</div>
+          <div class="h">BRICS nations expand local-currency settlement framework</div>
+          <div class="d">Ene 2026</div>
+        </div>
+        <div class="hl p1" style="--r:1.6deg">
+          <div class="src">CNBC</div>
+          <div class="h">Fed cuts rates as labor data softens; dollar index near 5-year low</div>
+          <div class="d">May 2026</div>
+        </div>
+        <div class="hl p1" style="--r:-1deg">
+          <div class="src">Le Monde</div>
+          <div class="h">L'arme du dollar inquiète Pékin</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p1" style="--r:.3deg">
+          <div class="src">Nikkei Asia</div>
+          <div class="h">Yuan settlement of Saudi oil reaches new milestone</div>
+          <div class="d">2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Recortes representativos · 2024-2026 · agenda mediática global sobre el rol del USD · titulares ilustrativos</div>
+  </section>
+
+  <!-- 3 · P1 — El dólar en 2000 (pico histórico) -->
   <section class="slide" data-p="1" data-title="El dólar en 2000: pico histórico 71%">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 1 · Punto de partida</div>
@@ -766,7 +839,87 @@
     <div class="source">Reuters · The Economist · REPO Act 2024</div>
   </section>
 
-  <!-- 10 · P2 — El Yuan como moneda global -->
+  <!-- 11 · P1 — Weaponization del dólar (NUEVA) -->
+  <section class="slide" data-p="1" data-title="Weaponization del dólar">
+    <div>
+      <div class="kicker"><span class="dot"></span>Reserva = activo político</div>
+      <h2 class="headline">El dólar<br/>como arma</h2>
+      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.4">
+        De Rusia 2022 a <b style="color:#ff8c00">+12.000 entidades</b> en la lista OFAC.<br/>
+        El acceso al sistema en USD es un permiso que se puede revocar.<br/>
+        Cada congelamiento empuja al resto a buscar alternativas.
+      </p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>2012</b> · Irán fuera de SWIFT</span><span class="v">primera vez · sanciones nucleares</span></div>
+        <div class="row"><span><b>2014</b> · Rusia (Crimea)</span><span class="v">Visa · Mastercard cortados</span></div>
+        <div class="row"><span><b>2018</b> · Irán fuera de SWIFT (2da vez)</span><span class="v">Trump unilateral · JCPOA roto</span></div>
+        <div class="row"><span><b>2019</b> · Venezuela · CITGO</span><span class="v">activos PDVSA bloqueados en EE.UU.</span></div>
+        <div class="row"><span><b>2022</b> · Rusia post-Ucrania</span><span class="v">US$300B reservas · 7 bancos fuera SWIFT</span></div>
+        <div class="row"><span><b>2024</b> · REPO Act</span><span class="v">intereses de reservas rusas → Ucrania</span></div>
+        <div class="row"><span><b>2025</b> · OFAC SDN List</span><span class="v">cruza 12.000 entidades sancionadas</span></div>
+        <div class="row"><span><b>2026</b> · Sanciones secundarias a China</span><span class="v">export controls · empresas off-list</span></div>
+      </div>
+    </div>
+    <div class="source">OFAC SDN List · CSIS Russia Sanctions Tracker · Atlantic Council Sanctions Map · REPO Act (Public Law 118-50)</div>
+  </section>
+
+  <!-- 12 · P2 — Titulares de prensa: BRICS y el carril paralelo -->
+  <section class="slide" data-p="2" data-title="Titulares · BRICS y el carril paralelo">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · Lo que ya pasó</div>
+      <h2 class="headline">El carril<br/>paralelo, en prensa</h2>
+      <p class="sub">BRICS pasó de bloque retórico a institucionalidad funcional.<br/>CIPS, yuan settlement y NDB ya son noticia operativa, no proyección.</p>
+    </div>
+    <div class="visual">
+      <div class="headlines">
+        <div class="hl big p2" style="--r:1.2deg">
+          <div class="src">South China Morning Post</div>
+          <div class="h">CIPS surpasses ¥175T in annual yuan settlement volume</div>
+          <div class="d">2026</div>
+        </div>
+        <div class="hl p2" style="--r:-1.4deg">
+          <div class="src">Al Jazeera</div>
+          <div class="h">Saudi-China oil deals settled outside SWIFT</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p2" style="--r:.8deg">
+          <div class="src">Reuters</div>
+          <div class="h">Indonesia joins BRICS as 10th full member</div>
+          <div class="d">Ene 2025</div>
+        </div>
+        <div class="hl p2" style="--r:-.6deg">
+          <div class="src">Bloomberg</div>
+          <div class="h">Russia, China sign 30-year gas deal priced in yuan</div>
+          <div class="d">2026</div>
+        </div>
+        <div class="hl wide p2" style="--r:1deg">
+          <div class="src">Folha de São Paulo</div>
+          <div class="h">Cúpula do BRICS em Kazan amplia rede com 9 países parceiros</div>
+          <div class="d">Out 2024</div>
+        </div>
+        <div class="hl p2" style="--r:-1.1deg">
+          <div class="src">Tehran Times</div>
+          <div class="h">Iran-UAE trade via local currencies hits record</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p2" style="--r:.4deg">
+          <div class="src">The Hindu</div>
+          <div class="h">India explores rupee invoicing for Russian crude imports</div>
+          <div class="d">2024</div>
+        </div>
+        <div class="hl p2" style="--r:-.8deg">
+          <div class="src">PBOC</div>
+          <div class="h">CIPS adds 30 new participants in 2025; coverage 119 countries</div>
+          <div class="d">Sep 2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Recortes representativos · 2024-2026 · agenda mediática sobre BRICS, CIPS y yuan · titulares ilustrativos</div>
+  </section>
+
+  <!-- 13 · P2 — El Yuan como moneda global -->
   <section class="slide" data-p="2" data-title="El Yuan como moneda global">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
@@ -947,7 +1100,82 @@
     <div class="source">PBOC · CIPS Quarterly · SWIFT RMB Tracker · Shanghai INE</div>
   </section>
 
-  <!-- 13 · P3 — Oro: % de las reservas -->
+  <!-- 16 · P2 — BRICS+: países y capital previsto -->
+  <section class="slide" data-p="2" data-title="BRICS+: países y capital previsto">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · BRICS / China</div>
+      <h2 class="headline">BRICS+</h2>
+      <p class="sub">10 países plenos · <b style="color:#ff8c00">~28% PIB global nominal</b> · <b style="color:#ff8c00">~36% PIB PPP</b> (mayor que G7) · <b style="color:#ff8c00">~45% población mundial</b>.<br/>Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>2010 · Fundadores</b></span><span class="v">Brasil · Rusia · India · China · Sudáfrica</span></div>
+        <div class="row"><span><b>2024 · Expansión BRICS+</b></span><span class="v">Egipto · Etiopía · Irán · EAU</span></div>
+        <div class="row"><span><b>2025 · Indonesia</b></span><span class="v">4to país más poblado del mundo</span></div>
+        <div class="row"><span><b>Socios (partner countries)</b></span><span class="v">Bielorrusia · Bolivia · Cuba · Kazajistán · Tailandia · Malasia · Nigeria · Uganda · Uzbekistán</span></div>
+        <div class="row"><span><b>NDB · Banco de Desarrollo BRICS</b></span><span class="v">US$100B autorizados · US$50B suscritos</span></div>
+        <div class="row"><span><b>CRA · Reserva contingente</b></span><span class="v">US$100B (China $41B · BRI $18B c/u)</span></div>
+        <div class="row"><span><b>BRICS Pay / Bridge</b></span><span class="v">CBDC + monedas locales (pilotos)</span></div>
+      </div>
+    </div>
+    <div class="source">BRICS Summit Kazán 2024 · BRICS Summit Rio 2025 · NDB & CRA founding agreements 2014 · IMF / WB</div>
+  </section>
+
+  <!-- 17 · P3 — Titulares de prensa: Oro y Bitcoin -->
+  <section class="slide" data-p="3" data-title="Titulares · Oro y Bitcoin">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales en prensa</div>
+      <h2 class="headline">La categoría<br/>neutral, en prensa</h2>
+      <p class="sub">Bancos centrales acumulan oro. Estados anuncian reservas de Bitcoin.<br/>Wall Street compra vía ETF. La narrativa de hedge entra al mainstream.</p>
+    </div>
+    <div class="visual">
+      <div class="headlines">
+        <div class="hl big p3" style="--r:-1deg">
+          <div class="src">Wall Street Journal</div>
+          <div class="h">Central banks buy gold at fastest pace in 55 years</div>
+          <div class="d">2024</div>
+        </div>
+        <div class="hl p3" style="--r:1.5deg">
+          <div class="src">Bloomberg</div>
+          <div class="h">Bitcoin ETFs cross $50B AUM in record-breaking launch</div>
+          <div class="d">Ene 2024</div>
+        </div>
+        <div class="hl p3" style="--r:-.6deg">
+          <div class="src">Reuters</div>
+          <div class="h">Trump signs executive order establishing US Strategic Bitcoin Reserve</div>
+          <div class="d">Mar 2025</div>
+        </div>
+        <div class="hl p3" style="--r:1deg">
+          <div class="src">WGC Survey</div>
+          <div class="h">76% of central banks expect higher gold allocation in 5 years</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl wide p3" style="--r:-1.2deg">
+          <div class="src">Nikkei Asia</div>
+          <div class="h">Japan's Metaplanet adopts Bitcoin treasury strategy, follows Strategy playbook</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p3" style="--r:.8deg">
+          <div class="src">El Mundo · El Salvador</div>
+          <div class="h">Bukele anuncia tenencia soberana de 6.000+ BTC</div>
+          <div class="d">2024</div>
+        </div>
+        <div class="hl p3" style="--r:-.4deg">
+          <div class="src">Pakistan Today</div>
+          <div class="h">Pakistan unveils Strategic Bitcoin Reserve framework</div>
+          <div class="d">2026</div>
+        </div>
+        <div class="hl p3" style="--r:1.3deg">
+          <div class="src">Financial Times</div>
+          <div class="h">Gold overtakes Treasuries as #2 global reserve asset for first time in 30 years</div>
+          <div class="d">2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Recortes representativos · 2024-2026 · agenda mediática sobre oro y Bitcoin como reserva · titulares ilustrativos</div>
+  </section>
+
+  <!-- 18 · P3 — Oro: % de las reservas -->
   <section class="slide" data-p="3" data-title="Oro: % de las reservas globales">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
@@ -969,28 +1197,7 @@
     <div class="source">World Gold Council · Central Bank Gold Reserves Survey 2025 · 76% de bancos centrales esperan mayor share de oro en 5 años</div>
   </section>
 
-  <!-- 14 · P2 — BRICS+: países y capital previsto -->
-  <section class="slide" data-p="2" data-title="BRICS+: países y capital previsto">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 2 · BRICS / China</div>
-      <h2 class="headline">BRICS+</h2>
-      <p class="sub">10 países plenos · <b style="color:#ff8c00">~28% PIB global nominal</b> · <b style="color:#ff8c00">~36% PIB PPP</b> (mayor que G7) · <b style="color:#ff8c00">~45% población mundial</b>.<br/>Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.</p>
-    </div>
-    <div class="visual">
-      <div class="buyers">
-        <div class="row"><span><b>2010 · Fundadores</b></span><span class="v">Brasil · Rusia · India · China · Sudáfrica</span></div>
-        <div class="row"><span><b>2024 · Expansión BRICS+</b></span><span class="v">Egipto · Etiopía · Irán · EAU</span></div>
-        <div class="row"><span><b>2025 · Indonesia</b></span><span class="v">4to país más poblado del mundo</span></div>
-        <div class="row"><span><b>Socios (partner countries)</b></span><span class="v">Bielorrusia · Bolivia · Cuba · Kazajistán · Tailandia · Malasia · Nigeria · Uganda · Uzbekistán</span></div>
-        <div class="row"><span><b>NDB · Banco de Desarrollo BRICS</b></span><span class="v">US$100B autorizados · US$50B suscritos</span></div>
-        <div class="row"><span><b>CRA · Reserva contingente</b></span><span class="v">US$100B (China $41B · BRI $18B c/u)</span></div>
-        <div class="row"><span><b>BRICS Pay / Bridge</b></span><span class="v">CBDC + monedas locales (pilotos)</span></div>
-      </div>
-    </div>
-    <div class="source">BRICS Summit Kazán 2024 · BRICS Summit Rio 2025 · NDB & CRA founding agreements 2014 · IMF / WB</div>
-  </section>
-
-  <!-- 15 · P3 — Oro: bancos centrales -->
+  <!-- 19 · P3 — Oro: bancos centrales -->
   <section class="slide" data-p="3" data-title="Oro: bancos centrales compran">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
@@ -1077,26 +1284,68 @@
     <div class="source">SEC filings 10-K/8-K · bitcointreasuries.net · bitbo.io · CoinMarketCap Public Bitcoin Treasuries · datos verificados 12-may-2026</div>
   </section>
 
-  <!-- 13 · P3 — Estados + ETFs -->
-  <section class="slide" data-p="3" data-title="Estados y ETFs con Bitcoin">
+  <!-- 23 · P3 — ETF flows institucionales (NUEVA) -->
+  <section class="slide" data-p="3" data-title="ETF flows institucionales">
     <div>
-      <div class="kicker"><span class="dot"></span>Estados y Wall Street</div>
-      <h2 class="headline">Soberanos y ETFs</h2>
-      <p class="sub">Reserva estratégica EE.UU., decomisos en Bulgaria, China y UK, minería estatal Bhután. ETFs spot dominan custodia institucional.</p>
+      <div class="kicker"><span class="dot"></span>Wall Street custodia institucional</div>
+      <h2 class="headline">ETFs spot:<br/>1,1M BTC en 2 años</h2>
+      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.4">
+        11 ETFs spot aprobados ene-2024 · <b style="color:#ff8c00">~US$120B</b> AUM combinado.<br/>
+        <b style="color:#ff8c00">~1,1M BTC</b> bajo custodia institucional — <b style="color:#d7ad45">supera a Strategy</b> (~819K).<br/>
+        13F filings: Mubadala (UAE soberano), Wisconsin Investment Board, Harvard, JP Morgan, Goldman.
+      </p>
+    </div>
+    <div class="visual">
+      <div class="chart">
+        <div class="totalbar"><b>11 ETFs SPOT EE.UU. · ENE-2024 → MAY-2026</b><span>~$120B · ~1,1M BTC</span></div>
+
+        <div class="group asia">
+          <div class="head"><b><span class="dot"></span>BLACKROCK IBIT · LÍDER</b><span>~775K BTC · ~$50B</span></div>
+          <div class="bar"><span class="n">IBIT</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">$50B</span></div>
+        </div>
+
+        <div class="group america">
+          <div class="head"><b><span class="dot"></span>FIDELITY FBTC · #2</b><span>~471K BTC · ~$31B</span></div>
+          <div class="bar"><span class="n">FBTC</span><div class="barwrap"><div class="b" style="width:62%"></div></div><span class="v">$31B</span></div>
+        </div>
+
+        <div class="group europa">
+          <div class="head"><b><span class="dot"></span>GRAYSCALE GBTC + BTC mini</b><span>~218K BTC · ~$14B</span></div>
+          <div class="bar"><span class="n">GBTC</span><div class="barwrap"><div class="b" style="width:28%"></div></div><span class="v">$14B</span></div>
+        </div>
+
+        <div class="group resto">
+          <div class="head"><b><span class="dot"></span>OTROS 8 ETFs spot</b><span>~180K BTC · ~$25B</span></div>
+          <div class="bar"><span class="n">ARK 21Shares</span><div class="barwrap"><div class="b" style="width:13%"></div></div><span class="v">$6.5B</span></div>
+          <div class="bar"><span class="n">Bitwise BITB</span><div class="barwrap"><div class="b" style="width:12%"></div></div><span class="v">$6B</span></div>
+          <div class="bar"><span class="n">Invesco · WisdomTree · Franklin · VanEck · Hashdex · Valkyrie</span><div class="barwrap"><div class="b" style="width:25%"></div></div><span class="v">~$12.5B</span></div>
+          <div class="note">vs Strategy treasury corporativo ~819K BTC · ETFs en conjunto ya superaron al mayor holder corporativo del mundo</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Farside Investors ETF tracker · Bloomberg Bitcoin ETF dashboard · SEC 13F filings Q1 2026 · cifras aprox. may-2026</div>
+  </section>
+
+  <!-- 24 · P3 — Estados con Bitcoin (refinado, sin ETFs) -->
+  <section class="slide" data-p="3" data-title="Estados con Bitcoin">
+    <div>
+      <div class="kicker"><span class="dot"></span>Soberanos como holders</div>
+      <h2 class="headline">Estados<br/>en la red</h2>
+      <p class="sub">Reservas estratégicas, decomisos judiciales, minería estatal y compras programáticas.<br/>El soberano deja de ser solo regulador y pasa a ser <b style="color:#d7ad45">holder</b>.</p>
     </div>
     <div class="visual">
       <div class="buyers">
         <div class="row"><span><b>EE.UU.</b> · Strategic Bitcoin Reserve (EO mar-2025)</span><span class="v">~325K BTC</span></div>
-        <div class="row"><span><b>Bulgaria</b> · seizure 2017 (debatido)</span><span class="v">~213K BTC</span></div>
-        <div class="row"><span><b>China</b> · decomisos (PlusToken, etc.)*</span><span class="v">~190K BTC</span></div>
-        <div class="row"><span><b>Reino Unido</b> · BTC confiscado</span><span class="v">~61K BTC</span></div>
-        <div class="row"><span><b>Bhután · El Salvador</b> · minería / 1 BTC/día</span><span class="v">~13K · ~6K BTC</span></div>
-        <div class="row"><span><b>BlackRock IBIT</b> · ETF spot (~US$50B AUM)</span><span class="v">~775K BTC</span></div>
-        <div class="row"><span><b>Fidelity FBTC</b> · ETF spot</span><span class="v">~471K BTC</span></div>
-        <div class="row"><span><b>11 ETFs spot</b> EE.UU. · total AUM</span><span class="v">~US$120B+</span></div>
+        <div class="row"><span><b>Bulgaria</b> · seizure PlusToken 2017 (debatido)</span><span class="v">~213K BTC</span></div>
+        <div class="row"><span><b>China</b> · decomisos sin marco formal*</span><span class="v">~190K BTC</span></div>
+        <div class="row"><span><b>Reino Unido</b> · BTC confiscado en investigaciones</span><span class="v">~61K BTC</span></div>
+        <div class="row"><span><b>Bhután</b> · minería estatal hidroeléctrica</span><span class="v">~13K BTC</span></div>
+        <div class="row"><span><b>El Salvador</b> · 1 BTC/día desde 2021</span><span class="v">~6K+ BTC</span></div>
+        <div class="row"><span><b>Pakistán</b> · Strategic Bitcoin Reserve (anunciada 2026)</span><span class="v">framework</span></div>
+        <div class="row" style="background:rgba(43,102,255,.08);border-color:rgba(43,102,255,.3)"><span><b>Soberanos vía ETF (13F)</b> · Mubadala (UAE), Wisconsin Investment Board</span><span class="v">posiciones spot</span></div>
       </div>
     </div>
-    <div class="source">*China sin marco formal de reserva estratégica · USDOJ + EO Trump mar-2025 · SEC 13F · Bloomberg / Farside ETF flows 2026</div>
+    <div class="source">*China sin marco formal de reserva estratégica · USDOJ filings · EO Trump 6-mar-2025 · SEC 13F Q1 2026 · Chainalysis Strategic Reserves Tracker</div>
   </section>
 
   <!-- 14 · Cierre analítico -->
