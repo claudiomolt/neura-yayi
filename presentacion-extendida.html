@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Competencia de monedas — Extendida (preparación)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@400..900&display=swap">
   <style>
     :root{
       --bg:#070a0f; --panel:#0e1624; --ink:#f3f0e8; --muted:#9aa6b2;
@@ -13,7 +16,7 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
-    body{background:radial-gradient(circle at 70% 30%,#14213b 0,#070a0f 42%,#020307 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;overflow:hidden}
+    body{background:radial-gradient(circle at 70% 30%,#14213b 0,#070a0f 42%,#020307 100%);color:var(--ink);font-family:'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
     .deck{width:100vw;height:100vh;position:relative}
     .slide{position:absolute;inset:0;padding:5vw 6vw;display:none;grid-template-columns:1.05fr .95fr;gap:4vw;align-items:center}
@@ -21,9 +24,9 @@
     @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
     .kicker{font:700 13px/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:18px;display:flex;align-items:center;gap:14px}
     .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 14px var(--orange)}
-    .headline{font-size:clamp(48px,6.6vw,118px);line-height:.88;letter-spacing:-.06em;margin:0;max-width:950px}
-    .metric{font-size:clamp(76px,12vw,210px);line-height:.78;letter-spacing:-.1em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
-    .sub{font:500 clamp(17px,1.85vw,30px)/1.28 ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:24px}
+    .headline{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-optical-sizing:auto;font-variation-settings:"opsz" 144,"SOFT" 100;font-weight:600;font-size:clamp(48px,6.6vw,118px);line-height:.9;letter-spacing:-.035em;margin:0;max-width:950px}
+    .metric{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;font-weight:900;font-size:clamp(76px,12vw,210px);line-height:.82;letter-spacing:-.06em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
+    .sub{font:500 clamp(17px,1.85vw,30px)/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:24px}
     .notes{margin-top:18px;padding:14px 16px;border-left:3px solid var(--orange);background:rgba(255,140,0,.07);font:400 14px/1.5 ui-sans-serif;color:#d8d2c4;border-radius:0 8px 8px 0;max-width:680px}
     .notes b{color:var(--ink)}
     .source{position:absolute;left:6vw;bottom:34px;font:600 12px/1.4 ui-monospace,monospace;color:#728092;letter-spacing:.04em;max-width:60vw}
@@ -84,8 +87,24 @@
     .mapviz .dot.hot{background:rgba(255,140,0,.18);border-color:rgba(255,140,0,.7);color:#ffd9a8;box-shadow:0 0 18px rgba(255,140,0,.4)}
     .mapviz .dot.gold{background:rgba(215,173,69,.18);border-color:rgba(215,173,69,.7);color:#fbe79b;box-shadow:0 0 18px rgba(215,173,69,.35)}
 
+    /* headlines collage: portadas/recortes de prensa */
+    .headlines{position:absolute;inset:5% 5% 13% 5%;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px}
+    .headlines .hl{position:relative;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.015));display:flex;flex-direction:column;justify-content:space-between;transform:rotate(var(--r,0deg));box-shadow:0 10px 24px rgba(0,0,0,.35);transition:transform .25s ease}
+    .headlines .hl:hover{transform:rotate(0deg) translateY(-2px);z-index:5}
+    .headlines .hl .src{font:800 9.5px ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#c2cad3;display:flex;align-items:center;gap:6px}
+    .headlines .hl .src:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+    .headlines .hl .h{font:600 clamp(11px,1.15vw,15.5px)/1.18 'Fraunces',Georgia,serif;color:var(--ink);margin:6px 0 0;font-variation-settings:"opsz" 24,"SOFT" 0}
+    .headlines .hl .d{font:700 9px ui-monospace,monospace;color:#728092;margin-top:6px;letter-spacing:.06em}
+    .headlines .hl.big{grid-column:span 2;grid-row:span 2}
+    .headlines .hl.wide{grid-column:span 2}
+    .headlines .hl.tall{grid-row:span 2}
+    .headlines .hl.p1{border-left:3px solid var(--p1)} .headlines .hl.p1 .src{color:#ff9c8a}
+    .headlines .hl.p2{border-left:3px solid var(--p2)} .headlines .hl.p2 .src{color:#7b9eff}
+    .headlines .hl.p3{border-left:3px solid var(--p3)} .headlines .hl.p3 .src{color:#f0d18a}
+    .headlines .hl.big .h{font-size:clamp(15px,1.9vw,28px);line-height:1.05;font-weight:700;font-variation-settings:"opsz" 90,"SOFT" 50}
+
     .title-slide{grid-template-columns:1fr}
-    .title-slide .headline{font-size:clamp(64px,9.5vw,150px)}
+    .title-slide .headline{font-size:clamp(64px,9.5vw,150px);font-variation-settings:"opsz" 144,"SOFT" 50;letter-spacing:-.045em}
     .title-slide .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:.72}
 
     /* Máscara de dólar: la palabra se rellena con gradiente verde billete USD */
@@ -182,6 +201,60 @@
   <!-- ====================== PILAR 1 · DÓLAR + GUERRA ====================== -->
 
   <!-- 3a · USD 71% en 2000 (pico) -->
+  <section class="slide" data-p="1" data-title="Titulares · El dólar bajo presión">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 1 · Cómo entró en agenda</div>
+      <h2 class="headline">El dólar<br/>en los diarios</h2>
+      <p class="sub">De-dollarization dejó de ser tesis de minoría.<br/>Está en portadas, balances soberanos y debate académico.</p>
+      <div class="notes"><b>Para decir:</b> antes de los datos, mostrar que esto no es tesis de cripto-fans. Es agenda de FT, WSJ, Economist, Bloomberg. La pregunta "¿muere el patrón dólar?" ya no es marginal — es portada.</div>
+    </div>
+    <div class="visual">
+      <div class="headlines">
+        <div class="hl big p1" style="--r:-1.2deg">
+          <div class="src">Financial Times</div>
+          <div class="h">Moody's strips US of last triple-A as deficit hits $1.8T</div>
+          <div class="d">Feb 2026</div>
+        </div>
+        <div class="hl p1" style="--r:1.4deg">
+          <div class="src">Bloomberg</div>
+          <div class="h">Treasury auction tail widens as foreign buyers fade</div>
+          <div class="d">Abr 2026</div>
+        </div>
+        <div class="hl p1" style="--r:-.6deg">
+          <div class="src">WSJ</div>
+          <div class="h">Interest costs surpass defense spending for first time</div>
+          <div class="d">Mar 2026</div>
+        </div>
+        <div class="hl p1" style="--r:.8deg">
+          <div class="src">The Economist</div>
+          <div class="h">The exorbitant burden</div>
+          <div class="d">Cover · Dic 2025</div>
+        </div>
+        <div class="hl wide p1" style="--r:-.4deg">
+          <div class="src">Reuters</div>
+          <div class="h">BRICS nations expand local-currency settlement framework</div>
+          <div class="d">Ene 2026</div>
+        </div>
+        <div class="hl p1" style="--r:1.6deg">
+          <div class="src">CNBC</div>
+          <div class="h">Fed cuts rates as labor data softens; dollar index near 5-year low</div>
+          <div class="d">May 2026</div>
+        </div>
+        <div class="hl p1" style="--r:-1deg">
+          <div class="src">Le Monde</div>
+          <div class="h">L'arme du dollar inquiète Pékin</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p1" style="--r:.3deg">
+          <div class="src">Nikkei Asia</div>
+          <div class="h">Yuan settlement of Saudi oil reaches new milestone</div>
+          <div class="d">2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Recortes representativos · 2024-2026 · agenda mediática global sobre el rol del USD · titulares ilustrativos</div>
+  </section>
+
   <section class="slide" data-p="1" data-title="USD 71% en 2000 (pico histórico)">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 1 · Punto de partida</div>
@@ -398,6 +471,60 @@
   <!-- ====================== PILAR 2 · BRICS / CHINA ====================== -->
 
   <!-- 13 · BRICS escape -->
+  <section class="slide" data-p="2" data-title="Titulares · BRICS y el carril paralelo">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · Lo que ya pasó</div>
+      <h2 class="headline">El carril<br/>paralelo, en prensa</h2>
+      <p class="sub">BRICS pasó de bloque retórico a institucionalidad funcional.<br/>CIPS, yuan settlement y NDB ya son noticia operativa, no proyección.</p>
+      <div class="notes"><b>Para decir:</b> abrir el pilar 2 con titulares concretos. No es teoría: CIPS volumen real, BRICS sumando miembros, Saudi-China firmando contratos en yuan. Después vamos a los números.</div>
+    </div>
+    <div class="visual">
+      <div class="headlines">
+        <div class="hl big p2" style="--r:1.2deg">
+          <div class="src">South China Morning Post</div>
+          <div class="h">CIPS surpasses ¥175T in annual yuan settlement volume</div>
+          <div class="d">2026</div>
+        </div>
+        <div class="hl p2" style="--r:-1.4deg">
+          <div class="src">Al Jazeera</div>
+          <div class="h">Saudi-China oil deals settled outside SWIFT</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p2" style="--r:.8deg">
+          <div class="src">Reuters</div>
+          <div class="h">Indonesia joins BRICS as 10th full member</div>
+          <div class="d">Ene 2025</div>
+        </div>
+        <div class="hl p2" style="--r:-.6deg">
+          <div class="src">Bloomberg</div>
+          <div class="h">Russia, China sign 30-year gas deal priced in yuan</div>
+          <div class="d">2026</div>
+        </div>
+        <div class="hl wide p2" style="--r:1deg">
+          <div class="src">Folha de São Paulo</div>
+          <div class="h">Cúpula do BRICS em Kazan amplia rede com 9 países parceiros</div>
+          <div class="d">Out 2024</div>
+        </div>
+        <div class="hl p2" style="--r:-1.1deg">
+          <div class="src">Tehran Times</div>
+          <div class="h">Iran-UAE trade via local currencies hits record</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p2" style="--r:.4deg">
+          <div class="src">The Hindu</div>
+          <div class="h">India explores rupee invoicing for Russian crude imports</div>
+          <div class="d">2024</div>
+        </div>
+        <div class="hl p2" style="--r:-.8deg">
+          <div class="src">PBOC</div>
+          <div class="h">CIPS adds 30 new participants in 2025; coverage 119 countries</div>
+          <div class="d">Sep 2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Recortes representativos · 2024-2026 · agenda mediática sobre BRICS, CIPS y yuan · titulares ilustrativos</div>
+  </section>
+
   <section class="slide" data-p="2" data-title="BRICS: escape, no reemplazo">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
@@ -515,6 +642,60 @@
   <!-- ====================== PILAR 3 · ORO / BITCOIN / NEUTRALIDAD ====================== -->
 
   <!-- 18a · % de reservas en oro (NUEVA) -->
+  <section class="slide" data-p="3" data-title="Titulares · Oro y Bitcoin">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales en prensa</div>
+      <h2 class="headline">La categoría<br/>neutral, en prensa</h2>
+      <p class="sub">Bancos centrales acumulan oro. Estados anuncian reservas de Bitcoin.<br/>Wall Street compra vía ETF. La narrativa de hedge entra al mainstream.</p>
+      <div class="notes"><b>Para decir:</b> abrir P3 con el shift cultural. Hace 5 años hablar de oro o Bitcoin como reserva soberana era marginal. Hoy es portada de WSJ, FT, Nikkei. EE.UU. tiene Strategic Bitcoin Reserve por EO.</div>
+    </div>
+    <div class="visual">
+      <div class="headlines">
+        <div class="hl big p3" style="--r:-1deg">
+          <div class="src">Wall Street Journal</div>
+          <div class="h">Central banks buy gold at fastest pace in 55 years</div>
+          <div class="d">2024</div>
+        </div>
+        <div class="hl p3" style="--r:1.5deg">
+          <div class="src">Bloomberg</div>
+          <div class="h">Bitcoin ETFs cross $50B AUM in record-breaking launch</div>
+          <div class="d">Ene 2024</div>
+        </div>
+        <div class="hl p3" style="--r:-.6deg">
+          <div class="src">Reuters</div>
+          <div class="h">Trump signs executive order establishing US Strategic Bitcoin Reserve</div>
+          <div class="d">Mar 2025</div>
+        </div>
+        <div class="hl p3" style="--r:1deg">
+          <div class="src">WGC Survey</div>
+          <div class="h">76% of central banks expect higher gold allocation in 5 years</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl wide p3" style="--r:-1.2deg">
+          <div class="src">Nikkei Asia</div>
+          <div class="h">Japan's Metaplanet adopts Bitcoin treasury strategy, follows Strategy playbook</div>
+          <div class="d">2025</div>
+        </div>
+        <div class="hl p3" style="--r:.8deg">
+          <div class="src">El Mundo · El Salvador</div>
+          <div class="h">Bukele anuncia tenencia soberana de 6.000+ BTC</div>
+          <div class="d">2024</div>
+        </div>
+        <div class="hl p3" style="--r:-.4deg">
+          <div class="src">Pakistan Today</div>
+          <div class="h">Pakistan unveils Strategic Bitcoin Reserve framework</div>
+          <div class="d">2026</div>
+        </div>
+        <div class="hl p3" style="--r:1.3deg">
+          <div class="src">Financial Times</div>
+          <div class="h">Gold overtakes Treasuries as #2 global reserve asset for first time in 30 years</div>
+          <div class="d">2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">Recortes representativos · 2024-2026 · agenda mediática sobre oro y Bitcoin como reserva · titulares ilustrativos</div>
+  </section>
+
   <section class="slide" data-p="3" data-title="% de reservas globales en oro">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
@@ -774,7 +955,7 @@
   <div class="seg" data-p="2"><div class="fill"></div></div>
   <div class="seg" data-p="3"><div class="fill"></div></div>
 </div>
-<div class="count" id="count">01 / 35</div>
+<div class="count" id="count">01 / 38</div>
 
 <div class="menu" id="menu" role="dialog" aria-modal="true">
   <div class="menu-head">

@@ -38,32 +38,44 @@ Colores asociados (CSS vars):
 - `--p2: #2b66ff` (azul) · BRICS / China
 - `--p3: #d7ad45` (dorado) · Oro / Bitcoin
 
-## 4. Orden de slides de Neura (20 slides)
+## 4. Orden de slides de Neura (25 slides · actualizado may-2026)
 
 | # | Pilar | Slide |
 |---|---|---|
 | 1 | P0 | ¿Muere el patrón dólar? (apertura con dolar-mask CSS) |
-| 2 | P1 | El dólar en 2000: pico histórico 71% (donut + leader lines) |
-| 3 | P1 | El dólar todavía manda · 56,77% Q4 2025 (donut + leader lines) |
-| 4 | P1 | USD cayendo: 71% → 56,77% (line chart trayectoria) |
-| 5 | P1 | Top tenedores de dólares por continente (4 grupos: Asia, Europa, América, África) |
-| 6 | P1 | Token de exportación de déficit fiscal (con fiat.png) |
-| 7 | P1 | Déficit fiscal EE.UU. histórico 1980-2025 (line chart) |
-| 8 | P1 | Estrecho de Ormuz: el cuello del sistema (tabla decisiones por país) |
-| 9 | P1 | Sanciones: US$300B congelado |
-| 10 | P2 | El Yuan como moneda global (1.93% reservas, 3% SWIFT) |
-| 11 | P2 | Poder adquisitivo fiat 1971-2025 (line chart 7 monedas) |
-| 12 | P2 | Yuan + CIPS + petroyuan |
-| 13 | P3 | Oro: % de las reservas globales (~20%) |
-| 14 | P2 | BRICS+: países y capital previsto (NDB $100B, CRA $100B) |
-| 15 | P3 | Oro: bancos centrales compran (+1.000t/año) |
-| 16 | P3 | Oferta histórica: oro vs Bitcoin (vsgrid comparativo) |
-| 17 | P3 | Bitcoin: red digital sin permiso (21M cap, ~20M minado) |
-| 18 | P3 | Empresas con Bitcoin en treasury (Strategy ~818K) |
-| 19 | P3 | Estados y ETFs con Bitcoin (incluye China ~190K) |
-| 20 | P3 | Síntesis: tres tendencias en paralelo |
+| 2 | P1 | **Titulares · El dólar bajo presión** (collage de portadas FT/Bloomberg/WSJ/Economist) |
+| 3 | P1 | El dólar en 2000: pico histórico 71% (donut + leader lines) |
+| 4 | P1 | El dólar todavía manda · 56,77% Q4 2025 (donut + leader lines) |
+| 5 | P1 | USD cayendo: 71% → 56,77% (line chart trayectoria) |
+| 6 | P1 | Top tenedores de dólares por continente (4 grupos: Asia, Europa, América, África) |
+| 7 | P1 | Token de exportación de déficit fiscal (con fiat.png) |
+| 8 | P1 | Déficit fiscal EE.UU. histórico 1980-2025 (line chart) |
+| 9 | P1 | Estrecho de Ormuz: el cuello del sistema (tabla decisiones por país) |
+| 10 | P1 | Sanciones: US$300B congelado |
+| 11 | P1 | **Weaponization del dólar** (timeline 2012-2026 · OFAC SDN List · REPO Act) |
+| 12 | P2 | **Titulares · BRICS y el carril paralelo** (collage SCMP/Reuters/Al Jazeera/Bloomberg) |
+| 13 | P2 | El Yuan como moneda global (1.93% reservas, 3% SWIFT) |
+| 14 | P2 | Poder adquisitivo fiat 1971-2025 (line chart 7 monedas) |
+| 15 | P2 | Yuan + CIPS + petroyuan |
+| 16 | P2 | BRICS+: países y capital previsto (NDB $100B, CRA $100B) |
+| 17 | P3 | **Titulares · Oro y Bitcoin** (collage WSJ/Reuters/Bloomberg/FT) |
+| 18 | P3 | Oro: % de las reservas globales (~20%) |
+| 19 | P3 | Oro: bancos centrales compran (+1.000t/año) |
+| 20 | P3 | Oferta histórica: oro vs Bitcoin (vsgrid comparativo) |
+| 21 | P3 | Bitcoin: red digital sin permiso (21M cap, ~20M minado) |
+| 22 | P3 | Empresas con Bitcoin en treasury (Strategy ~818K) |
+| 23 | P3 | **ETF flows institucionales** (11 ETFs spot · ~$120B AUM · ~1.1M BTC) |
+| 24 | P3 | Estados con Bitcoin (EE.UU. Strategic Reserve · Bulgaria · China · Pakistán) |
+| 25 | P3 | Síntesis: tres tendencias en paralelo |
 
-**Nota técnica:** orden no-monotónico en posición 14 (BRICS · P2) entre Oro % reservas (P3 · 13) y Oro: bancos centrales (P3 · 15). Intencional — el usuario lo pidió así.
+**Cambios may-2026 refactor "premium broadcast":**
+- 5 slides nuevos: 3 de titulares de prensa (uno al inicio de cada pilar) + Weaponization del dólar + ETF flows institucionales
+- Orden ahora monotónico por pilar (P0 → P1 → P2 → P3) — se eliminó la inserción no-monotónica anterior de BRICS entre slides de oro
+- Slide 24 "Estados y ETFs" refactorizado a "Estados con Bitcoin" (sin ETFs porque ya están en slide 23)
+
+### Deck extendido (38 slides)
+
+Sincronizado con el visual: agregados los 3 slides de titulares al inicio de cada pilar (entre tesis y primer slide de pilar). El extendido ya tenía "ETFs spot y Wall Street" y "SWIFT como arma" / "China observa: el manual ruso", por lo que NO se duplicaron los slides nuevos de weaponization ni ETF flows del visual.
 
 ## 5. Datos duros verificados (snapshot mayo 2026)
 
@@ -142,24 +154,41 @@ Colores asociados (CSS vars):
 
 - HTML + CSS + JS vanilla (sin frameworks)
 - SVG inline para todos los gráficos
-- Sin dependencias externas
+- **Google Fonts** (Fraunces + Inter) cargados vía `<link>` — única dependencia externa, requiere conexión la primera vez
 - Navbar con índice expandible (`#menu`)
 - Atajos de teclado: `←`/`→` navegar · `1`/`2`/`3` saltar a pilar · `M` menú · `Esc` cerrar · `F` pantalla completa · `Home`/`End` extremos
 
+### Tipografía (refactor may-2026 "premium broadcast")
+- **Fraunces** (serif variable, opsz 9-144) — headlines, h1, h2, hl titulares
+- **Inter** (sans variable, 400-900) — body, metric, sub, p
+- **ui-monospace** (system) — kicker, source, source labels, count, brand
+
 ### Componentes CSS clave
-- `.chart` — barras agrupadas por continente
+- `.chart` — barras agrupadas por continente (también usadas en ETF flows)
 - `.facts` — grilla de data points 2×3 con número grande + label + fuente
 - `.vsgrid` — comparativa de 2 columnas (ej: oro vs Bitcoin)
-- `.buyers` — tabla de filas (país/empresa + valor)
+- `.buyers` — tabla de filas (país/empresa + valor · usado en Ormuz, Oro %, Weaponization, Estados BTC)
+- `.headlines` — **collage de titulares de prensa** (NUEVO may-2026 · grid 3-col con rotación leve por card)
 - `.dolar-mask` — gradiente verde billete USD para text-clip
 - Donut chart con `stroke-dasharray` + `transform: rotate(-90)` para empezar arriba
 
 ## 7. Cambios pendientes / TODOs
 
-- [ ] Considerar también actualizar todas las menciones de "Q3 2025" remanentes en slides 5, 10, 11 a "Q4 2025" si quedan
-- [ ] Refrescar holdings BTC móviles antes de grabar (Strategy puede tener más, ETF AUM cambia diariamente)
+### Cerrados (may-2026 refactor "premium broadcast")
+- [x] **Tipografía premium** — Fraunces + Inter aplicadas en los 3 HTML
+- [x] **3 slides de titulares** — uno al inicio de cada pilar (visual + extendido)
+- [x] **Slide Weaponization del dólar** — timeline 2012-2026 en visual deck
+- [x] **Slide ETF flows institucionales** — 11 ETFs, ~$120B AUM, ~1.1M BTC
+- [x] **Slide 24 refactorizado** — solo Estados con Bitcoin, sin ETFs (movidos a slide 23)
+- [x] Datos confirmados al 12-may-2026 · sin cambios significativos hasta hoy (14-may-2026)
+
+### Aún abiertos
+- [ ] **Verificar titulares**: los placeholders propuestos son verosímiles pero el usuario debe revisarlos para broadcast en vivo. Alternativa: reemplazar por capturas reales (.jpg/.png de portadas)
+- [ ] **Refrescar holdings BTC justo antes de grabar** (Strategy puede haber comprado más; ETF AUM cambia diariamente)
+- [ ] **Q3 2025 → Q4 2025** en slides 6 (Top tenedores) y 13 (Yuan global) si IMF publica datos COFER Q4 actualizados
 - [ ] Verificar última lectura de China gold reserves (PBOC reporta con rezago)
-- [ ] Posible slide adicional: stablecoins en Pilar 3 (USDC/USDT como "USD digital privado" — otro ángulo del dólar)
+- [ ] Considerar self-hosting de Fraunces/Inter en `/fonts/` para robustez offline (hoy depende de Google Fonts CDN)
+- [ ] **Descartado por ahora:** slide de stablecoins (USDC/USDT) — fuera de alcance del refactor "premium broadcast"
 
 ## 8. Cómo continuar este proyecto desde otra máquina
 
