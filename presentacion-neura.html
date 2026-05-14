@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Competencia de monedas — Neura</title>
+  <style>
+    :root{
+      --bg:#070a0f; --panel:#0e1624; --ink:#f3f0e8; --muted:#9aa6b2;
+      --orange:#ff8c00; --gold:#d7ad45; --red:#d7432f; --blue:#2b66ff; --green:#3ecf8e;
+      --line:rgba(255,255,255,.14);
+      --p1:#d7432f; --p2:#2b66ff; --p3:#d7ad45;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    body{background:radial-gradient(circle at 70% 30%,#14213b 0,#070a0f 42%,#020307 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;overflow:hidden}
+
+    .deck{width:100vw;height:100vh;position:relative}
+    .slide{position:absolute;inset:0;padding:5vw 6vw;display:none;grid-template-columns:1.05fr .95fr;gap:4vw;align-items:center}
+    .slide.active{display:grid;animation:fade .4s ease}
+    @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .kicker{font:700 13px/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+    .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 14px var(--orange)}
+    .headline{font-size:clamp(52px,7.4vw,128px);line-height:.86;letter-spacing:-.07em;margin:0;max-width:950px}
+    .metric{font-size:clamp(82px,13vw,220px);line-height:.78;letter-spacing:-.1em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
+    .sub{font:500 clamp(18px,2vw,34px)/1.22 ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:28px}
+    .source{position:absolute;left:6vw;bottom:34px;font:600 12px/1.4 ui-monospace,monospace;color:#728092;letter-spacing:.04em;max-width:60vw}
+
+    .visual{min-height:60vh;border:1px solid var(--line);border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015));position:relative;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,.45)}
+    .visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,var(--orange),transparent 18%),radial-gradient(circle at 80% 20%,var(--blue),transparent 22%);opacity:.16;filter:blur(18px);animation:drift 14s infinite alternate ease-in-out}
+    .visual:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle,#000 30%,transparent 78%)}
+    @keyframes drift{to{transform:translate3d(8%,4%,0) rotate(8deg)}}
+    .bigword{position:absolute;inset:auto 28px 28px 28px;font:900 clamp(34px,5vw,88px)/.9 ui-sans-serif,system-ui,sans-serif;letter-spacing:-.07em;color:rgba(243,240,232,.92)}
+
+    .web{position:absolute;inset:12%;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+    .web i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--orange);box-shadow:0 0 30px var(--orange)}
+    .web i:nth-child(1){left:50%;top:4%}.web i:nth-child(2){left:82%;top:28%}.web i:nth-child(3){left:78%;top:72%}.web i:nth-child(4){left:22%;top:74%}.web i:nth-child(5){left:15%;top:24%}
+    .usd{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:900 120px ui-sans-serif;color:var(--gold)}
+    .ice{position:absolute;inset:18%;border-radius:24px;background:linear-gradient(135deg,rgba(142,207,255,.25),rgba(255,255,255,.04));border:2px solid rgba(142,207,255,.5);box-shadow:inset 0 0 80px rgba(142,207,255,.18)}
+    .lock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:900 120px ui-sans-serif;color:#bfe6ff}
+    .bars{position:absolute;left:12%;right:12%;bottom:12%;height:55%;display:flex;gap:18px;align-items:end}
+    .bars b{flex:1;background:linear-gradient(var(--gold),#6e4e12);border-radius:14px 14px 0 0}
+    .bars b:nth-child(2){height:85%}.bars b:nth-child(3){height:66%}.bars b:nth-child(4){height:92%}.bars b:nth-child(5){height:74%}.bars b:nth-child(1){height:56%}
+    .route{position:absolute;inset:16%;border:3px solid rgba(255,255,255,.18);border-radius:50%;transform:rotate(-18deg)}
+    .route:before{content:"";position:absolute;left:8%;top:45%;width:84%;border-top:7px dashed var(--red)}
+    .ship{position:absolute;font-size:80px;left:42%;top:38%}
+    .chip{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:46%;aspect-ratio:1;border:10px solid var(--gold);background:#111827;box-shadow:0 0 0 16px rgba(215,173,69,.12)}
+    .chip:before,.chip:after{content:"";position:absolute;inset:16%;border:2px solid rgba(255,255,255,.25)}
+    .btc{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font:900 170px ui-sans-serif;color:var(--orange);text-shadow:0 0 70px rgba(255,140,0,.35)}
+    .node{position:absolute;width:13px;height:13px;background:var(--orange);border-radius:50%;box-shadow:0 0 18px var(--orange)}
+    .node:nth-child(1){left:22%;top:25%}.node:nth-child(2){left:76%;top:20%}.node:nth-child(3){left:18%;top:73%}.node:nth-child(4){left:68%;top:78%}
+    .split{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+    .split div{display:grid;place-items:center;font:900 110px ui-sans-serif}
+    .split div:first-child{background:rgba(215,173,69,.09)}
+    .split div:last-child{background:rgba(255,140,0,.09)}
+
+    .buyers{position:absolute;inset:8% 8% 22% 8%;display:flex;flex-direction:column;gap:9px;font:600 clamp(13px,1.25vw,17px)/1.4 ui-monospace,monospace;color:#e9e6dc}
+    .buyers .row{display:grid;grid-template-columns:1fr auto;align-items:center;padding:10px 13px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px}
+    .buyers .row b{color:var(--orange);font-weight:800}
+    .buyers .row .v{color:var(--gold);font-weight:800;letter-spacing:.02em}
+
+    .facts{position:absolute;inset:8% 8% 22% 8%;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;font-family:ui-monospace,monospace;color:#e9e6dc}
+    .facts .f{padding:16px 18px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;gap:6px;justify-content:space-between;min-height:0}
+    .facts .f .n{font:900 clamp(26px,3vw,46px)/1 ui-sans-serif;letter-spacing:-.03em;color:var(--gold)}
+    .facts .f .t{font:600 clamp(12px,1.05vw,15px)/1.25 ui-sans-serif;color:var(--ink)}
+    .facts .f .src{font:500 10px ui-monospace,monospace;color:#728092;letter-spacing:.02em;margin-top:6px}
+
+    /* chart: barras agrupadas por continente */
+    .chart{position:absolute;inset:3% 3% 7% 3%;display:flex;flex-direction:column;gap:5px;font-family:ui-monospace,monospace;overflow:hidden}
+    .chart .group{display:flex;flex-direction:column;gap:2px}
+    .chart .head{display:flex;justify-content:space-between;align-items:baseline;padding:0 0 3px;border-bottom:1px solid var(--line);margin-bottom:2px}
+    .chart .head b{font:800 11px ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#c2cad3;display:flex;align-items:center;gap:8px}
+    .chart .head b .dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 12px currentColor}
+    .chart .group.asia .head b{color:#ffc080}.chart .group.asia .head b .dot{background:var(--orange);color:var(--orange)}
+    .chart .group.europa .head b{color:#a0bdff}.chart .group.europa .head b .dot{background:var(--blue);color:var(--blue)}
+    .chart .group.america .head b{color:#f0d18a}.chart .group.america .head b .dot{background:var(--gold);color:var(--gold)}
+    .chart .head span{font:800 12px ui-monospace,monospace;color:var(--gold);letter-spacing:.04em}
+    .chart .bar{display:grid;grid-template-columns:78px 1fr 58px;align-items:center;gap:10px;font-size:11px}
+    .chart .bar .n{color:#e9e6dc;font:700 clamp(10px,.95vw,12px) ui-sans-serif;text-align:right;line-height:1.2}
+    .chart .bar .barwrap{height:11px;border-radius:3px;background:rgba(255,255,255,.04);overflow:hidden;position:relative}
+    .chart .bar .b{height:100%;border-radius:3px;min-width:2px}
+    .chart .group.asia .b{background:linear-gradient(90deg,var(--orange),#ffb070);box-shadow:0 0 10px rgba(255,140,0,.4)}
+    .chart .group.europa .b{background:linear-gradient(90deg,var(--blue),#7b9eff);box-shadow:0 0 10px rgba(43,102,255,.4)}
+    .chart .group.america .b{background:linear-gradient(90deg,var(--gold),#f0d18a);box-shadow:0 0 10px rgba(215,173,69,.4)}
+    .chart .group.resto .head b{color:#9aa6b2}.chart .group.resto .head b .dot{background:#9aa6b2;color:#9aa6b2}
+    .chart .group.resto .b{background:linear-gradient(90deg,#5a6573,#9aa6b2);box-shadow:0 0 10px rgba(154,166,178,.3)}
+    .chart .group.asia2 .head b{color:#ffc89c}.chart .group.asia2 .head b .dot{background:#ff8c00;color:#ff8c00}
+    .chart .group.asia2 .b{background:linear-gradient(90deg,#cc7000,#ffb070);box-shadow:0 0 10px rgba(255,140,0,.25)}
+    .chart .group.europa2 .head b{color:#a0bdff}.chart .group.europa2 .head b .dot{background:#2b66ff;color:#2b66ff}
+    .chart .group.europa2 .b{background:linear-gradient(90deg,#2052cc,#7b9eff);box-shadow:0 0 10px rgba(43,102,255,.25)}
+    .chart .group.africa .head b{color:#fbbf24}.chart .group.africa .head b .dot{background:#f59e0b;color:#f59e0b}
+    .chart .group.africa .b{background:linear-gradient(90deg,#b45309,#f59e0b);box-shadow:0 0 10px rgba(245,158,11,.3)}
+    .chart .group.america2 .head b{color:#f0d18a}.chart .group.america2 .head b .dot{background:#d7ad45;color:#d7ad45}
+    .chart .group.america2 .b{background:linear-gradient(90deg,#a07f1e,#f0d18a);box-shadow:0 0 10px rgba(215,173,69,.25)}
+    .chart .totalbar{display:flex;justify-content:space-between;align-items:baseline;padding:6px 12px;background:linear-gradient(90deg,rgba(215,173,69,.15),rgba(255,140,0,.05));border:1px solid rgba(215,173,69,.35);border-radius:8px;margin-bottom:4px}
+    .chart .totalbar b{font:800 11px ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+    .chart .totalbar span{font:900 14px ui-sans-serif;color:#ffe79b;letter-spacing:-.02em}
+    .chart .restogrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+    .chart .restogrid .group{gap:3px}
+    .chart .restogrid .head{padding:0 0 3px}
+    .chart .restogrid .head b{font-size:9.5px;letter-spacing:.14em}
+    .chart .restogrid .head span{font-size:10.5px}
+    .chart .restogrid .bar{grid-template-columns:62px 1fr 50px;font-size:9.5px;gap:6px}
+    .chart .restogrid .bar .n{font-size:9.5px}
+    .chart .restogrid .bar .v{font-size:9.5px}
+    .chart .restogrid .barwrap{height:8px}
+    .chart .restogrid .note{font-size:8.5px;margin-left:0;line-height:1.35}
+    .chart{gap:6px}
+    .chart .bar .v{color:var(--ink);font:800 clamp(10px,.92vw,11.5px) ui-monospace,monospace;letter-spacing:.01em}
+    .chart .note{font:500 10px ui-monospace,monospace;color:#728092;font-style:italic;margin-left:88px}
+
+    /* vs-grid: comparativa de dos columnas */
+    .vsgrid{position:absolute;inset:7% 6% 19% 6%;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .vsgrid .col{padding:18px 18px 14px;border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;gap:4px;background:rgba(255,255,255,.03)}
+    .vsgrid .col.gold{background:rgba(215,173,69,.07);border-color:rgba(215,173,69,.3)}
+    .vsgrid .col.btc{background:rgba(255,140,0,.07);border-color:rgba(255,140,0,.3)}
+    .vsgrid .col h4{font:900 clamp(16px,1.6vw,22px) ui-sans-serif;letter-spacing:-.02em;margin:0 0 8px;color:var(--gold)}
+    .vsgrid .col.btc h4{color:var(--orange)}
+    .vsgrid .col h4 small{display:block;font:700 10px ui-monospace,monospace;letter-spacing:.2em;color:#9aa6b2;text-transform:uppercase;margin-bottom:4px}
+    .vsgrid .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-family:ui-monospace,monospace}
+    .vsgrid .row:last-child{border-bottom:0}
+    .vsgrid .row .l{color:#9aa6b2;font:600 clamp(10px,.95vw,12px)/1.3}
+    .vsgrid .row .v{color:var(--ink);font:800 clamp(11px,1.05vw,14px)/1.3;text-align:right}
+
+    .title-slide{grid-template-columns:1fr}
+    .title-slide .headline{font-size:clamp(64px,9.2vw,150px)}
+    .title-slide .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:.72}
+
+    /* Máscara de dólar: la palabra se rellena con un gradiente verde billete USD */
+    .dolar-mask{
+      background-image:
+        linear-gradient(135deg,
+          #0a2a16 0%,
+          #1a4a2a 12%,
+          #2f6b3f 25%,
+          #5e9b5e 40%,
+          #8fc474 55%,
+          #5e9b5e 70%,
+          #2f6b3f 82%,
+          #1a4a2a 92%,
+          #0a2a16 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      color:transparent;
+      filter:drop-shadow(0 4px 18px rgba(133,187,101,.35)) drop-shadow(0 2px 4px rgba(0,0,0,.5));
+      padding:0 .04em;
+      display:inline-block;
+    }
+    .dolar-mask::before{content:"";}
+
+    .topbar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 26px;z-index:30;pointer-events:none}
+    .topbar > *{pointer-events:auto}
+    .brand{font:800 12px/1 ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:#c2cad3;background:rgba(0,0,0,.35);border:1px solid var(--line);padding:9px 12px;border-radius:999px;backdrop-filter:blur(8px)}
+    .pillar-tag{display:flex;align-items:center;gap:10px;font:800 11px/1 ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#c2cad3;background:rgba(0,0,0,.35);border:1px solid var(--line);padding:9px 14px;border-radius:999px;backdrop-filter:blur(8px)}
+    .pillar-tag .pip{width:9px;height:9px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px currentColor}
+    .pillar-tag[data-p="1"] .pip{background:var(--p1);color:var(--p1)}
+    .pillar-tag[data-p="2"] .pip{background:var(--p2);color:var(--p2)}
+    .pillar-tag[data-p="3"] .pip{background:var(--p3);color:var(--p3)}
+    .menu-btn{display:flex;align-items:center;gap:8px;font:800 11px/1 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#e9e6dc;background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.4);padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .2s;backdrop-filter:blur(8px)}
+    .menu-btn:hover{background:rgba(255,140,0,.22);border-color:rgba(255,140,0,.7)}
+    .menu-btn svg{width:14px;height:14px}
+
+    .progress{position:fixed;left:0;right:0;bottom:0;height:6px;display:flex;z-index:25;background:rgba(0,0,0,.4)}
+    .progress .seg{flex:1;position:relative;background:rgba(255,255,255,.05);cursor:pointer}
+    .progress .seg + .seg{border-left:1px solid rgba(0,0,0,.4)}
+    .progress .seg .fill{position:absolute;left:0;top:0;bottom:0;width:0;transition:width .35s ease}
+    .progress .seg[data-p="1"] .fill{background:linear-gradient(90deg,var(--p1),#ff6b56)}
+    .progress .seg[data-p="2"] .fill{background:linear-gradient(90deg,var(--p2),#5d8cff)}
+    .progress .seg[data-p="3"] .fill{background:linear-gradient(90deg,var(--p3),#f0c860)}
+    .count{position:fixed;right:24px;bottom:18px;font:700 12px ui-monospace,monospace;color:#728092;z-index:26}
+
+    .menu{position:fixed;inset:0;background:rgba(3,5,8,.85);backdrop-filter:blur(18px);z-index:50;display:none;padding:6vh 8vw;overflow:auto}
+    .menu.open{display:block;animation:fade .25s ease}
+    .menu-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:36px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+    .menu-title{font:800 28px/1 ui-sans-serif;letter-spacing:-.02em}
+    .menu-title small{display:block;font:700 11px ui-monospace,monospace;letter-spacing:.2em;color:var(--orange);text-transform:uppercase;margin-bottom:8px}
+    .menu-close{font:800 11px ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#e9e6dc;background:transparent;border:1px solid var(--line);padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .2s}
+    .menu-close:hover{border-color:var(--orange);color:var(--orange)}
+    .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+    @media (max-width:980px){.pillars{grid-template-columns:1fr}}
+    .pillar{position:relative}
+    .pillar h3{font:800 13px/1 ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+    .pillar h3 .dot{width:11px;height:11px;border-radius:50%}
+    .pillar[data-p="1"] h3 .dot{background:var(--p1);box-shadow:0 0 16px var(--p1)}
+    .pillar[data-p="2"] h3 .dot{background:var(--p2);box-shadow:0 0 16px var(--p2)}
+    .pillar[data-p="3"] h3 .dot{background:var(--p3);box-shadow:0 0 16px var(--p3)}
+    .pillar p.lede{font:400 14px/1.4 ui-sans-serif;color:var(--muted);margin:0 0 18px;max-width:34ch}
+    .pillar ol{list-style:none;padding:0;margin:0}
+    .pillar li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:baseline;padding:10px 12px;border-radius:10px;cursor:pointer;transition:background .15s;border:1px solid transparent}
+    .pillar li:hover{background:rgba(255,255,255,.05);border-color:var(--line)}
+    .pillar li.current{background:rgba(255,140,0,.12);border-color:rgba(255,140,0,.45)}
+    .pillar li .n{font:800 12px ui-monospace,monospace;color:var(--orange);letter-spacing:.04em}
+    .pillar li .t{font:600 15px/1.25 ui-sans-serif}
+    .menu-hint{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font:600 11px ui-monospace,monospace;letter-spacing:.12em;color:#728092;text-transform:uppercase;display:flex;gap:24px;flex-wrap:wrap}
+    .menu-hint kbd{display:inline-block;padding:2px 7px;border:1px solid var(--line);border-radius:5px;background:rgba(255,255,255,.04);color:#c2cad3;margin-right:6px;font:700 10px ui-monospace,monospace}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">NEURA · ¿MUERE EL PATRÓN DÓLAR?</div>
+  <div class="pillar-tag" id="pillarTag" data-p="0"><span class="pip"></span><span id="pillarName">APERTURA</span></div>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir índice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    ÍNDICE
+  </button>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · Apertura -->
+  <section class="slide title-slide active" data-p="0" data-title="¿Muere el patrón dólar?">
+    <div>
+      <div class="kicker"><span class="dot"></span>Dólar · BRICS · Oro · Bitcoin</div>
+      <h1 class="headline">¿Muere el<br/>patrón <span class="dolar-mask">dólar</span>?</h1>
+      <p class="sub">Competencia de monedas en curso. Activos neutrales en alza.</p>
+    </div>
+    <div class="visual"><div class="web"><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="source">Mayo 2026 · 20 slides</div>
+  </section>
+
+  <!-- 2 · P1 — El dólar en 2000 (pico histórico) -->
+  <section class="slide" data-p="1" data-title="El dólar en 2000: pico histórico 71%">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 1 · Punto de partida</div>
+      <div class="metric">71%</div>
+      <p class="sub">de las reservas oficiales globales estaban en USD a inicio del siglo.<br/>El punto más alto en la era post-Bretton Woods.</p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:3% 2% 10% 2%;width:96%;height:87%" preserveAspectRatio="xMidYMid meet">
+        <!-- Donut chart MUCHO MÁS GRANDE: composición reservas FX 2000 (IMF COFER) -->
+        <g transform="rotate(-90 320 250)">
+          <!-- USD 71% (624.55 de 879.65, C=2π·140) -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ff8c00" stroke-width="62"
+                  stroke-dasharray="624.55 879.65" stroke-dashoffset="0"/>
+          <!-- EUR/DEM 18% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#2b66ff" stroke-width="62"
+                  stroke-dasharray="158.34 879.65" stroke-dashoffset="-624.55"/>
+          <!-- JPY 6.5% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ef4444" stroke-width="62"
+                  stroke-dasharray="57.18 879.65" stroke-dashoffset="-782.89"/>
+          <!-- GBP 3% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#8b5cf6" stroke-width="62"
+                  stroke-dasharray="26.39 879.65" stroke-dashoffset="-840.07"/>
+          <!-- Otras (CHF 0.3% + otras 1.2%) = 1.5% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#9aa6b2" stroke-width="62"
+                  stroke-dasharray="13.19 879.65" stroke-dashoffset="-866.46"/>
+        </g>
+
+        <!-- Centro: 71% -->
+        <text x="320" y="260" text-anchor="middle" font-family="ui-sans-serif" font-weight="900"
+              font-size="78" fill="#d7ad45" letter-spacing="-3">71%</text>
+        <text x="320" y="290" text-anchor="middle" font-family="ui-monospace,monospace"
+              font-weight="800" font-size="13" letter-spacing="4" fill="#9aa6b2">USD · 2000</text>
+
+        <!-- Leader lines -->
+        <g fill="none" stroke-width="1.2" stroke-linecap="round">
+          <!-- USD: derecha -->
+          <path d="M 456,346 L 545,346 L 560,346" stroke="#ff8c00"/>
+          <!-- EUR: izquierda -->
+          <path d="M 156,187 L 70,187 L 60,187" stroke="#2b66ff"/>
+          <!-- JPY: arriba-izquierda -->
+          <path d="M 240,87 L 130,72 L 60,72" stroke="#ef4444"/>
+          <!-- GBP: arriba -->
+          <path d="M 288,71 L 288,40 L 245,28" stroke="#8b5cf6"/>
+          <!-- Otras: arriba-derecha -->
+          <path d="M 312,68 L 410,40 L 480,28" stroke="#9aa6b2"/>
+        </g>
+
+        <!-- Puntos en el borde de cada slice -->
+        <g stroke="#070a0f" stroke-width="2">
+          <circle cx="456" cy="346" r="4" fill="#ff8c00"/>
+          <circle cx="156" cy="187" r="4" fill="#2b66ff"/>
+          <circle cx="240" cy="87"  r="4" fill="#ef4444"/>
+          <circle cx="288" cy="71"  r="4" fill="#8b5cf6"/>
+          <circle cx="312" cy="68"  r="4" fill="#9aa6b2"/>
+        </g>
+
+        <!-- Labels grandes y legibles -->
+        <g font-family="ui-monospace,monospace" font-weight="800">
+          <!-- USD label (derecha) -->
+          <text x="565" y="338" font-size="16" fill="#ffc070">USD</text>
+          <text x="565" y="368" font-size="30" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">71%</text>
+
+          <!-- EUR/DEM label (izquierda) -->
+          <text x="55" y="178" text-anchor="end" font-size="15" fill="#7b9eff">EUR / DEM</text>
+          <text x="55" y="205" text-anchor="end" font-size="24" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">18%</text>
+
+          <!-- JPY label (arriba-izquierda) -->
+          <text x="55" y="62" text-anchor="end" font-size="15" fill="#ff9c8a">JPY</text>
+          <text x="55" y="86" text-anchor="end" font-size="22" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">6.5%</text>
+
+          <!-- GBP label (arriba) -->
+          <text x="240" y="20" text-anchor="end" font-size="15" fill="#c4a7ff">GBP</text>
+          <text x="245" y="44" text-anchor="end" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">3%</text>
+
+          <!-- Otras label (arriba-derecha) -->
+          <text x="485" y="20" font-size="15" fill="#c2cad3">Otras</text>
+          <text x="485" y="44" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">1.5%</text>
+        </g>
+
+        <!-- Footer notes -->
+        <text x="350" y="465" text-anchor="middle" fill="#728092"
+              font-family="ui-monospace,monospace" font-size="10.5" font-style="italic">
+          Euro recién lanzado (1999) · "Otras" incluye CHF 0.3% · reservas totales 2000 incluían oro ~10% y DEG ~3%
+        </text>
+      </svg>
+    </div>
+    <div class="source">IMF COFER Q4 2000 · Fed International Role of the U.S. Dollar series · World Gold Council histórico</div>
+  </section>
+
+  <!-- 3 · P1 — El dólar manda + pie chart composición -->
+  <section class="slide" data-p="1" data-title="El dólar todavía manda (mínimo 30 años)">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 1 · Dólar y guerra</div>
+      <div class="metric">56,77%</div>
+      <p class="sub">de reservas globales en USD (Q4 2025, mínimo en 30 años).<br/>~88% de pares FX involucran USD. ~80% del comercio se factura en USD.</p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:3% 2% 10% 2%;width:96%;height:87%" preserveAspectRatio="xMidYMid meet">
+        <!-- Donut chart GRANDE: composición reservas FX Q4 2025 (IMF COFER) -->
+        <g transform="rotate(-90 320 250)">
+          <!-- USD 56.77% (499.36 de 879.65, C=2π·140) -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ff8c00" stroke-width="62"
+                  stroke-dasharray="499.36 879.65" stroke-dashoffset="0"/>
+          <!-- EUR 21% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#2b66ff" stroke-width="62"
+                  stroke-dasharray="184.73 879.65" stroke-dashoffset="-499.36"/>
+          <!-- JPY 5.5% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ef4444" stroke-width="62"
+                  stroke-dasharray="48.38 879.65" stroke-dashoffset="-684.09"/>
+          <!-- GBP 5% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#8b5cf6" stroke-width="62"
+                  stroke-dasharray="43.98 879.65" stroke-dashoffset="-732.47"/>
+          <!-- CNY 2.2% -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#f59e0b" stroke-width="62"
+                  stroke-dasharray="19.35 879.65" stroke-dashoffset="-776.45"/>
+          <!-- Otras 9.53% (CAD + AUD + CHF + KRW + otras) -->
+          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#9aa6b2" stroke-width="62"
+                  stroke-dasharray="83.85 879.65" stroke-dashoffset="-795.80"/>
+        </g>
+
+        <!-- Centro: 56,77% -->
+        <text x="320" y="260" text-anchor="middle" font-family="ui-sans-serif" font-weight="900"
+              font-size="68" fill="#d7ad45" letter-spacing="-3">56,77%</text>
+        <text x="320" y="290" text-anchor="middle" font-family="ui-monospace,monospace"
+              font-weight="800" font-size="13" letter-spacing="4" fill="#9aa6b2">USD · Q4 2025</text>
+
+        <!-- Leader lines -->
+        <g fill="none" stroke-width="1.2" stroke-linecap="round">
+          <!-- USD: derecha -->
+          <path d="M 488,288 L 555,288 L 565,288" stroke="#ff8c00"/>
+          <!-- EUR: izquierda-abajo -->
+          <path d="M 166,328 L 70,328 L 60,328" stroke="#2b66ff"/>
+          <!-- JPY: izquierda-media -->
+          <path d="M 159,189 L 80,180 L 60,180" stroke="#ef4444"/>
+          <!-- GBP: izquierda-arriba -->
+          <path d="M 187,140 L 95,95 L 60,90" stroke="#8b5cf6"/>
+          <!-- CNY: arriba-centro-izq -->
+          <path d="M 215,113 L 215,50 L 200,28" stroke="#f59e0b"/>
+          <!-- Otras: arriba-derecha -->
+          <path d="M 270,85 L 380,40 L 460,28" stroke="#9aa6b2"/>
+        </g>
+
+        <!-- Puntos en el borde de cada slice -->
+        <g stroke="#070a0f" stroke-width="2">
+          <circle cx="488" cy="288" r="4" fill="#ff8c00"/>
+          <circle cx="166" cy="328" r="4" fill="#2b66ff"/>
+          <circle cx="159" cy="189" r="4" fill="#ef4444"/>
+          <circle cx="187" cy="140" r="4" fill="#8b5cf6"/>
+          <circle cx="215" cy="113" r="4" fill="#f59e0b"/>
+          <circle cx="270" cy="85"  r="4" fill="#9aa6b2"/>
+        </g>
+
+        <!-- Labels grandes y legibles -->
+        <g font-family="ui-monospace,monospace" font-weight="800">
+          <!-- USD label (derecha) -->
+          <text x="565" y="280" font-size="16" fill="#ffc070">USD</text>
+          <text x="565" y="310" font-size="26" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">56,77%</text>
+
+          <!-- EUR label (izquierda-abajo) -->
+          <text x="55" y="320" text-anchor="end" font-size="15" fill="#7b9eff">EUR</text>
+          <text x="55" y="346" text-anchor="end" font-size="24" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">21%</text>
+
+          <!-- JPY label (izquierda-media) -->
+          <text x="55" y="170" text-anchor="end" font-size="15" fill="#ff9c8a">JPY</text>
+          <text x="55" y="195" text-anchor="end" font-size="22" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">5.5%</text>
+
+          <!-- GBP label (izquierda-arriba) -->
+          <text x="55" y="80" text-anchor="end" font-size="15" fill="#c4a7ff">GBP</text>
+          <text x="55" y="105" text-anchor="end" font-size="22" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">5%</text>
+
+          <!-- CNY label (arriba) -->
+          <text x="195" y="20" text-anchor="end" font-size="15" fill="#fbbf24">CNY</text>
+          <text x="200" y="44" text-anchor="end" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">2.2%</text>
+
+          <!-- Otras label (arriba-derecha) -->
+          <text x="465" y="20" font-size="15" fill="#c2cad3">Otras</text>
+          <text x="465" y="44" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">9,53%</text>
+        </g>
+
+        <!-- Footer notes -->
+        <text x="350" y="465" text-anchor="middle" fill="#728092"
+              font-family="ui-monospace,monospace" font-size="10.5" font-style="italic">
+          "Otras" incluye CAD · AUD · CHF · KRW · resto · + reservas totales incluyen oro (~20%) y DEG (~3%)
+        </text>
+      </svg>
+    </div>
+    <div class="source">IMF COFER Q4 2025 · Fed International Role of the U.S. Dollar · BIS Triennial · World Gold Council</div>
+  </section>
+
+  <!-- 4 · P1 — Caída del USD 2000-2025 (line chart) -->
+  <section class="slide" data-p="1" data-title="USD cayendo: 71% → 56,77% en 25 años">
+    <div>
+      <div class="kicker"><span class="dot"></span>Tendencia secular</div>
+      <h2 class="headline">El dólar<br/>viene cayendo</h2>
+      <p class="sub">De ~71% en 2000 a <b style="color:#ff8c00">56,77%</b> en Q4 2025.<br/><b style="color:#ff8c00">−14,23 puntos porcentuales en 25 años.</b><br/>Mínimo de 30 años en participación de reservas globales.</p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:5% 5% 14% 5%;width:90%;height:80%" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="declineG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff8c00" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#ff8c00" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Título -->
+        <text x="360" y="32" text-anchor="middle" fill="#c2cad3"
+              font-family="ui-monospace,monospace" font-weight="800" font-size="13"
+              letter-spacing="3">USD COMO % DE RESERVAS GLOBALES · 2000–2025</text>
+
+        <!-- Grid horizontal -->
+        <g stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,4">
+          <line x1="70" y1="116" x2="660" y2="116"/>
+          <line x1="70" y1="172" x2="660" y2="172"/>
+          <line x1="70" y1="228" x2="660" y2="228"/>
+          <line x1="70" y1="284" x2="660" y2="284"/>
+        </g>
+
+        <!-- Y-axis labels -->
+        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="end">
+          <text x="62" y="120">70%</text>
+          <text x="62" y="176">65%</text>
+          <text x="62" y="232">60%</text>
+          <text x="62" y="288">55%</text>
+        </g>
+
+        <!-- X-axis labels -->
+        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">
+          <text x="70" y="365">2000</text>
+          <text x="188" y="365">2005</text>
+          <text x="306" y="365">2010</text>
+          <text x="424" y="365">2015</text>
+          <text x="542" y="365">2020</text>
+          <text x="660" y="365">2025</text>
+        </g>
+
+        <!-- Eje base -->
+        <line x1="70" y1="340" x2="660" y2="340" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+        <!-- Área bajo la curva -->
+        <path d="M 70,105 L 117,150 L 259,183 L 400,194 L 471,198 L 542,239 L 589,246 L 636,253 L 660,262 L 660,340 L 70,340 Z"
+              fill="url(#declineG)"/>
+
+        <!-- Línea principal -->
+        <polyline points="70,105 117,150 259,183 400,194 471,198 542,239 589,246 636,253 660,262"
+                  fill="none" stroke="#ff8c00" stroke-width="3" stroke-linejoin="round"/>
+
+        <!-- Puntos de datos -->
+        <g stroke="#070a0f" stroke-width="2">
+          <circle cx="70"  cy="105" r="6" fill="#d7ad45"/>
+          <circle cx="117" cy="150" r="4" fill="#ff8c00"/>
+          <circle cx="259" cy="183" r="4" fill="#ff8c00"/>
+          <circle cx="400" cy="194" r="4" fill="#ff8c00"/>
+          <circle cx="471" cy="198" r="4" fill="#ff8c00"/>
+          <circle cx="542" cy="239" r="4" fill="#ff8c00"/>
+          <circle cx="589" cy="246" r="4" fill="#ff8c00"/>
+          <circle cx="636" cy="253" r="4" fill="#ff8c00"/>
+          <circle cx="660" cy="262" r="7" fill="#d7ad45"/>
+        </g>
+
+        <!-- Anotación punto inicial -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="70" y1="105" x2="70" y2="78" stroke="#d7ad45" stroke-width="1" stroke-dasharray="2,2"/>
+          <rect x="20" y="50" width="120" height="26" fill="rgba(215,173,69,0.15)"
+                stroke="#d7ad45" stroke-width="1" rx="4"/>
+          <text x="80" y="60" text-anchor="middle" fill="#f0d18a" font-weight="800" font-size="12">71% · 2000</text>
+          <text x="80" y="71" text-anchor="middle" fill="#9aa6b2" font-size="9">pico histórico</text>
+        </g>
+
+        <!-- Anotación punto final -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="660" y1="262" x2="660" y2="295" stroke="#d7ad45" stroke-width="1" stroke-dasharray="2,2"/>
+          <rect x="520" y="295" width="140" height="40" fill="rgba(215,173,69,0.18)"
+                stroke="#d7ad45" stroke-width="1" rx="4"/>
+          <text x="590" y="309" text-anchor="middle" fill="#f0d18a" font-weight="800" font-size="13">56,77% · Q4 2025</text>
+          <text x="590" y="324" text-anchor="middle" fill="#9aa6b2" font-size="10">mínimo en 30 años</text>
+        </g>
+
+        <!-- Footer -->
+        <text x="360" y="405" text-anchor="middle" fill="#728092"
+              font-family="ui-monospace,monospace" font-size="10" font-style="italic">
+          parte de la caída 2024-25 se debe a efectos de tipo de cambio (USD débil), no solo a desdolarización activa
+        </text>
+        <text x="360" y="425" text-anchor="middle" fill="#5a6573"
+              font-family="ui-monospace,monospace" font-size="9.5">
+          puntos: 2000 · 2002 · 2008 · 2014 · 2017 · 2020 · 2022 · 2024 · Q4 2025
+        </text>
+      </svg>
+      <div class="bigword">CAÍDA</div>
+    </div>
+    <div class="source">IMF COFER (Currency Composition of Official Foreign Exchange Reserves) · series 2000-Q4 2025 · USD share 56,77%</div>
+  </section>
+
+  <!-- 4 · P1 — Top tenedores de USD (gráfico por continentes) -->
+  <section class="slide" data-p="1" data-title="Top tenedores de dólares por continente">
+    <div>
+      <div class="kicker"><span class="dot"></span>Quién financia al dólar</div>
+      <h2 class="headline">Mayores tenedores<br/>por continente</h2>
+      <p class="sub">Total global de reservas: <b style="color:#d7ad45">~US$13T</b> (Q3 2025).<br/>Asia · Pacífico · ME concentra <b style="color:#ff8c00">~69%</b> de las reservas mundiales.</p>
+    </div>
+    <div class="visual">
+      <div class="chart">
+        <div class="totalbar"><b>TOTAL GLOBAL · Q3 2025</b><span>~US$13.0T</span></div>
+
+        <div class="group asia">
+          <div class="head"><b><span class="dot"></span>ASIA · PACÍFICO · MEDIO ORIENTE</b><span>~US$8.95T · 69%</span></div>
+          <div class="bar"><span class="n">China</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">$3.2T</span></div>
+          <div class="bar"><span class="n">Japón</span><div class="barwrap"><div class="b" style="width:39%"></div></div><span class="v">$1.25T</span></div>
+          <div class="bar"><span class="n">Taiwán·HK·Corea·Singapur</span><div class="barwrap"><div class="b" style="width:56%"></div></div><span class="v">~$1.79T</span></div>
+          <div class="bar"><span class="n">India</span><div class="barwrap"><div class="b" style="width:21%"></div></div><span class="v">$680B</span></div>
+          <div class="bar"><span class="n">Arabia Saudita</span><div class="barwrap"><div class="b" style="width:13.5%"></div></div><span class="v">$430B</span></div>
+          <div class="note">Tigres asiáticos: Taiwán $580B · HK $425B · Corea S. $415B · Singapur $370B · + Tailandia $220B · Israel $220B · EAU $180B · Turquía $165B · Indonesia $140B · Irán $130B · resto ~$895B</div>
+        </div>
+
+        <div class="group europa">
+          <div class="head"><b><span class="dot"></span>EUROPA</b><span>~US$2.80T · 22%</span></div>
+          <div class="bar"><span class="n">Suiza</span><div class="barwrap"><div class="b" style="width:28%"></div></div><span class="v">$895B</span></div>
+          <div class="bar"><span class="n">Rusia</span><div class="barwrap"><div class="b" style="width:19%"></div></div><span class="v">$600B</span></div>
+          <div class="bar"><span class="n">Eurozona pooled</span><div class="barwrap"><div class="b" style="width:12.5%"></div></div><span class="v">~$400B</span></div>
+          <div class="bar"><span class="n">Polonia</span><div class="barwrap"><div class="b" style="width:6.3%"></div></div><span class="v">$200B</span></div>
+          <div class="bar"><span class="n">Reino Unido</span><div class="barwrap"><div class="b" style="width:5.3%"></div></div><span class="v">$170B</span></div>
+          <div class="note">~US$300B de Rusia congelados desde 2022 · + Chequia $140B · Dinamarca $95B · Noruega $77B · Rumania $80B · Suecia $60B · Hungría $50B · ~$500B</div>
+        </div>
+
+        <div class="group america">
+          <div class="head"><b><span class="dot"></span>AMÉRICA (NORTE + SUR)</b><span>~US$970B · 7.5%</span></div>
+          <div class="bar"><span class="n">Brasil</span><div class="barwrap"><div class="b" style="width:11%"></div></div><span class="v">$350B</span></div>
+          <div class="bar"><span class="n">México</span><div class="barwrap"><div class="b" style="width:7%"></div></div><span class="v">$220B</span></div>
+          <div class="bar"><span class="n">Canadá</span><div class="barwrap"><div class="b" style="width:4%"></div></div><span class="v">$130B</span></div>
+          <div class="bar"><span class="n">Perú·Colombia·Chile</span><div class="barwrap"><div class="b" style="width:5.7%"></div></div><span class="v">~$182B</span></div>
+          <div class="bar"><span class="n">Argentina</span><div class="barwrap"><div class="b" style="width:0.9%"></div></div><span class="v">~$28B</span></div>
+          <div class="note">+ Uruguay $20B · Bolivia · Ecuador · Paraguay · Rep. Dominicana · resto ~$60B</div>
+        </div>
+
+        <div class="group africa">
+          <div class="head"><b><span class="dot"></span>ÁFRICA</b><span>~US$400B · 3%</span></div>
+          <div class="bar"><span class="n">Libia</span><div class="barwrap"><div class="b" style="width:2.5%"></div></div><span class="v">$80B</span></div>
+          <div class="bar"><span class="n">Argelia</span><div class="barwrap"><div class="b" style="width:2.2%"></div></div><span class="v">$70B</span></div>
+          <div class="bar"><span class="n">Sudáfrica</span><div class="barwrap"><div class="b" style="width:1.9%"></div></div><span class="v">$60B</span></div>
+          <div class="bar"><span class="n">Egipto · Nigeria · Marruecos</span><div class="barwrap"><div class="b" style="width:3.3%"></div></div><span class="v">~$107B</span></div>
+          <div class="note">+ Angola $15B · Kenia · Etiopía · Ghana · Costa de Marfil · resto continente ~$83B</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">IMF International Financial Statistics · COFER Q3 2025 · cifras aproximadas · total global excluye oro</div>
+  </section>
+
+  <!-- 4 · P1 — Token de exportación -->
+  <section class="slide" data-p="1" data-title="Token de exportación de déficit fiscal">
+    <div>
+      <div class="kicker"><span class="dot"></span>El dólar como aspiradora de energía</div>
+      <h2 class="headline">Exportar el déficit</h2>
+      <p class="sub">EE.UU. emite. El mundo absorbe. Esa diferencia es el privilegio exorbitante.</p>
+      <p class="sub" style="font-size:clamp(13px,1.1vw,16px);margin-top:18px;color:#9aa6b2">
+        <b style="color:#ff8c00">US$36T+</b> deuda · <b style="color:#ff8c00">US$1.8T</b> déficit FY24 (~6.4% PIB)<br/>
+        <b style="color:#ff8c00">US$1T+</b> intereses anuales · <b style="color:#ff8c00">~US$21T</b> M2 EE.UU.
+      </p>
+    </div>
+    <div class="visual">
+      <img src="imagenes/fiat.png" alt="Norte emite, Sur absorbe"
+           style="position:absolute;inset:6% 6% 16% 6%;width:88%;height:78%;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5)) brightness(1.05)"/>
+    </div>
+    <div class="source">~US$8T Treasuries en manos extranjeras (TIC) · déficit primario proyectado prom. ~7% PIB próximos 10 años (CBO)</div>
+  </section>
+
+  <!-- 6 · P1 — Déficit fiscal EE.UU. histórico -->
+  <section class="slide" data-p="1" data-title="Déficit fiscal EE.UU. histórico 1980-2025">
+    <div>
+      <div class="kicker"><span class="dot"></span>Magnitud histórica</div>
+      <h2 class="headline">~US$1.8T<br/>por año</h2>
+      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.35">
+        FY2025: <b style="color:#ff8c00">US$1.8T</b> de déficit · <b style="color:#ff8c00">5.9% PIB</b><br/>
+        Deuda total: <b style="color:#d7ad45">US$37.6T+</b> (+2.2T en 1 año)<br/>
+        Deuda/PIB cruza <b style="color:#d7432f">99.8%</b> (35% en 1980)
+      </p>
+      <div style="margin-top:18px;padding:12px 14px;border-left:3px solid #d7432f;background:rgba(215,67,47,.10);border-radius:0 8px 8px 0;font:600 13px/1.5 ui-sans-serif;color:#e9e6dc;max-width:540px">
+        <b style="color:#ff9c8a">Hitos FY2025:</b><br/>
+        · Intereses <b>US$970B</b> &gt; gasto militar (~US$905B)<br/>
+        · Intereses ya son el #2 gasto federal (detrás de Social Security)<br/>
+        · Déficit <b>5.9% PIB</b> vs promedio 50 años de <b>3.8%</b><br/>
+        · Superado solo 8 veces desde 1946
+      </div>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:5% 4% 14% 4%;width:92%;height:80%" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="deficitG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#d7432f" stop-opacity="0"/>
+            <stop offset="60%" stop-color="#d7432f" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#d7432f" stop-opacity="0.05"/>
+          </linearGradient>
+          <linearGradient id="surplusG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3ecf8e" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Título -->
+        <text x="360" y="28" text-anchor="middle" fill="#c2cad3"
+              font-family="ui-monospace,monospace" font-weight="800" font-size="13"
+              letter-spacing="3">DÉFICIT FISCAL EE.UU. · 1980–2025 · US$ MILES DE MILLONES</text>
+
+        <!-- Grid horizontal -->
+        <g stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,4">
+          <line x1="80" y1="86"  x2="680" y2="86"/>
+          <line x1="80" y1="148" x2="680" y2="148"/>
+          <line x1="80" y1="270" x2="680" y2="270"/>
+          <line x1="80" y1="374" x2="680" y2="374"/>
+        </g>
+
+        <!-- Línea cero (resaltada) -->
+        <line x1="80" y1="106" x2="680" y2="106" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+
+        <!-- Y-axis labels -->
+        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="end">
+          <text x="72" y="90" fill="#3ecf8e">+300</text>
+          <text x="72" y="110">0</text>
+          <text x="72" y="190">-1.000</text>
+          <text x="72" y="270">-2.000</text>
+          <text x="72" y="378">-3.000</text>
+        </g>
+
+        <!-- X-axis labels -->
+        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">
+          <text x="80" y="403">1980</text>
+          <text x="213" y="403">1990</text>
+          <text x="347" y="403">2000</text>
+          <text x="480" y="403">2010</text>
+          <text x="613" y="403">2020</text>
+          <text x="680" y="403">2025</text>
+        </g>
+
+        <!-- Área bajo la línea (déficit) -->
+        <path d="M 80,112 L 147,124 L 213,125 L 240,131 L 280,120 L 320,100 L 347,86 L 373,119 L 440,120 L 453,145 L 467,227 L 480,217 L 507,199 L 533,147 L 573,163 L 600,190 L 613,374 L 627,344 L 640,224 L 653,251 L 667,263 L 680,260 L 680,106 L 80,106 Z"
+              fill="url(#deficitG)"/>
+
+        <!-- Pequeño área de superávit (1998-2001) -->
+        <path d="M 320,106 L 320,100 L 347,86 L 373,106 Z" fill="url(#surplusG)"/>
+
+        <!-- Línea principal -->
+        <polyline points="80,112 147,124 213,125 240,131 280,120 320,100 347,86 373,119 440,120 453,145 467,227 480,217 507,199 533,147 573,163 600,190 613,374 627,344 640,224 653,251 667,263 680,260"
+                  fill="none" stroke="#ff8c00" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- Puntos de datos -->
+        <g stroke="#070a0f" stroke-width="2">
+          <!-- años principales -->
+          <circle cx="80"  cy="112" r="3.5" fill="#ff8c00"/>
+          <circle cx="213" cy="125" r="3.5" fill="#ff8c00"/>
+          <circle cx="280" cy="120" r="3.5" fill="#ff8c00"/>
+          <!-- Pico superávit -->
+          <circle cx="347" cy="86" r="6" fill="#3ecf8e"/>
+          <!-- GFC -->
+          <circle cx="467" cy="227" r="6" fill="#d7432f"/>
+          <!-- COVID peak -->
+          <circle cx="613" cy="374" r="7" fill="#d7432f"/>
+          <!-- 2024-2025 -->
+          <circle cx="667" cy="263" r="4" fill="#ff8c00"/>
+          <circle cx="680" cy="260" r="6" fill="#d7ad45"/>
+        </g>
+
+        <!-- Anotación: superávit Clinton -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="347" y1="86" x2="347" y2="55" stroke="#3ecf8e" stroke-width="1" stroke-dasharray="2,2"/>
+          <rect x="290" y="38" width="120" height="22" fill="rgba(62,207,142,0.18)"
+                stroke="#3ecf8e" stroke-width="1" rx="4"/>
+          <text x="350" y="53" text-anchor="middle" fill="#7dffc1" font-weight="800" font-size="11">SUPERÁVIT 2000</text>
+        </g>
+
+        <!-- Anotación: GFC -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="467" y1="227" x2="475" y2="252" stroke="#d7432f" stroke-width="1" stroke-dasharray="2,2"/>
+          <rect x="420" y="252" width="115" height="22" fill="rgba(215,67,47,0.18)"
+                stroke="#d7432f" stroke-width="1" rx="4"/>
+          <text x="478" y="267" text-anchor="middle" fill="#ff9c8a" font-weight="800" font-size="11">2009 · GFC −1.4T</text>
+        </g>
+
+        <!-- Anotación: COVID -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="613" y1="374" x2="540" y2="358" stroke="#d7432f" stroke-width="1" stroke-dasharray="2,2"/>
+          <rect x="430" y="346" width="115" height="22" fill="rgba(215,67,47,0.22)"
+                stroke="#d7432f" stroke-width="1.4" rx="4"/>
+          <text x="487" y="361" text-anchor="middle" fill="#ff9c8a" font-weight="800" font-size="11">2020 · COVID −3.1T</text>
+        </g>
+
+        <!-- Anotación: FY2025 final -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="680" y1="260" x2="650" y2="295" stroke="#d7ad45" stroke-width="1.4" stroke-dasharray="2,2"/>
+          <rect x="528" y="295" width="155" height="52" fill="rgba(215,173,69,0.22)"
+                stroke="#d7ad45" stroke-width="1.4" rx="4"/>
+          <text x="605" y="310" text-anchor="middle" fill="#f0d18a" font-weight="800" font-size="13">FY2025 · -1.8T</text>
+          <text x="605" y="326" text-anchor="middle" fill="#9aa6b2" font-size="10">5.9% PIB · deuda 99.8% PIB</text>
+          <text x="605" y="340" text-anchor="middle" fill="#9aa6b2" font-size="10">intereses &gt; gasto militar</text>
+        </g>
+
+        <!-- Footer -->
+        <text x="360" y="432" text-anchor="middle" fill="#728092"
+              font-family="ui-monospace,monospace" font-size="10" font-style="italic">
+          datos FY · negativo = déficit · solo 8 años desde 1946 con déficit &gt; 5.9% PIB · pico FY2020 (COVID)
+        </text>
+      </svg>
+      <div class="bigword">DÉFICIT</div>
+    </div>
+    <div class="source">US Treasury · CBO Monthly Budget Review FY2025 (nov-2025) · OMB Historical Tables · CRFB · FRED</div>
+  </section>
+
+  <!-- 7 · P1 — Estrecho de Ormuz + decisiones de países -->
+  <section class="slide" data-p="1" data-title="Estrecho de Ormuz: el cuello del sistema">
+    <div>
+      <div class="kicker"><span class="dot"></span>El cuello del sistema</div>
+      <h2 class="headline">Estrecho<br/>de Ormuz</h2>
+      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.4">
+        <b style="color:#ff8c00">~20%</b> del petróleo mundial · <b style="color:#ff8c00">~21M</b> barriles/día<br/>
+        <b style="color:#ff8c00">33 km</b> en su punto más estrecho · todo denominado en USD<br/>
+        <span style="color:#9aa6b2">Un solo punto geográfico mueve la inflación global.</span>
+      </p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>Irán</b> · amenaza con cerrarlo</span><span class="v">minas · misiles · 5to convoy</span></div>
+        <div class="row"><span><b>Arabia Saudita</b> · bypass</span><span class="v">pipeline E-W ~5 Mb/d</span></div>
+        <div class="row"><span><b>EAU</b> · bypass</span><span class="v">pipeline Fujairah ~1.8 Mb/d</span></div>
+        <div class="row"><span><b>EE.UU.</b> · mantiene tránsito</span><span class="v">5ta Flota · Bahrain</span></div>
+        <div class="row"><span><b>China</b> · mayor cliente</span><span class="v">~50% del crudo · bilateraliza en yuan</span></div>
+        <div class="row"><span><b>India</b> · 2do cliente</span><span class="v">busca alternativas · Rusia</span></div>
+        <div class="row"><span><b>Rusia</b> · beneficiada por crisis</span><span class="v">suministro alternativo</span></div>
+      </div>
+    </div>
+    <div class="source">EIA · IEA Oil Market Report · CSIS Energy Security · Lloyd's market reports</div>
+  </section>
+
+  <!-- 5 · P1 — US$300B Rusia -->
+  <section class="slide" data-p="1" data-title="Sanciones: US$300B congelado">
+    <div>
+      <div class="kicker"><span class="dot"></span>Reserva = activo político</div>
+      <div class="metric">US$300B</div>
+      <p class="sub">reservas rusas congeladas tras 2022.<br/>REPO Act (2024): EE.UU. autoriza usar los intereses para financiar Ucrania.</p>
+    </div>
+    <div class="visual"><div class="ice"></div><div class="lock">▣</div><div class="bigword">CONGELADO</div></div>
+    <div class="source">Reuters · The Economist · REPO Act 2024</div>
+  </section>
+
+  <!-- 10 · P2 — El Yuan como moneda global -->
+  <section class="slide" data-p="2" data-title="El Yuan como moneda global">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
+      <h2 class="headline">El Yuan<br/>no escaló</h2>
+      <p class="sub">A pesar del push de Beijing, el yuan sigue siendo marginal como moneda global.<br/>Su pico fue 2022. Desde entonces, <b style="color:#ff8c00">cae en reservas</b>.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">1.93%</span><span class="t">CNY en reservas globales (Q3 2025)</span><span class="src">IMF COFER · pico fue ~2.83% en 2022</span></div>
+        <div class="f"><span class="n">3%</span><span class="t">CNY en pagos SWIFT (jun-2025)</span><span class="src">SWIFT RMB Tracker · vs USD 48%, EUR 24%</span></div>
+        <div class="f"><span class="n">US$24.5T</span><span class="t">Volumen anual CIPS 2024 (+43% YoY)</span><span class="src">PBOC · CIPS Annual Report</span></div>
+        <div class="f"><span class="n">30×</span><span class="t">CIPS ~$60B/día · CHIPS ~$1.800B/día</span><span class="src">CIPS vs CHIPS daily settlement</span></div>
+      </div>
+      <div class="bigword">YUAN</div>
+    </div>
+    <div class="source">IMF COFER Q3 2025 · SWIFT RMB Tracker jun-2025 · PBOC CIPS Annual Report 2024 · BBVA Research</div>
+  </section>
+
+  <!-- 11 · P2 — Todas fiat, emisión infinita + chart poder adquisitivo -->
+  <section class="slide" data-p="2" data-title="Poder adquisitivo fiat 1971-2025">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
+      <h2 class="headline">Todas fiat,<br/>todas caen</h2>
+      <p class="sub" style="font-size:clamp(14px,1.45vw,20px);line-height:1.4">
+        Desde 1971 (fin de Bretton Woods):<br/>
+        · USD perdió <b style="color:#ff8c00">~86%</b> · CNY <b style="color:#f59e0b">~85%</b><br/>
+        · GBP perdió <b style="color:#8b5cf6">~93%</b> · INR <b style="color:#14b8a6">~97%</b><br/>
+        · CHF (el mejor) perdió <b style="color:#3ecf8e">~65%</b><br/>
+        · ARS perdió <b style="color:#d7432f">prácticamente todo</b>
+      </p>
+    </div>
+    <div class="visual">
+      <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:5% 4% 14% 4%;width:92%;height:80%" preserveAspectRatio="xMidYMid meet">
+        <!-- Título -->
+        <text x="360" y="28" text-anchor="middle" fill="#c2cad3"
+              font-family="ui-monospace,monospace" font-weight="800" font-size="13"
+              letter-spacing="3">PODER ADQUISITIVO · 1971 = 100 · MONEDAS FIAT</text>
+
+        <!-- Grid horizontal -->
+        <g stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,4">
+          <line x1="80" y1="155" x2="680" y2="155"/>
+          <line x1="80" y1="230" x2="680" y2="230"/>
+          <line x1="80" y1="305" x2="680" y2="305"/>
+          <line x1="80" y1="380" x2="680" y2="380"/>
+        </g>
+
+        <!-- Línea inicial (referencia 100) -->
+        <line x1="80" y1="80" x2="680" y2="80" stroke="rgba(255,255,255,0.25)" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+        <!-- Y-axis labels -->
+        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="end">
+          <text x="72" y="84">100</text>
+          <text x="72" y="159">75</text>
+          <text x="72" y="234">50</text>
+          <text x="72" y="309">25</text>
+          <text x="72" y="384">0</text>
+        </g>
+
+        <!-- X-axis labels -->
+        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">
+          <text x="80"  y="403">1971</text>
+          <text x="180" y="403">1980</text>
+          <text x="291" y="403">1990</text>
+          <text x="402" y="403">2000</text>
+          <text x="513" y="403">2010</text>
+          <text x="624" y="403">2020</text>
+          <text x="680" y="403">2025</text>
+        </g>
+
+        <!-- Anotación Nixon Shock -->
+        <g font-family="ui-monospace,monospace">
+          <line x1="80" y1="80" x2="80" y2="54" stroke="#d7ad45" stroke-width="1" stroke-dasharray="2,2"/>
+          <rect x="50" y="38" width="130" height="20" fill="rgba(215,173,69,0.18)"
+                stroke="#d7ad45" stroke-width="1" rx="3"/>
+          <text x="115" y="52" text-anchor="middle" fill="#f0d18a" font-weight="800" font-size="10.5">1971 · NIXON SHOCK</text>
+        </g>
+
+        <!-- CHF (verde, mejor performer) -->
+        <polyline points="80,80 180,161 291,200 402,227 513,245 624,260 680,275"
+                  fill="none" stroke="#3ecf8e" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- JPY (rojo) -->
+        <polyline points="80,80 180,239 291,266 402,284 513,287 624,290 680,296"
+                  fill="none" stroke="#ef4444" stroke-width="2" stroke-linejoin="round"/>
+        <!-- DEM/EUR (azul) -->
+        <polyline points="80,80 180,188 291,233 402,272 513,296 624,311 680,323"
+                  fill="none" stroke="#2b66ff" stroke-width="2" stroke-linejoin="round"/>
+        <!-- CNY (amber, BRICS) -->
+        <polyline points="80,80 180,95 291,230 402,296 513,314 624,329 680,335"
+                  fill="none" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
+        <!-- USD (naranja, destacada) -->
+        <polyline points="80,80 180,227 291,281 402,305 513,314 624,329 680,338"
+                  fill="none" stroke="#ff8c00" stroke-width="3" stroke-linejoin="round"/>
+        <!-- GBP (violeta, peor de las "estables") -->
+        <polyline points="80,80 180,299 291,332 402,344 513,350 624,356 680,359"
+                  fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
+        <!-- INR (teal, BRICS, alta inflación) -->
+        <polyline points="80,80 180,239 291,314 402,347 513,362 624,368 680,371"
+                  fill="none" stroke="#14b8a6" stroke-width="2" stroke-linejoin="round"/>
+
+        <!-- Puntos finales con etiqueta -->
+        <g font-family="ui-monospace,monospace" font-weight="800" font-size="11">
+          <!-- CHF -->
+          <circle cx="680" cy="275" r="4" fill="#3ecf8e" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="278" fill="#7dffc1">CHF · 35</text>
+          <!-- JPY -->
+          <circle cx="680" cy="296" r="4" fill="#ef4444" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="299" fill="#ff9c8a">JPY · 28</text>
+          <!-- EUR -->
+          <circle cx="680" cy="323" r="4" fill="#2b66ff" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="320" fill="#7b9eff">EUR · 19</text>
+          <!-- CNY -->
+          <circle cx="680" cy="335" r="4" fill="#f59e0b" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="332" fill="#fbbf24">CNY · 15</text>
+          <!-- USD -->
+          <circle cx="680" cy="338" r="5" fill="#ff8c00" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="346" fill="#ffc070">USD · 14</text>
+          <!-- GBP -->
+          <circle cx="680" cy="359" r="4" fill="#8b5cf6" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="358" fill="#c4a7ff">GBP · 7</text>
+          <!-- INR -->
+          <circle cx="680" cy="371" r="4" fill="#14b8a6" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="372" fill="#5eead4">INR · 3</text>
+        </g>
+
+        <!-- Legenda inferior compacta -->
+        <g font-family="ui-monospace,monospace" font-size="10.5" font-weight="700">
+          <g transform="translate(80,432)">
+            <rect width="11" height="11" fill="#3ecf8e"/><text x="16" y="10" fill="#e9e6dc">CHF Suizo</text>
+          </g>
+          <g transform="translate(170,432)">
+            <rect width="11" height="11" fill="#ef4444"/><text x="16" y="10" fill="#e9e6dc">JPY Japón</text>
+          </g>
+          <g transform="translate(258,432)">
+            <rect width="11" height="11" fill="#2b66ff"/><text x="16" y="10" fill="#e9e6dc">EUR / DEM</text>
+          </g>
+          <g transform="translate(353,432)">
+            <rect width="11" height="11" fill="#f59e0b"/><text x="16" y="10" fill="#e9e6dc">CNY Yuan</text>
+          </g>
+          <g transform="translate(445,432)">
+            <rect width="11" height="11" fill="#ff8c00"/><text x="16" y="10" fill="#e9e6dc">USD EE.UU.</text>
+          </g>
+          <g transform="translate(540,432)">
+            <rect width="11" height="11" fill="#8b5cf6"/><text x="16" y="10" fill="#e9e6dc">GBP UK</text>
+          </g>
+          <g transform="translate(615,432)">
+            <rect width="11" height="11" fill="#14b8a6"/><text x="16" y="10" fill="#e9e6dc">INR India</text>
+          </g>
+        </g>
+
+        <!-- Nota ARS -->
+        <text x="360" y="465" text-anchor="middle" fill="#728092"
+              font-family="ui-monospace,monospace" font-size="10" font-style="italic">
+          Peso argentino: 4 reemplazos de moneda · 1 ARS actual = 10.000.000.000.000 (1 × 10¹³) pesos pre-1971 · prácticamente 0
+        </text>
+      </svg>
+      <div class="bigword">FIAT</div>
+    </div>
+    <div class="source">CPI nacionales (BLS / Eurostat / SNB / BoJ / ONS) · BCRA series largas · estimaciones FRED · datos 1971-2025</div>
+  </section>
+
+  <!-- 8 · P2 — Yuan + CIPS + petroyuan + M2 -->
+  <section class="slide" data-p="2" data-title="Yuan + CIPS + petroyuan">
+    <div>
+      <div class="kicker"><span class="dot"></span>China construye el carril</div>
+      <h2 class="headline">Yuan + CIPS<br/>+ petroyuan</h2>
+      <p class="sub">El carril paralelo crece. Pero la masa monetaria también.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~US$43T</span><span class="t">M2 China (~315T yuanes)</span><span class="src">PBOC · 2024</span></div>
+        <div class="f"><span class="n">~US$21T</span><span class="t">M2 EE.UU.</span><span class="src">Fed H.6 · 2024</span></div>
+        <div class="f"><span class="n">47% / 4.5%</span><span class="t">USD vs Yuan en SWIFT</span><span class="src">SWIFT RMB Tracker 2024</span></div>
+        <div class="f"><span class="n">~6×</span><span class="t">Crecimiento M2 China 2008-2024</span><span class="src">PBOC series largas</span></div>
+      </div>
+      <div class="bigword">BEIJING</div>
+    </div>
+    <div class="source">PBOC · CIPS Quarterly · SWIFT RMB Tracker · Shanghai INE</div>
+  </section>
+
+  <!-- 13 · P3 — Oro: % de las reservas -->
+  <section class="slide" data-p="3" data-title="Oro: % de las reservas globales">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
+      <div class="metric">~20%</div>
+      <p class="sub">de las reservas oficiales globales ya están en oro.<br/>En 2024-25 <b style="color:#d7ad45">el oro superó a los Treasuries</b> como #2 activo de reserva. Primera vez en 30 años.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>Portugal</b></span><span class="v">~76%</span></div>
+        <div class="row"><span><b>Alemania</b></span><span class="v">~75%</span></div>
+        <div class="row"><span><b>EE.UU.</b></span><span class="v">~73%</span></div>
+        <div class="row"><span><b>Italia · Francia</b></span><span class="v">~70%</span></div>
+        <div class="row"><span><b>Rusia</b></span><span class="v">~30%</span></div>
+        <div class="row"><span><b>Polonia</b> (target 30%)</span><span class="v">~28%</span></div>
+        <div class="row"><span><b>India</b></span><span class="v">~12%</span></div>
+        <div class="row"><span><b>China · Brasil</b></span><span class="v">~7%</span></div>
+      </div>
+    </div>
+    <div class="source">World Gold Council · Central Bank Gold Reserves Survey 2025 · 76% de bancos centrales esperan mayor share de oro en 5 años</div>
+  </section>
+
+  <!-- 14 · P2 — BRICS+: países y capital previsto -->
+  <section class="slide" data-p="2" data-title="BRICS+: países y capital previsto">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · BRICS / China</div>
+      <h2 class="headline">BRICS+</h2>
+      <p class="sub">10 países plenos · <b style="color:#ff8c00">~28% PIB global nominal</b> · <b style="color:#ff8c00">~36% PIB PPP</b> (mayor que G7) · <b style="color:#ff8c00">~45% población mundial</b>.<br/>Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>2010 · Fundadores</b></span><span class="v">Brasil · Rusia · India · China · Sudáfrica</span></div>
+        <div class="row"><span><b>2024 · Expansión BRICS+</b></span><span class="v">Egipto · Etiopía · Irán · EAU</span></div>
+        <div class="row"><span><b>2025 · Indonesia</b></span><span class="v">4to país más poblado del mundo</span></div>
+        <div class="row"><span><b>Socios (partner countries)</b></span><span class="v">Bielorrusia · Bolivia · Cuba · Kazajistán · Tailandia · Malasia · Nigeria · Uganda · Uzbekistán</span></div>
+        <div class="row"><span><b>NDB · Banco de Desarrollo BRICS</b></span><span class="v">US$100B autorizados · US$50B suscritos</span></div>
+        <div class="row"><span><b>CRA · Reserva contingente</b></span><span class="v">US$100B (China $41B · BRI $18B c/u)</span></div>
+        <div class="row"><span><b>BRICS Pay / Bridge</b></span><span class="v">CBDC + monedas locales (pilotos)</span></div>
+      </div>
+    </div>
+    <div class="source">BRICS Summit Kazán 2024 · BRICS Summit Rio 2025 · NDB & CRA founding agreements 2014 · IMF / WB</div>
+  </section>
+
+  <!-- 15 · P3 — Oro: bancos centrales -->
+  <section class="slide" data-p="3" data-title="Oro: bancos centrales compran">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
+      <div class="metric">+1.000t</div>
+      <p class="sub">por año compran los bancos centrales (2022-2024).<br/>2022: récord histórico (1.082t).<br/>Sin riesgo de contraparte estatal.</p>
+    </div>
+    <div class="visual"><div class="bars"><b></b><b></b><b></b><b></b><b></b></div><div class="bigword">ORO</div></div>
+    <div class="source">World Gold Council · Central Bank Gold Demand 2022-2024</div>
+  </section>
+
+  <!-- 10 · P3 — Oferta histórica: oro vs Bitcoin (NUEVA) -->
+  <section class="slide" data-p="3" data-title="Oferta histórica: oro vs Bitcoin">
+    <div>
+      <div class="kicker"><span class="dot"></span>Competencia de activos neutrales</div>
+      <h2 class="headline">Oferta histórica:<br/>oro vs Bitcoin</h2>
+      <p class="sub">Oro: crece ~1.5–2% anual sin techo definido.<br/>Bitcoin: cap absoluto 21M, emisión decae cada 4 años.</p>
+    </div>
+    <div class="visual">
+      <div class="vsgrid">
+        <div class="col gold">
+          <h4><small>Activo físico</small>ORO</h4>
+          <div class="row"><span class="l">Stock total minado</span><span class="v">~213.000 t</span></div>
+          <div class="row"><span class="l">Stock en 1900</span><span class="v">~30.000 t</span></div>
+          <div class="row"><span class="l">Stock en 2000</span><span class="v">~140.000 t</span></div>
+          <div class="row"><span class="l">Oferta minera 2024</span><span class="v">~3.500 t</span></div>
+          <div class="row"><span class="l">Inflación anual</span><span class="v">~1.5–2%</span></div>
+          <div class="row"><span class="l">Stock-to-flow</span><span class="v">~62</span></div>
+          <div class="row"><span class="l">Techo de oferta</span><span class="v">indefinido</span></div>
+        </div>
+        <div class="col btc">
+          <h4><small>Activo digital</small>BITCOIN</h4>
+          <div class="row"><span class="l">Cap absoluto</span><span class="v">21.000.000 BTC</span></div>
+          <div class="row"><span class="l">En circulación (may-2026)</span><span class="v">~20.01M (~95.3%)</span></div>
+          <div class="row"><span class="l">Halvings ya ocurridos</span><span class="v">4 (2012-2016-2020-2024)</span></div>
+          <div class="row"><span class="l">Emisión nueva 2024</span><span class="v">~165.000 BTC</span></div>
+          <div class="row"><span class="l">Inflación post-halving abr-2024</span><span class="v">~0.82%</span></div>
+          <div class="row"><span class="l">Stock-to-flow</span><span class="v">~117</span></div>
+          <div class="row"><span class="l">Última emisión prevista</span><span class="v">año 2140</span></div>
+        </div>
+      </div>
+      <div class="bigword">OFERTA</div>
+    </div>
+    <div class="source">World Gold Council · USGS · blockchain.com · Bitcoin protocol consensus rules</div>
+  </section>
+
+  <!-- 11 · P3 — Bitcoin 21M + datos -->
+  <section class="slide" data-p="3" data-title="Bitcoin: red digital sin permiso">
+    <div>
+      <div class="kicker"><span class="dot"></span>Activo digital inconfiscable</div>
+      <h2 class="headline">Escasez por consenso</h2>
+      <p class="sub">Verificable por cualquier nodo. Liquidación 24/7. Sin permiso.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">21M</span><span class="t">Oferta máxima total (cap absoluto)</span><span class="src">Bitcoin protocol · 2008</span></div>
+        <div class="f"><span class="n">~20.01M</span><span class="t">BTC en circulación (~95.3%)</span><span class="src">on-chain · may-2026 · cruzó 20M en mar-2026</span></div>
+        <div class="f"><span class="n">~0.82%</span><span class="t">Inflación anual post-halving abr-2024</span><span class="src">protocol</span></div>
+        <div class="f"><span class="n">~900 EH/s</span><span class="t">Hashrate global de la red</span><span class="src">may-2026 · CoinWarz / Hashrate Index</span></div>
+      </div>
+      <div class="bigword">PROTOCOLO</div>
+    </div>
+    <div class="source">Bitcoin Whitepaper (Satoshi, 2008) · consenso de red</div>
+  </section>
+
+  <!-- 18 · P3 — Empresas con Bitcoin en treasury (verificado may-2026) -->
+  <section class="slide" data-p="3" data-title="Empresas con Bitcoin en treasury">
+    <div>
+      <div class="kicker"><span class="dot"></span>Treasuries corporativos · verificado mayo 2026</div>
+      <h2 class="headline">Empresas con BTC en balance</h2>
+      <p class="sub">Empresas públicas combinadas: <b style="color:#ff8c00">~1.188M BTC</b> (~5.6% del supply en circulación).<br/>Strategy es el mayor holder corporativo del mundo — adquirió 3.376 BTC el 27-abr-2026.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>Strategy</b> (MSTR · ex-MicroStrategy)</span><span class="v">~818.869 BTC</span></div>
+        <div class="row"><span><b>Twenty One Capital</b> (XXI)</span><span class="v">~43.514 BTC</span></div>
+        <div class="row"><span><b>Metaplanet</b> (3350.T · Japón)</span><span class="v">~40.177 BTC</span></div>
+        <div class="row"><span><b>MARA Holdings</b> (minero)</span><span class="v">~35.303 BTC</span></div>
+        <div class="row"><span><b>Bullish</b> (BLSH)</span><span class="v">~24.300 BTC</span></div>
+        <div class="row"><span><b>Tesla</b></span><span class="v">~11.500 BTC</span></div>
+        <div class="row"><span><b>Block · GameStop · Semler · Riot · CleanSpark · Coinbase</b></span><span class="v">treasuries adicionales</span></div>
+        <div class="row" style="background:rgba(43,102,255,.08);border-color:rgba(43,102,255,.3)"><span><b>Nota:</b> BlackRock IBIT (~775K BTC) es un ETF spot, NO treasury corporativo · ver slide 19</span><span class="v">→</span></div>
+      </div>
+    </div>
+    <div class="source">SEC filings 10-K/8-K · bitcointreasuries.net · bitbo.io · CoinMarketCap Public Bitcoin Treasuries · datos verificados 12-may-2026</div>
+  </section>
+
+  <!-- 13 · P3 — Estados + ETFs -->
+  <section class="slide" data-p="3" data-title="Estados y ETFs con Bitcoin">
+    <div>
+      <div class="kicker"><span class="dot"></span>Estados y Wall Street</div>
+      <h2 class="headline">Soberanos y ETFs</h2>
+      <p class="sub">Reserva estratégica EE.UU., decomisos en Bulgaria, China y UK, minería estatal Bhután. ETFs spot dominan custodia institucional.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>EE.UU.</b> · Strategic Bitcoin Reserve (EO mar-2025)</span><span class="v">~325K BTC</span></div>
+        <div class="row"><span><b>Bulgaria</b> · seizure 2017 (debatido)</span><span class="v">~213K BTC</span></div>
+        <div class="row"><span><b>China</b> · decomisos (PlusToken, etc.)*</span><span class="v">~190K BTC</span></div>
+        <div class="row"><span><b>Reino Unido</b> · BTC confiscado</span><span class="v">~61K BTC</span></div>
+        <div class="row"><span><b>Bhután · El Salvador</b> · minería / 1 BTC/día</span><span class="v">~13K · ~6K BTC</span></div>
+        <div class="row"><span><b>BlackRock IBIT</b> · ETF spot (~US$50B AUM)</span><span class="v">~775K BTC</span></div>
+        <div class="row"><span><b>Fidelity FBTC</b> · ETF spot</span><span class="v">~471K BTC</span></div>
+        <div class="row"><span><b>11 ETFs spot</b> EE.UU. · total AUM</span><span class="v">~US$120B+</span></div>
+      </div>
+    </div>
+    <div class="source">*China sin marco formal de reserva estratégica · USDOJ + EO Trump mar-2025 · SEC 13F · Bloomberg / Farside ETF flows 2026</div>
+  </section>
+
+  <!-- 14 · Cierre analítico -->
+  <section class="slide" data-p="3" data-title="Síntesis: tres tendencias en paralelo">
+    <div>
+      <div class="kicker"><span class="dot"></span>Síntesis</div>
+      <h2 class="headline">Tres tendencias<br/>en paralelo</h2>
+      <p class="sub"><b>1.</b> Competencia de monedas estatales (BRICS, CIPS, petroyuan).<br/><b>2.</b> El dólar defiende posición con SWIFT y poder militar.<br/><b>3.</b> Activos neutrales (oro físico, Bitcoin digital) capturan demanda de hedge.</p>
+    </div>
+    <div class="visual"><div class="split"><div style="color:var(--gold)">Au</div><div style="color:var(--orange)">₿</div></div><div class="bigword">NEUTRALIDAD</div></div>
+    <div class="source">Inconfiscables, libres, con oferta verificable. Esa es la categoría que aprecia.</div>
+  </section>
+
+</div>
+
+<div class="progress" id="progress">
+  <div class="seg" data-p="1"><div class="fill"></div></div>
+  <div class="seg" data-p="2"><div class="fill"></div></div>
+  <div class="seg" data-p="3"><div class="fill"></div></div>
+</div>
+<div class="count" id="count">01 / 20</div>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true">
+  <div class="menu-head">
+    <div class="menu-title"><small>Neura · 20 slides</small>¿Muere el patrón dólar?</div>
+    <button class="menu-close" id="menuClose">CERRAR ✕</button>
+  </div>
+  <div class="pillars">
+    <div class="pillar" data-p="1">
+      <h3><span class="dot"></span>Pilar 1 · Dólar y guerra</h3>
+      <p class="lede">Por qué el dólar manda y cómo sostiene la demanda por un token de exportación de déficit fiscal.</p>
+      <ol id="list1"></ol>
+    </div>
+    <div class="pillar" data-p="2">
+      <h3><span class="dot"></span>Pilar 2 · BRICS / China</h3>
+      <p class="lede">Competencia de monedas estatales: CIPS, yuan, monedas locales, energía. Todas fiat, emisión infinita.</p>
+      <ol id="list2"></ol>
+    </div>
+    <div class="pillar" data-p="3">
+      <h3><span class="dot"></span>Pilar 3 · Oro / Bitcoin</h3>
+      <p class="lede">Activos neutrales, libres e inconfiscables. Competencia oro vs Bitcoin por la reserva del siglo.</p>
+      <ol id="list3"></ol>
+    </div>
+  </div>
+  <div class="menu-hint">
+    <span><kbd>←</kbd><kbd>→</kbd> navegar</span>
+    <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> ir a pilar</span>
+    <span><kbd>M</kbd> menú</span>
+    <span><kbd>Esc</kbd> cerrar</span>
+    <span><kbd>F</kbd> pantalla completa</span>
+  </div>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const pillarNames = {0:'APERTURA',1:'PILAR 1 · DÓLAR + GUERRA',2:'PILAR 2 · BRICS / CHINA',3:'PILAR 3 · ORO + BITCOIN'};
+  let i = Math.max(0, slides.findIndex(s => s.classList.contains('active')));
+  slides.forEach(s => s.classList.remove('active'));
+
+  const lists = {1:document.getElementById('list1'),2:document.getElementById('list2'),3:document.getElementById('list3')};
+  slides.forEach((s, idx) => {
+    const p = +s.dataset.p;
+    if (!lists[p]) return;
+    const li = document.createElement('li');
+    li.dataset.idx = idx;
+    li.innerHTML = `<span class="n">${String(idx+1).padStart(2,'0')}</span><span><span class="t">${s.dataset.title}</span></span>`;
+    li.addEventListener('click', () => { show(idx); closeMenu(); });
+    lists[p].appendChild(li);
+  });
+
+  const pillarTag = document.getElementById('pillarTag');
+  const pillarName = document.getElementById('pillarName');
+  const count = document.getElementById('count');
+  const progSegs = [...document.querySelectorAll('#progress .seg')];
+
+  function pillarCounts(){
+    const counts = {1:0,2:0,3:0}, indexInPillar = [];
+    slides.forEach((s,idx)=>{ const p=+s.dataset.p; if(p>=1&&p<=3){ counts[p]++; indexInPillar.push({p,n:counts[p]});} else indexInPillar.push({p:0,n:0}); });
+    return {counts, indexInPillar};
+  }
+  const {counts:pCounts, indexInPillar} = pillarCounts();
+
+  function show(n){
+    slides.forEach(s => s.classList.remove('active'));
+    i = (n + slides.length) % slides.length;
+    slides[i].classList.add('active');
+    const p = +slides[i].dataset.p;
+    pillarTag.dataset.p = p;
+    pillarName.textContent = pillarNames[p];
+    count.textContent = `${String(i+1).padStart(2,'0')} / ${slides.length}`;
+    progSegs.forEach(seg => {
+      const segP = +seg.dataset.p;
+      const fill = seg.querySelector('.fill');
+      if (segP < p) fill.style.width = '100%';
+      else if (segP > p) fill.style.width = '0%';
+      else {
+        const info = indexInPillar[i];
+        const pct = pCounts[segP] ? (info.n / pCounts[segP]) * 100 : 0;
+        fill.style.width = pct + '%';
+      }
+    });
+    document.querySelectorAll('.pillar li').forEach(li => li.classList.toggle('current', +li.dataset.idx === i));
+  }
+
+  const menu = document.getElementById('menu');
+  function openMenu(){ menu.classList.add('open'); }
+  function closeMenu(){ menu.classList.remove('open'); }
+  document.getElementById('menuBtn').addEventListener('click', openMenu);
+  document.getElementById('menuClose').addEventListener('click', closeMenu);
+  menu.addEventListener('click', e => { if (e.target === menu) closeMenu(); });
+
+  function jumpToPillar(p){
+    const idx = slides.findIndex(s => +s.dataset.p === p);
+    if (idx >= 0) show(idx);
+  }
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { if (menu.classList.contains('open')) closeMenu(); return; }
+    if (menu.classList.contains('open')) return;
+    if (['ArrowRight',' ','Enter','PageDown'].includes(e.key)) { e.preventDefault(); show(i+1); }
+    else if (['ArrowLeft','Backspace','PageUp'].includes(e.key)) { e.preventDefault(); show(i-1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length-1);
+    else if (e.key === '1') jumpToPillar(1);
+    else if (e.key === '2') jumpToPillar(2);
+    else if (e.key === '3') jumpToPillar(3);
+    else if (e.key === '0') show(0);
+    else if (e.key.toLowerCase() === 'm') openMenu();
+    else if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+  });
+
+  progSegs.forEach(seg => seg.addEventListener('click', () => jumpToPillar(+seg.dataset.p)));
+
+  show(0);
+</script>
+</body>
+</html>

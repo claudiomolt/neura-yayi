@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Competencia de monedas — Extendida (preparación)</title>
+  <style>
+    :root{
+      --bg:#070a0f; --panel:#0e1624; --ink:#f3f0e8; --muted:#9aa6b2;
+      --orange:#ff8c00; --gold:#d7ad45; --red:#d7432f; --blue:#2b66ff; --green:#3ecf8e;
+      --line:rgba(255,255,255,.14);
+      --p1:#d7432f; --p2:#2b66ff; --p3:#d7ad45;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    body{background:radial-gradient(circle at 70% 30%,#14213b 0,#070a0f 42%,#020307 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;overflow:hidden}
+
+    .deck{width:100vw;height:100vh;position:relative}
+    .slide{position:absolute;inset:0;padding:5vw 6vw;display:none;grid-template-columns:1.05fr .95fr;gap:4vw;align-items:center}
+    .slide.active{display:grid;animation:fade .4s ease}
+    @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .kicker{font:700 13px/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+    .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 14px var(--orange)}
+    .headline{font-size:clamp(48px,6.6vw,118px);line-height:.88;letter-spacing:-.06em;margin:0;max-width:950px}
+    .metric{font-size:clamp(76px,12vw,210px);line-height:.78;letter-spacing:-.1em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
+    .sub{font:500 clamp(17px,1.85vw,30px)/1.28 ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:24px}
+    .notes{margin-top:18px;padding:14px 16px;border-left:3px solid var(--orange);background:rgba(255,140,0,.07);font:400 14px/1.5 ui-sans-serif;color:#d8d2c4;border-radius:0 8px 8px 0;max-width:680px}
+    .notes b{color:var(--ink)}
+    .source{position:absolute;left:6vw;bottom:34px;font:600 12px/1.4 ui-monospace,monospace;color:#728092;letter-spacing:.04em;max-width:60vw}
+
+    .visual{min-height:60vh;border:1px solid var(--line);border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015));position:relative;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,.45)}
+    .visual:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,var(--orange),transparent 18%),radial-gradient(circle at 80% 20%,var(--blue),transparent 22%);opacity:.16;filter:blur(18px);animation:drift 14s infinite alternate ease-in-out}
+    .visual:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle,#000 30%,transparent 78%)}
+    @keyframes drift{to{transform:translate3d(8%,4%,0) rotate(8deg)}}
+    .bigword{position:absolute;inset:auto 28px 28px 28px;font:900 clamp(34px,5vw,88px)/.9 ui-sans-serif,system-ui,sans-serif;letter-spacing:-.07em;color:rgba(243,240,232,.92)}
+
+    .web{position:absolute;inset:12%;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+    .web i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--orange);box-shadow:0 0 30px var(--orange)}
+    .web i:nth-child(1){left:50%;top:4%}.web i:nth-child(2){left:82%;top:28%}.web i:nth-child(3){left:78%;top:72%}.web i:nth-child(4){left:22%;top:74%}.web i:nth-child(5){left:15%;top:24%}
+    .usd{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:900 120px ui-sans-serif;color:var(--gold)}
+    .ice{position:absolute;inset:18%;border-radius:24px;background:linear-gradient(135deg,rgba(142,207,255,.25),rgba(255,255,255,.04));border:2px solid rgba(142,207,255,.5);box-shadow:inset 0 0 80px rgba(142,207,255,.18)}
+    .lock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:900 120px ui-sans-serif;color:#bfe6ff}
+    .bars{position:absolute;left:12%;right:12%;bottom:12%;height:55%;display:flex;gap:18px;align-items:end}
+    .bars b{flex:1;background:linear-gradient(var(--gold),#6e4e12);border-radius:14px 14px 0 0}
+    .bars b:nth-child(2){height:85%}.bars b:nth-child(3){height:66%}.bars b:nth-child(4){height:92%}.bars b:nth-child(5){height:74%}.bars b:nth-child(1){height:56%}
+    .route{position:absolute;inset:16%;border:3px solid rgba(255,255,255,.18);border-radius:50%;transform:rotate(-18deg)}
+    .route:before{content:"";position:absolute;left:8%;top:45%;width:84%;border-top:7px dashed var(--red)}
+    .ship{position:absolute;font-size:80px;left:42%;top:38%}
+    .chip{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:46%;aspect-ratio:1;border:10px solid var(--gold);background:#111827;box-shadow:0 0 0 16px rgba(215,173,69,.12)}
+    .chip:before,.chip:after{content:"";position:absolute;inset:16%;border:2px solid rgba(255,255,255,.25)}
+    .btc{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font:900 170px ui-sans-serif;color:var(--orange);text-shadow:0 0 70px rgba(255,140,0,.35)}
+    .node{position:absolute;width:13px;height:13px;background:var(--orange);border-radius:50%;box-shadow:0 0 18px var(--orange)}
+    .node:nth-child(1){left:22%;top:25%}.node:nth-child(2){left:76%;top:20%}.node:nth-child(3){left:18%;top:73%}.node:nth-child(4){left:68%;top:78%}
+    .split{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+    .split div{display:grid;place-items:center;font:900 110px ui-sans-serif}
+    .split div:first-child{background:rgba(215,173,69,.09)}
+    .split div:last-child{background:rgba(255,140,0,.09)}
+
+    .facts{position:absolute;inset:8% 8% 22% 8%;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;font-family:ui-monospace,monospace;color:#e9e6dc}
+    .facts .f{padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;gap:5px;justify-content:space-between;min-height:0}
+    .facts .f .n{font:900 clamp(22px,2.6vw,38px)/1 ui-sans-serif;letter-spacing:-.03em;color:var(--gold)}
+    .facts .f .t{font:600 clamp(11px,1vw,14px)/1.25 ui-sans-serif;color:var(--ink)}
+    .facts .f .src{font:500 10px ui-monospace,monospace;color:#728092;letter-spacing:.02em;margin-top:4px}
+
+    .vsgrid{position:absolute;inset:7% 6% 19% 6%;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .vsgrid .col{padding:16px 18px 12px;border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;gap:3px;background:rgba(255,255,255,.03)}
+    .vsgrid .col.gold{background:rgba(215,173,69,.07);border-color:rgba(215,173,69,.3)}
+    .vsgrid .col.btc{background:rgba(255,140,0,.07);border-color:rgba(255,140,0,.3)}
+    .vsgrid .col h4{font:900 clamp(15px,1.5vw,21px) ui-sans-serif;letter-spacing:-.02em;margin:0 0 6px;color:var(--gold)}
+    .vsgrid .col.btc h4{color:var(--orange)}
+    .vsgrid .col h4 small{display:block;font:700 9.5px ui-monospace,monospace;letter-spacing:.2em;color:#9aa6b2;text-transform:uppercase;margin-bottom:3px}
+    .vsgrid .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-family:ui-monospace,monospace}
+    .vsgrid .row:last-child{border-bottom:0}
+    .vsgrid .row .l{color:#9aa6b2;font:600 clamp(10px,.92vw,12px)/1.3}
+    .vsgrid .row .v{color:var(--ink);font:800 clamp(11px,1vw,13.5px)/1.3;text-align:right}
+
+    .buyers{position:absolute;inset:8% 8% 22% 8%;display:flex;flex-direction:column;gap:8px;font:600 clamp(12px,1.18vw,16px)/1.4 ui-monospace,monospace;color:#e9e6dc}
+    .buyers .row{display:grid;grid-template-columns:1fr auto;align-items:center;padding:9px 13px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px}
+    .buyers .row b{color:var(--orange);font-weight:800}
+    .buyers .row .v{color:var(--gold);font-weight:800;letter-spacing:.02em}
+
+    .mapviz{position:absolute;inset:14%;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;align-content:center}
+    .mapviz .dot{aspect-ratio:1;border-radius:50%;border:2px solid rgba(255,255,255,.15);display:grid;place-items:center;font:800 10px ui-monospace,monospace;color:#cfd5dd;background:rgba(255,255,255,.03)}
+    .mapviz .dot.hot{background:rgba(255,140,0,.18);border-color:rgba(255,140,0,.7);color:#ffd9a8;box-shadow:0 0 18px rgba(255,140,0,.4)}
+    .mapviz .dot.gold{background:rgba(215,173,69,.18);border-color:rgba(215,173,69,.7);color:#fbe79b;box-shadow:0 0 18px rgba(215,173,69,.35)}
+
+    .title-slide{grid-template-columns:1fr}
+    .title-slide .headline{font-size:clamp(64px,9.5vw,150px)}
+    .title-slide .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:.72}
+
+    /* Máscara de dólar: la palabra se rellena con gradiente verde billete USD */
+    .dolar-mask{
+      background-image:linear-gradient(135deg,#0a2a16 0%,#1a4a2a 12%,#2f6b3f 25%,#5e9b5e 40%,#8fc474 55%,#5e9b5e 70%,#2f6b3f 82%,#1a4a2a 92%,#0a2a16 100%);
+      -webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;color:transparent;
+      filter:drop-shadow(0 4px 18px rgba(133,187,101,.35)) drop-shadow(0 2px 4px rgba(0,0,0,.5));
+      padding:0 .04em;display:inline-block;
+    }
+
+    .topbar{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 26px;z-index:30;pointer-events:none}
+    .topbar > *{pointer-events:auto}
+    .brand{font:800 12px/1 ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:#c2cad3;background:rgba(0,0,0,.35);border:1px solid var(--line);padding:9px 12px;border-radius:999px;backdrop-filter:blur(8px)}
+    .pillar-tag{display:flex;align-items:center;gap:10px;font:800 11px/1 ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#c2cad3;background:rgba(0,0,0,.35);border:1px solid var(--line);padding:9px 14px;border-radius:999px;backdrop-filter:blur(8px)}
+    .pillar-tag .pip{width:9px;height:9px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px currentColor}
+    .pillar-tag[data-p="1"] .pip{background:var(--p1);color:var(--p1)}
+    .pillar-tag[data-p="2"] .pip{background:var(--p2);color:var(--p2)}
+    .pillar-tag[data-p="3"] .pip{background:var(--p3);color:var(--p3)}
+    .menu-btn{display:flex;align-items:center;gap:8px;font:800 11px/1 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#e9e6dc;background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.4);padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .2s;backdrop-filter:blur(8px)}
+    .menu-btn:hover{background:rgba(255,140,0,.22);border-color:rgba(255,140,0,.7)}
+    .menu-btn svg{width:14px;height:14px}
+
+    .progress{position:fixed;left:0;right:0;bottom:0;height:6px;display:flex;z-index:25;background:rgba(0,0,0,.4)}
+    .progress .seg{flex:1;position:relative;background:rgba(255,255,255,.05);cursor:pointer}
+    .progress .seg + .seg{border-left:1px solid rgba(0,0,0,.4)}
+    .progress .seg .fill{position:absolute;left:0;top:0;bottom:0;width:0;transition:width .35s ease}
+    .progress .seg[data-p="1"] .fill{background:linear-gradient(90deg,var(--p1),#ff6b56)}
+    .progress .seg[data-p="2"] .fill{background:linear-gradient(90deg,var(--p2),#5d8cff)}
+    .progress .seg[data-p="3"] .fill{background:linear-gradient(90deg,var(--p3),#f0c860)}
+    .count{position:fixed;right:24px;bottom:18px;font:700 12px ui-monospace,monospace;color:#728092;z-index:26}
+
+    .menu{position:fixed;inset:0;background:rgba(3,5,8,.88);backdrop-filter:blur(18px);z-index:50;display:none;padding:5vh 7vw;overflow:auto}
+    .menu.open{display:block;animation:fade .25s ease}
+    .menu-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:30px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+    .menu-title{font:800 26px/1 ui-sans-serif;letter-spacing:-.02em}
+    .menu-title small{display:block;font:700 11px ui-monospace,monospace;letter-spacing:.2em;color:var(--orange);text-transform:uppercase;margin-bottom:8px}
+    .menu-close{font:800 11px ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#e9e6dc;background:transparent;border:1px solid var(--line);padding:9px 14px;border-radius:999px;cursor:pointer;transition:all .2s}
+    .menu-close:hover{border-color:var(--orange);color:var(--orange)}
+    .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+    @media (max-width:980px){.pillars{grid-template-columns:1fr}}
+    .pillar h3{font:800 13px/1 ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+    .pillar h3 .dot{width:11px;height:11px;border-radius:50%}
+    .pillar[data-p="1"] h3 .dot{background:var(--p1);box-shadow:0 0 16px var(--p1)}
+    .pillar[data-p="2"] h3 .dot{background:var(--p2);box-shadow:0 0 16px var(--p2)}
+    .pillar[data-p="3"] h3 .dot{background:var(--p3);box-shadow:0 0 16px var(--p3)}
+    .pillar p.lede{font:400 13px/1.4 ui-sans-serif;color:var(--muted);margin:0 0 14px;max-width:34ch}
+    .pillar ol{list-style:none;padding:0;margin:0}
+    .pillar li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:baseline;padding:8px 10px;border-radius:9px;cursor:pointer;transition:background .15s;border:1px solid transparent}
+    .pillar li:hover{background:rgba(255,255,255,.05);border-color:var(--line)}
+    .pillar li.current{background:rgba(255,140,0,.12);border-color:rgba(255,140,0,.45)}
+    .pillar li .n{font:800 11px ui-monospace,monospace;color:var(--orange);letter-spacing:.04em}
+    .pillar li .t{font:600 13.5px/1.25 ui-sans-serif}
+    .menu-hint{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font:600 11px ui-monospace,monospace;letter-spacing:.12em;color:#728092;text-transform:uppercase;display:flex;gap:24px;flex-wrap:wrap}
+    .menu-hint kbd{display:inline-block;padding:2px 7px;border:1px solid var(--line);border-radius:5px;background:rgba(255,255,255,.04);color:#c2cad3;margin-right:6px;font:700 10px ui-monospace,monospace}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">EXTENDIDA · ¿MUERE EL PATRÓN DÓLAR?</div>
+  <div class="pillar-tag" id="pillarTag" data-p="0"><span class="pip"></span><span id="pillarName">APERTURA</span></div>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir índice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    ÍNDICE
+  </button>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · Título -->
+  <section class="slide title-slide active" data-p="0" data-title="¿Muere el patrón dólar?">
+    <div>
+      <div class="kicker"><span class="dot"></span>Dólar · BRICS · Oro · Bitcoin</div>
+      <h1 class="headline">¿Muere el<br/>patrón <span class="dolar-mask">dólar</span>?</h1>
+      <p class="sub">Competencia de monedas en curso. Activos neutrales en alza.</p>
+    </div>
+    <div class="visual"><div class="web"><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="source">Mayo 2026 · versión extendida para preparación</div>
+  </section>
+
+  <!-- 2 · Tesis -->
+  <section class="slide" data-p="0" data-title="Tesis: tres tendencias">
+    <div>
+      <div class="kicker"><span class="dot"></span>Tesis</div>
+      <h2 class="headline">Tres tendencias<br/>en paralelo</h2>
+      <p class="sub"><b>1.</b> Competencia de monedas estatales (BRICS, CIPS, petroyuan).<br/><b>2.</b> El dólar pierde fuerza y se defiende con SWIFT + poder militar.<br/><b>3.</b> Activos neutrales (oro, Bitcoin) capturan demanda de hedge.</p>
+      <div class="notes"><b>Para decir en vivo:</b> tres procesos simultáneos. Ninguno requiere creer en el otro para activarse. Lo que aprecia en este escenario son los <b>activos sin permiso ni emisor: inconfiscables, libres y con oferta verificable.</b></div>
+    </div>
+    <div class="visual"><div class="web"><i></i><i></i><i></i><i></i><i></i><span class="usd">$</span></div><div class="bigword">TESIS</div></div>
+    <div class="source">Datos duros. Sin moralizar.</div>
+  </section>
+
+  <!-- ====================== PILAR 1 · DÓLAR + GUERRA ====================== -->
+
+  <!-- 3a · USD 71% en 2000 (pico) -->
+  <section class="slide" data-p="1" data-title="USD 71% en 2000 (pico histórico)">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 1 · Punto de partida</div>
+      <div class="metric">71%</div>
+      <p class="sub">Composición en 2000: USD 71% · EUR/DEM 18% · JPY 6.5% · GBP 3% · CHF 0.3% · Otras 1.2%.</p>
+      <div class="notes"><b>Contexto:</b> el Euro recién había sido lanzado (1999). Era el pico histórico post-Bretton Woods. Reservas totales del 2000 incluían también oro (~10%) y DEG / posición FMI (~3%).</div>
+    </div>
+    <div class="visual"><div class="bars"><b></b><b></b><b></b><b></b><b></b></div><div class="bigword">PICO</div></div>
+    <div class="source">IMF COFER Q4 2000 · Fed International Role of the U.S. Dollar series histórico · World Gold Council</div>
+  </section>
+
+  <!-- 3 · 57% reservas (Q3 2025) -->
+  <section class="slide" data-p="1" data-title="USD 57% en 2025 (mínimo 30 años)">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 1 · Dólar y guerra</div>
+      <div class="metric">57%</div>
+      <p class="sub">Reservas oficiales globales en USD (Q3 2025, mínimo en 30 años).</p>
+      <div class="notes"><b>Composición Q3 2025:</b> USD 57% · EUR 21% · JPY 5.5% · GBP 5% · CNY 2.2% · CAD/AUD/CHF/otras 9.3%. <b>Reservas totales</b> también incluyen oro (~20%) y DEG/posición FMI (~3%). Parte de la caída 2024-25 se debió a movimientos de tipo de cambio (USD débil), no solo a desdolarización activa.</div>
+    </div>
+    <div class="visual"><div class="bars"><b></b><b></b><b></b><b></b><b></b></div><div class="bigword">57%</div></div>
+    <div class="source">Federal Reserve · International Role of the U.S. Dollar 2025 · IMF COFER Q3 2025 · IMF Data Brief oct-2025</div>
+  </section>
+
+  <!-- 3b · USD cayendo: trayectoria 2000-2025 -->
+  <section class="slide" data-p="1" data-title="USD cayendo: 71% → 57% en 25 años">
+    <div>
+      <div class="kicker"><span class="dot"></span>Tendencia secular</div>
+      <h2 class="headline">El dólar viene<br/>cayendo</h2>
+      <p class="sub">De ~71% (2000) a ~57% (Q3 2025). <b style="color:#ff8c00">−14 puntos porcentuales en 25 años.</b></p>
+      <div class="notes">Hitos: 2000: 71% (pico) · 2008: 64% · 2014: 63% · 2020: 59% (COVID) · 2022: 58.4% (post-sanciones Rusia) · Q3 2025: 57% (mínimo en 30 años). <b>EUR estuvo entre 20-28% en este período</b>; JPY y GBP en rangos estables; <b>CNY pasó de ~0% a ~2%</b>. La caída es secular pero gradual: el dólar no muere, pierde dominancia relativa.</div>
+    </div>
+    <div class="visual"><div class="bars"><b></b><b></b><b></b><b></b><b></b></div><div class="bigword">CAÍDA</div></div>
+    <div class="source">IMF COFER series 2000-Q3 2025 · puntos: 2000, 2002, 2008, 2014, 2017, 2020, 2022, 2024, Q3 2025</div>
+  </section>
+
+  <!-- 4 · Red financiera global -->
+  <section class="slide" data-p="1" data-title="Red financiera global">
+    <div>
+      <div class="kicker"><span class="dot"></span>Red, no solo moneda</div>
+      <h2 class="headline">El dólar es la infraestructura</h2>
+      <p class="sub">Liquidación, corresponsalía, derivados, petróleo, deuda emergente.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~88%</span><span class="t">FX globales involucran USD (un lado de cada par)</span><span class="src">BIS Triennial FX Survey 2022</span></div>
+        <div class="f"><span class="n">~US$7.5T</span><span class="t">Volumen FX diario global</span><span class="src">BIS Triennial 2022</span></div>
+        <div class="f"><span class="n">~80%</span><span class="t">Comercio internacional facturado en USD</span><span class="src">estimaciones SWIFT / Fed</span></div>
+        <div class="f"><span class="n">~47%</span><span class="t">Pagos SWIFT en USD (vs EUR 23%, CNY ~4.5%)</span><span class="src">SWIFT RMB Tracker 2024</span></div>
+      </div>
+      <div class="bigword">RED</div>
+    </div>
+    <div class="source">BIS · SWIFT RMB Tracker · Federal Reserve</div>
+  </section>
+
+  <!-- 5 · Top tenedores de dólares (NUEVA) -->
+  <section class="slide" data-p="1" data-title="Top tenedores de dólares">
+    <div>
+      <div class="kicker"><span class="dot"></span>Quién financia al dólar</div>
+      <h2 class="headline">Mayores tenedores<br/>de dólares</h2>
+      <p class="sub">Dos métricas paralelas: reservas internacionales totales (la mayoría en USD) y holdings de US Treasuries.</p>
+      <div class="notes"><b>Lectura:</b> Japón es el mayor financista de la deuda norteamericana. China, el mayor stock total de reservas — pero <b>reduce Treasuries</b> y acumula oro. Rusia tiene ~US$300B congelados de sus ~US$600B totales.</div>
+    </div>
+    <div class="visual">
+      <div class="vsgrid">
+        <div class="col gold">
+          <h4><small>Top reservas internacionales</small>RESERVAS TOTALES</h4>
+          <div class="row"><span class="l">China</span><span class="v">~US$3.2T</span></div>
+          <div class="row"><span class="l">Japón</span><span class="v">~US$1.25T</span></div>
+          <div class="row"><span class="l">Suiza</span><span class="v">~US$895B</span></div>
+          <div class="row"><span class="l">India</span><span class="v">~US$680B</span></div>
+          <div class="row"><span class="l">Rusia (~$300B congelados)</span><span class="v">~US$600B</span></div>
+          <div class="row"><span class="l">Taiwán</span><span class="v">~US$580B</span></div>
+          <div class="row"><span class="l">Arabia Saudita</span><span class="v">~US$430B</span></div>
+          <div class="row"><span class="l">Hong Kong</span><span class="v">~US$425B</span></div>
+          <div class="row"><span class="l">Corea del Sur</span><span class="v">~US$415B</span></div>
+          <div class="row"><span class="l">Singapur</span><span class="v">~US$370B</span></div>
+        </div>
+        <div class="col btc">
+          <h4><small>Holdings de US Treasuries (TIC)</small>TREASURIES</h4>
+          <div class="row"><span class="l">Japón</span><span class="v">~US$1.06T</span></div>
+          <div class="row"><span class="l">China</span><span class="v">~US$770B</span></div>
+          <div class="row"><span class="l">Reino Unido</span><span class="v">~US$725B</span></div>
+          <div class="row"><span class="l">Luxemburgo</span><span class="v">~US$425B</span></div>
+          <div class="row"><span class="l">Bélgica (Euroclear)</span><span class="v">~US$370B</span></div>
+          <div class="row"><span class="l">Cayman Islands</span><span class="v">~US$350B</span></div>
+          <div class="row"><span class="l">Canadá</span><span class="v">~US$340B</span></div>
+          <div class="row"><span class="l">Francia</span><span class="v">~US$320B</span></div>
+          <div class="row"><span class="l">Irlanda</span><span class="v">~US$310B</span></div>
+          <div class="row"><span class="l">Suiza</span><span class="v">~US$300B</span></div>
+        </div>
+      </div>
+      <div class="bigword">TENEDORES</div>
+    </div>
+    <div class="source">IMF International Reserves · US Treasury TIC Data 2024 · cifras aprox.</div>
+  </section>
+
+  <!-- 6 · Token de exportación de déficit fiscal -->
+  <section class="slide" data-p="1" data-title="Token de exportación de déficit fiscal">
+    <div>
+      <div class="kicker"><span class="dot"></span>El dólar como aspiradora de energía</div>
+      <h2 class="headline">Exportar el déficit</h2>
+      <p class="sub">EE.UU. emite. El mundo absorbe. La diferencia es el privilegio exorbitante.</p>
+      <div class="notes"><b>La idea fuerte:</b> el dólar es la única moneda donde el déficit del emisor se financia, en parte, por la demanda externa de su propio token. <b>El dólar exporta el déficit fiscal de EE.UU. al resto del planeta como ahorro denominado en USD.</b></div>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">US$37.6T+</span><span class="t">Deuda pública EE.UU. (+$2.2T en FY2025)</span><span class="src">US Treasury · FiscalData / JEC 2025</span></div>
+        <div class="f"><span class="n">US$1.8T</span><span class="t">Déficit fiscal FY2025 (~5.9% PIB)</span><span class="src">CBO Monthly Budget Review nov-2025</span></div>
+        <div class="f"><span class="n">US$970B</span><span class="t">Intereses anuales FY2025 (&gt; gasto militar)</span><span class="src">US Treasury BPD</span></div>
+        <div class="f"><span class="n">~US$21T</span><span class="t">M2 — masa monetaria EE.UU.</span><span class="src">Fed · H.6 release 2024</span></div>
+        <div class="f"><span class="n">99.8%</span><span class="t">Deuda/PIB en FY2025 (era 35% en 1980)</span><span class="src">CRFB · CBO</span></div>
+        <div class="f"><span class="n">~7%</span><span class="t">Déficit primario proyectado prom. próximos 10 años</span><span class="src">CBO Long-Term Budget Outlook</span></div>
+      </div>
+    </div>
+    <div class="source">Intereses ya son el #2 gasto federal (detrás de Social Security) · déficit superado solo 8 veces desde 1946</div>
+  </section>
+
+  <!-- 6b · Déficit fiscal histórico 1980-2025 (NUEVA) -->
+  <section class="slide" data-p="1" data-title="Déficit fiscal histórico 1980-2025">
+    <div>
+      <div class="kicker"><span class="dot"></span>Magnitud histórica</div>
+      <h2 class="headline">~US$1.8T por año</h2>
+      <p class="sub">FY2025 cerró con récord: déficit US$1.8T · deuda US$37.6T (99.8% PIB) · intereses US$970B (&gt; gasto militar).</p>
+      <div class="notes"><b>Hitos del último medio siglo:</b><br/>· 1980: déficit ~-$74B (modesto, era de moderación post-Vietnam).<br/>· 1998-2001: superávit Clinton (último período de cuentas positivas).<br/>· 2009: −$1.4T (Gran Recesión / GFC).<br/>· 2020: −$3.1T (récord histórico por COVID).<br/>· 2024-25: −$1.8T anual sostenido (~6% PIB).<br/>El déficit estructural se ha vuelto la nueva normalidad. <b>Solo en 8 años desde 1946 el déficit superó 5.9% del PIB</b>; ahora es la base de la trayectoria proyectada.</div>
+    </div>
+    <div class="visual"><div class="bars"><b></b><b></b><b></b><b></b><b></b></div><div class="bigword">DÉFICIT</div></div>
+    <div class="source">US Treasury · CBO Monthly Budget Review FY2025 (nov-2025) · OMB Historical Tables · CRFB · FRED</div>
+  </section>
+
+  <!-- 6 · Guerra = logística -->
+  <section class="slide" data-p="1" data-title="Cómo se sostiene el poderío">
+    <div>
+      <div class="kicker"><span class="dot"></span>El dólar se patrulla</div>
+      <h2 class="headline">Moneda = logística</h2>
+      <p class="sub">Rutas, energía, pagos, seguros, primas, inflación.</p>
+      <div class="notes">El dólar no flota solo por confianza: <b>flota porque la marina más grande del mundo asegura las rutas</b> por donde circula petróleo, chips y comercio denominado en dólares.</div>
+    </div>
+    <div class="visual"><div class="route"></div><div class="ship">➜</div><div class="bigword">GUERRA</div></div>
+    <div class="source">CSIS · Atlantic Council · Lloyd's market reports</div>
+  </section>
+
+  <!-- 7 · Ormuz -->
+  <section class="slide" data-p="1" data-title="Ormuz: 20% del petróleo">
+    <div>
+      <div class="kicker"><span class="dot"></span>Estrecho de Ormuz</div>
+      <div class="metric">~20%</div>
+      <p class="sub">del petróleo mundial pasa cerca de ese cuello — <b>denominado en USD</b>.</p>
+      <div class="notes">Un estrecho de ~33 km mueve la inflación global. Irán amenaza, EE.UU. patrulla, el Golfo paga primas de seguros. <b>Petróleo en USD = demanda estructural de dólares.</b></div>
+    </div>
+    <div class="visual"><div class="route"></div><div class="ship">🛢</div><div class="bigword">ORMUZ</div></div>
+    <div class="source">U.S. Energy Information Administration (EIA)</div>
+  </section>
+
+  <!-- 8 · Mar Rojo / Suez -->
+  <section class="slide" data-p="1" data-title="Mar Rojo / Suez bajo presión">
+    <div>
+      <div class="kicker"><span class="dot"></span>Mar Rojo</div>
+      <h2 class="headline">Suez desviado</h2>
+      <p class="sub">Ataques hutíes desde fines 2023 forzaron desvíos por Cabo de Buena Esperanza.</p>
+      <div class="notes">Más días, más combustible, más seguros, más flete, más inflación. La cadena logística se convirtió en variable monetaria.</div>
+    </div>
+    <div class="visual"><div class="route"></div><div class="ship">🚢</div><div class="bigword">MAR ROJO</div></div>
+    <div class="source">IMO · Drewry · Maersk reportes ruta</div>
+  </section>
+
+  <!-- 9 · Taiwán / TSMC -->
+  <section class="slide" data-p="1" data-title="Taiwán: 90% chips avanzados">
+    <div>
+      <div class="kicker"><span class="dot"></span>Silicio estratégico</div>
+      <div class="metric">~90%</div>
+      <p class="sub">de chips avanzados se fabrican en TSMC.<br/>Mar del Sur de China: ~US$3T de comercio anual en riesgo.</p>
+      <div class="notes">Taiwán es <b>un botón nuclear económico</b>. Un escenario Taiwán sería Rusia × 10: cadena de suministros global colapsada en 72hs.</div>
+    </div>
+    <div class="visual"><div class="chip"></div><div class="bigword">SILICIO</div></div>
+    <div class="source">TSMC · SEMI · CSIS supply chain reports</div>
+  </section>
+
+  <!-- 10 · SWIFT como arma -->
+  <section class="slide" data-p="1" data-title="SWIFT como arma">
+    <div>
+      <div class="kicker"><span class="dot"></span>Arma financiera</div>
+      <h2 class="headline">Sanciones primarias y secundarias</h2>
+      <p class="sub">Cortar SWIFT. Cortar clearing en dólares. Cortar acceso a la red corresponsal.</p>
+      <div class="notes">Casos: Irán (2012, 2018), Rusia (2022), Venezuela. La sanción ya no es bilateral: alcanza a cualquier banco que toque USD.</div>
+    </div>
+    <div class="visual"><div class="lock">▣</div><div class="bigword">ARMA</div></div>
+    <div class="source">OFAC · Tesoro EE.UU. · CSIS analysis</div>
+  </section>
+
+  <!-- 11 · US$300B Rusia -->
+  <section class="slide" data-p="1" data-title="US$300B reservas rusas congeladas">
+    <div>
+      <div class="kicker"><span class="dot"></span>Punto de inflexión</div>
+      <div class="metric">US$300B</div>
+      <p class="sub">Reservas del Banco Central ruso congeladas tras febrero 2022.</p>
+      <div class="notes">2024 (REPO Act): EE.UU. autoriza usar <b>intereses generados</b> por esas reservas para financiar Ucrania. Un Rubicón.</div>
+    </div>
+    <div class="visual"><div class="ice"></div><div class="lock">▣</div><div class="bigword">CONGELADO</div></div>
+    <div class="source">Reuters · The Economist · REPO Act 2024</div>
+  </section>
+
+  <!-- 12 · Mensaje a China -->
+  <section class="slide" data-p="1" data-title="China observa: el manual ruso">
+    <div>
+      <div class="kicker"><span class="dot"></span>La lectura china</div>
+      <h2 class="headline">El manual ruso</h2>
+      <p class="sub">Una reserva bajo jurisdicción externa es congelable bajo decisión política.<br/>Beijing prepara redundancia: yuan, CIPS, oro.</p>
+      <div class="notes">No es un juicio: es un cálculo. China ajusta su mix de reservas y construye carriles paralelos como hedge. Esto explica el ritmo de compra de oro PBOC y la inversión en CIPS.</div>
+    </div>
+    <div class="visual"><div class="ice"></div><div class="bigword">MANUAL</div></div>
+    <div class="source">Sanciones como input para el cálculo estratégico chino</div>
+  </section>
+
+  <!-- ====================== PILAR 2 · BRICS / CHINA ====================== -->
+
+  <!-- 13 · BRICS escape -->
+  <section class="slide" data-p="2" data-title="BRICS: escape, no reemplazo">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
+      <h2 class="headline">Escape, no reemplazo</h2>
+      <p class="sub">Sin moneda común. Sin banco central BRICS. Sin Treasuries propios.<br/>Pero sí: monedas locales, sistemas de pago, oro.</p>
+      <div class="notes">BRICS+ no es bloque coherente. China e India compiten. Brasil no quiere ser colonia financiera china. Es <b>coordinación defensiva</b>, no revolución.</div>
+    </div>
+    <div class="visual"><div class="route"></div><div class="ship">➜</div><div class="bigword">BRICS</div></div>
+    <div class="source">Cumbre Kazán 2024 · declaraciones BRICS+</div>
+  </section>
+
+  <!-- 14 · Todas fiat, emisión infinita (NUEVA) -->
+  <section class="slide" data-p="2" data-title="Todas fiat, emisión infinita">
+    <div>
+      <div class="kicker"><span class="dot"></span>El punto ciego del debate</div>
+      <h2 class="headline">Todas fiat,<br/>emisión infinita</h2>
+      <p class="sub">No importa qué bandera tenga la moneda: cada banco central imprime sin techo.</p>
+      <div class="notes"><b>Observación clave:</b> elegir entre dólar y yuan es elegir entre dos formas de fiat con emisión sin tope. La alternativa BRICS es competencia entre monedas estatales, no una alternativa al modelo monetario fiat.</div>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~US$21T</span><span class="t">M2 EE.UU.</span><span class="src">Fed H.6 · 2024</span></div>
+        <div class="f"><span class="n">~US$43T</span><span class="t">M2 China (~315T yuanes)</span><span class="src">PBOC · 2024</span></div>
+        <div class="f"><span class="n">~€16T</span><span class="t">M3 Eurozona</span><span class="src">ECB Statistics 2024</span></div>
+        <div class="f"><span class="n">~¥1,238T</span><span class="t">M2 Japón</span><span class="src">Bank of Japan 2024</span></div>
+        <div class="f"><span class="n">~6×</span><span class="t">Crecimiento M2 China 2008-2024</span><span class="src">PBOC series largas</span></div>
+        <div class="f"><span class="n">∞</span><span class="t">Techo de emisión fiat</span><span class="src">por construcción</span></div>
+      </div>
+      <div class="bigword">FIAT</div>
+    </div>
+    <div class="source">Fed · PBOC · ECB · BoJ — masas monetarias 2024</div>
+  </section>
+
+  <!-- 15a · El Yuan como moneda global (NUEVA) -->
+  <section class="slide" data-p="2" data-title="El Yuan como moneda global">
+    <div>
+      <div class="kicker"><span class="dot"></span>La pregunta directa</div>
+      <h2 class="headline">El Yuan<br/>no escaló</h2>
+      <p class="sub">A pesar del push de Beijing, el yuan sigue siendo marginal como moneda global. Pico en 2022, desde entonces cae en reservas.</p>
+      <div class="notes"><b>Lectura:</b> el yuan tiene un techo estructural — China no permite convertibilidad plena porque perdería control sobre fuga de capitales. El "petroyuan" es más simbólico que dominante: la mayoría del crudo global se sigue facturando en USD.</div>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">1.93%</span><span class="t">CNY en reservas globales (Q3 2025)</span><span class="src">IMF COFER · pico fue ~2.83% en 2022</span></div>
+        <div class="f"><span class="n">3%</span><span class="t">CNY en pagos SWIFT (jun-2025) · vs USD 48%, EUR 24%</span><span class="src">SWIFT RMB Tracker jul-2025</span></div>
+        <div class="f"><span class="n">US$24.5T</span><span class="t">Volumen anual CIPS 2024 (+43% YoY)</span><span class="src">PBOC · CIPS Annual Report</span></div>
+        <div class="f"><span class="n">30×</span><span class="t">CIPS ~$60B/día · CHIPS ~$1.800B/día</span><span class="src">CIPS vs CHIPS daily settlement</span></div>
+        <div class="f"><span class="n">176 / 1.467</span><span class="t">Participantes CIPS directos / indirectos en 119 países (sep-2025)</span><span class="src">CIPS</span></div>
+        <div class="f"><span class="n">100%</span><span class="t">Crudo Rusia → China en yuan/rublo desde 2022</span><span class="src">PBOC · reportes oficiales</span></div>
+      </div>
+      <div class="bigword">YUAN</div>
+    </div>
+    <div class="source">IMF COFER Q3 2025 · SWIFT RMB Tracker jul-2025 · PBOC CIPS Annual Report 2024 · BBVA Research · BOFIT</div>
+  </section>
+
+  <!-- 15b · China Yuan + CIPS + oro -->
+  <section class="slide" data-p="2" data-title="China: Yuan + CIPS + oro (carril paralelo)">
+    <div>
+      <div class="kicker"><span class="dot"></span>Beijing construye el carril</div>
+      <h2 class="headline">Yuan + CIPS + oro</h2>
+      <p class="sub">Comercio China-Rusia en yuan/rublo pasó de marginal a dominante.<br/>PBOC acumula oro y reduce exposición relativa a Treasuries.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~¥175T</span><span class="t">Volumen anual CIPS 2024 (~US$24.5T, +43% YoY)</span><span class="src">PBOC · CIPS Annual Report</span></div>
+        <div class="f"><span class="n">~2,300t</span><span class="t">Reservas oficiales oro China (7% reservas totales)</span><span class="src">WGC · PBOC ago-2025</span></div>
+        <div class="f"><span class="n">~$770B</span><span class="t">Treasuries China (bajó desde >$1.1T en 2013)</span><span class="src">US Treasury TIC Data</span></div>
+        <div class="f"><span class="n">18 meses</span><span class="t">Compras consecutivas oro PBOC hasta abr-2024</span><span class="src">WGC reports</span></div>
+      </div>
+      <div class="bigword">BEIJING</div>
+    </div>
+    <div class="source">PBOC · CIPS Annual Report · World Gold Council 2025 · US Treasury TIC</div>
+  </section>
+
+  <!-- 15 · Multipolar -->
+  <section class="slide" data-p="2" data-title="Multipolar: Rusia, India, Brasil, Arabia">
+    <div>
+      <div class="kicker"><span class="dot"></span>Cada uno juega su libro</div>
+      <h2 class="headline">No es un bloque,<br/>es un mosaico</h2>
+      <div class="notes" style="margin-top:24px">
+        <b>Rusia:</b> desdolarización forzada. Supervivencia, no romanticismo.<br/>
+        <b>India:</b> autonomía estratégica. Compra crudo barato; no se casa con China.<br/>
+        <b>Brasil:</b> voz del Sur Global sin quemar puentes con Occidente.<br/>
+        <b>Arabia Saudita:</b> petrodólar flexible. Seguridad con EE.UU., comercio con China.
+      </div>
+    </div>
+    <div class="visual"><div class="split"><div>$</div><div>¥</div></div><div class="bigword">MOSAICO</div></div>
+    <div class="source">Comercio bilateral en monedas locales 2022-2025</div>
+  </section>
+
+  <!-- 16 · Petroyuan -->
+  <section class="slide" data-p="2" data-title="Petroyuan: energía sin USD">
+    <div>
+      <div class="kicker"><span class="dot"></span>Petroyuan</div>
+      <h2 class="headline">Energía sin pasar por Washington</h2>
+      <p class="sub">Crudo ruso pagado en yuan.<br/>Futuros de petróleo en INE Shanghái (yuan, liquidación en oro).<br/>Arabia Saudita aceptó pagos en yuan por algunos cargamentos.</p>
+      <div class="notes">El <b>petroyuan</b> es más simbólico que dominante. Pero cada barril fuera del dólar erosiona la demanda estructural de USD. <b>El petrodólar no muere; se vuelve opcional.</b></div>
+    </div>
+    <div class="visual"><div class="route"></div><div class="ship">🛢</div><div class="bigword">PETROYUAN</div></div>
+    <div class="source">Shanghai INE crude futures · Reuters · WSJ 2023-2025</div>
+  </section>
+
+  <!-- 17 · Límite del yuan -->
+  <section class="slide" data-p="2" data-title="Límite del yuan: controles de capital">
+    <div>
+      <div class="kicker"><span class="dot"></span>Límite estructural</div>
+      <h2 class="headline">El yuan no es neutral</h2>
+      <p class="sub">Controles de capital. Riesgo político. Mercados menos abiertos que los de EE.UU.</p>
+      <div class="notes">China no quiere convertibilidad plena: perdería control sobre fuga de capitales. <b>El yuan quiere reemplazar al dólar sin dejar de ser controlado por China.</b> Esa contradicción es su techo.</div>
+    </div>
+    <div class="visual"><div class="lock">¥</div><div class="bigword">MURALLA</div></div>
+    <div class="source">SAFE · IMF · análisis sobre RMB internacionalización</div>
+  </section>
+
+  <!-- ====================== PILAR 3 · ORO / BITCOIN / NEUTRALIDAD ====================== -->
+
+  <!-- 18a · % de reservas en oro (NUEVA) -->
+  <section class="slide" data-p="3" data-title="% de reservas globales en oro">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
+      <div class="metric">~20%</div>
+      <p class="sub">de las reservas oficiales globales ya están en oro. En 2024-25 <b style="color:#d7ad45">el oro superó a los Treasuries</b> como #2 activo de reserva. Primera vez en 30 años.</p>
+      <div class="notes"><b>Distribución por país:</b> Portugal ~76% · Alemania ~75% · EE.UU. ~73% · Italia/Francia ~70% · Países Bajos ~64% · Rusia ~30% · Polonia ~28% (target 30%, subió desde 20% en oct-2024) · India ~12% · China ~7% · Brasil ~6% · Japón ~5%. <b>Los occidentales ya tienen mucho oro; los BRICS son los que están comprando.</b></div>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~20%</span><span class="t">Oro en reservas oficiales globales (2025)</span><span class="src">World Gold Council 2025</span></div>
+        <div class="f"><span class="n">#2</span><span class="t">Oro superó a Treasuries en CB reserves (2024-25)</span><span class="src">WGC · WisdomTree</span></div>
+        <div class="f"><span class="n">76%</span><span class="t">De CBs encuestados esperan mayor share de oro en 5 años</span><span class="src">WGC Survey 2025</span></div>
+        <div class="f"><span class="n">~73%</span><span class="t">Oro en reservas EE.UU. (~8.133t)</span><span class="src">US Treasury</span></div>
+        <div class="f"><span class="n">~7%</span><span class="t">Oro en reservas China (~2.300t, creciendo)</span><span class="src">PBOC ago-2025</span></div>
+        <div class="f"><span class="n">28%</span><span class="t">Polonia (target 30% — subió desde 20% en 2024)</span><span class="src">National Bank of Poland</span></div>
+      </div>
+      <div class="bigword">ORO %</div>
+    </div>
+    <div class="source">World Gold Council · Central Bank Gold Reserves Survey 2025 · WisdomTree · National Bank of Poland</div>
+  </section>
+
+  <!-- 18b · Oro: +1.000t -->
+  <section class="slide" data-p="3" data-title="Oro: +1.000t/año bancos centrales">
+    <div>
+      <div class="kicker"><span class="dot"></span>El mayor ciclo en décadas</div>
+      <h2 class="headline">Bancos centrales<br/>vuelven al oro</h2>
+      <p class="sub">El mayor ciclo comprador estatal en décadas. Polonia, Turquía, China, India, Singapur.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">1.082t</span><span class="t">Compras netas bancos centrales 2022 (récord histórico)</span><span class="src">World Gold Council</span></div>
+        <div class="f"><span class="n">1.037t</span><span class="t">Compras netas 2023</span><span class="src">World Gold Council</span></div>
+        <div class="f"><span class="n">1.045t</span><span class="t">Compras netas 2024</span><span class="src">World Gold Council</span></div>
+        <div class="f"><span class="n">~20%</span><span class="t">Oro en reservas globales (2025, cruzó Treasuries)</span><span class="src">WGC · ECB</span></div>
+        <div class="f"><span class="n">2× a 3×</span><span class="t">Demanda 2022-2024 vs promedio 2010s</span><span class="src">WGC histórico</span></div>
+        <div class="f"><span class="n">0</span><span class="t">Riesgo de contraparte estatal</span><span class="src">por definición</span></div>
+      </div>
+    </div>
+    <div class="source">World Gold Council · Central Bank Gold Demand 2022-2024 · Amundi Research</div>
+  </section>
+
+  <!-- 19 · Oferta histórica: oro vs Bitcoin (NUEVA) -->
+  <section class="slide" data-p="3" data-title="Oferta histórica: oro vs Bitcoin">
+    <div>
+      <div class="kicker"><span class="dot"></span>Competencia de activos neutrales</div>
+      <h2 class="headline">Oferta histórica:<br/>oro vs Bitcoin</h2>
+      <p class="sub">Dos activos neutrales, dos políticas de emisión opuestas.</p>
+      <div class="notes"><b>Dato clave:</b> el stock-to-flow de Bitcoin <b>superó al del oro tras el halving de abril 2024</b> (~117 vs ~62). Es la primera vez en la historia que un activo digital tiene mayor escasez relativa que el oro.</div>
+    </div>
+    <div class="visual">
+      <div class="vsgrid">
+        <div class="col gold">
+          <h4><small>Activo físico</small>ORO</h4>
+          <div class="row"><span class="l">Stock total minado</span><span class="v">~213.000 t</span></div>
+          <div class="row"><span class="l">Stock en 1900</span><span class="v">~30.000 t</span></div>
+          <div class="row"><span class="l">Stock en 1950</span><span class="v">~50.000 t</span></div>
+          <div class="row"><span class="l">Stock en 2000</span><span class="v">~140.000 t</span></div>
+          <div class="row"><span class="l">Oferta minera 2024</span><span class="v">~3.500 t/año</span></div>
+          <div class="row"><span class="l">Inflación anual</span><span class="v">~1.5–2%</span></div>
+          <div class="row"><span class="l">Stock-to-flow</span><span class="v">~62</span></div>
+          <div class="row"><span class="l">Techo de oferta</span><span class="v">indefinido</span></div>
+        </div>
+        <div class="col btc">
+          <h4><small>Activo digital</small>BITCOIN</h4>
+          <div class="row"><span class="l">Cap absoluto</span><span class="v">21.000.000 BTC</span></div>
+          <div class="row"><span class="l">2009 (génesis)</span><span class="v">0 BTC</span></div>
+          <div class="row"><span class="l">2012 · halving 1</span><span class="v">~10.5M BTC</span></div>
+          <div class="row"><span class="l">2020 · halving 3</span><span class="v">~18.4M BTC</span></div>
+          <div class="row"><span class="l">2026 · post halving 4</span><span class="v">~20.01M BTC (95.3%)</span></div>
+          <div class="row"><span class="l">Emisión 2024</span><span class="v">~165.000 BTC/año</span></div>
+          <div class="row"><span class="l">Inflación post-halving</span><span class="v">~0.82% → 0.4% en 2028</span></div>
+          <div class="row"><span class="l">Stock-to-flow</span><span class="v">~117</span></div>
+        </div>
+      </div>
+      <div class="bigword">OFERTA</div>
+    </div>
+    <div class="source">World Gold Council · USGS Mineral Commodity Summaries · blockchain.com · Bitcoin protocol consensus rules</div>
+  </section>
+
+  <!-- 20 · Bitcoin 21M -->
+  <section class="slide" data-p="3" data-title="Bitcoin: 21M y consenso">
+    <div>
+      <div class="kicker"><span class="dot"></span>Neutralidad digital</div>
+      <h2 class="headline">Escasez por consenso</h2>
+      <p class="sub">La auditoría monetaria deja de depender del custodio: la verificás vos.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">21M</span><span class="t">Oferta máxima total (cap absoluto)</span><span class="src">Bitcoin protocol · 2008</span></div>
+        <div class="f"><span class="n">~20.01M</span><span class="t">BTC en circulación (~95.3%)</span><span class="src">on-chain · may-2026 · cruzó 20M en mar-2026</span></div>
+        <div class="f"><span class="n">~0.82%</span><span class="t">Inflación anual post-halving abr-2024</span><span class="src">protocol · cae a la mitad cada 4 años</span></div>
+        <div class="f"><span class="n">~900 EH/s</span><span class="t">Hashrate global de la red</span><span class="src">may-2026 · CoinWarz · Hashrate Index</span></div>
+        <div class="f"><span class="n">~50.000</span><span class="t">Nodos completos públicos activos</span><span class="src">bitnodes.io 2025</span></div>
+        <div class="f"><span class="n">10 min</span><span class="t">Tiempo medio entre bloques (ajuste cada 2016 bloques)</span><span class="src">protocol</span></div>
+      </div>
+      <div class="bigword">PROTOCOLO</div>
+    </div>
+    <div class="source">Bitcoin Whitepaper (Satoshi, 2008) · consenso de red · blockchain.com / bitnodes.io 2025</div>
+  </section>
+
+  <!-- 21 · Bitcoin: autocustodia 24/7 -->
+  <section class="slide" data-p="3" data-title="Autocustodia + liquidación 24/7">
+    <div>
+      <div class="kicker"><span class="dot"></span>Propiedades técnicas</div>
+      <h2 class="headline">Claves, no bóvedas</h2>
+      <p class="sub">Custodia individual. Liquidación 24/7. Transferencia transfronteriza nativa.</p>
+      <div class="notes">Oro: custodia física, requiere bóvedas, transporte y auditoría de terceros. Bitcoin: custodia con claves criptográficas, transferencia digital y verificación de saldo on-chain por cualquier nodo.</div>
+    </div>
+    <div class="visual"><div class="split"><div style="color:var(--gold)">Au</div><div style="color:var(--orange)">₿</div></div><div class="bigword">CUSTODIA</div></div>
+    <div class="source">Comparación de modelos de custodia: físico vs criptográfico</div>
+  </section>
+
+  <!-- 22 · Empresas con Bitcoin en treasury (verificado may-2026) -->
+  <section class="slide" data-p="3" data-title="Empresas con Bitcoin en treasury (verificado may-2026)">
+    <div>
+      <div class="kicker"><span class="dot"></span>Treasuries corporativos · verificado mayo 2026</div>
+      <h2 class="headline">Las empresas ya entraron</h2>
+      <p class="sub">El balance corporativo descubrió el activo escaso. Empresas públicas combinadas tienen <b style="color:#ff8c00">~1.188M BTC</b> (~5.6% del supply en circulación, 12-may-2026). Strategy es el mayor holder corporativo del mundo.</p>
+      <div class="notes"><b>Importante distinción:</b> BlackRock IBIT (~775K BTC) NO es un "treasury corporativo" — es un ETF spot que custodia BTC para inversores del fondo. Strategy es el mayor corporate holder; BlackRock IBIT es el mayor ETF holder. Categorías diferentes (ver slide siguiente para ETFs).</div>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>Strategy</b> (MSTR · ex-MicroStrategy)</span><span class="v">~818.869 BTC</span></div>
+        <div class="row"><span><b>Twenty One Capital</b> (XXI)</span><span class="v">~43.514 BTC</span></div>
+        <div class="row"><span><b>Metaplanet</b> (3350.T · Japón)</span><span class="v">~40.177 BTC</span></div>
+        <div class="row"><span><b>MARA Holdings</b> (minero, ex-Marathon Digital)</span><span class="v">~35.303 BTC</span></div>
+        <div class="row"><span><b>Bullish</b> (BLSH)</span><span class="v">~24.300 BTC</span></div>
+        <div class="row"><span><b>Tesla</b></span><span class="v">~11.500 BTC</span></div>
+        <div class="row"><span><b>Block</b> (Jack Dorsey)</span><span class="v">~8.500 BTC</span></div>
+        <div class="row"><span><b>GameStop · Semler · KULR · Riot · CleanSpark · Coinbase · Hut 8</b></span><span class="v">treasuries 2024-26</span></div>
+      </div>
+    </div>
+    <div class="source">SEC filings 10-K/8-K · bitcointreasuries.net · bitbo.io · CoinMarketCap Public Bitcoin Treasuries · Strategy disclosure 27-abr-2026 · datos al 12-may-2026</div>
+  </section>
+
+  <!-- 23 · ETFs / Wall Street -->
+  <section class="slide" data-p="3" data-title="ETFs spot y Wall Street">
+    <div>
+      <div class="kicker"><span class="dot"></span>Puerta institucional</div>
+      <h2 class="headline">Wall Street empaqueta BTC</h2>
+      <p class="sub">Enero 2024: aprobación SEC de los primeros ETFs spot en EE.UU. El producto más rápido en alcanzar US$50B AUM. BlackRock IBIT segundo mayor holder mundial detrás de Strategy.</p>
+      <div class="notes"><b>Costo:</b> recustodian Bitcoin. Riesgo de captura institucional. Pero también: legitiman el activo y abren la puerta a fondos de pensión y fondos soberanos vía 13F.</div>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~775K BTC</span><span class="t">BlackRock IBIT (~US$50B+ AUM)</span><span class="src">Bloomberg ETF tracker may-2026</span></div>
+        <div class="f"><span class="n">~471K BTC</span><span class="t">Fidelity FBTC (~US$31B AUM)</span><span class="src">Farside Investors 2026</span></div>
+        <div class="f"><span class="n">~US$120B+</span><span class="t">AUM total ETFs spot BTC EE.UU.</span><span class="src">Bloomberg / Farside 2026</span></div>
+        <div class="f"><span class="n">11</span><span class="t">ETFs spot aprobados (ene-2024)</span><span class="src">SEC</span></div>
+        <div class="f"><span class="n">~1.1M BTC</span><span class="t">Total BTC custodiado en ETFs spot EE.UU.</span><span class="src">Farside · 2026</span></div>
+        <div class="f"><span class="n">US$50B</span><span class="t">Producto financiero más rápido en alcanzar esta AUM</span><span class="src">Bloomberg ETF flows</span></div>
+      </div>
+    </div>
+    <div class="source">SEC · BlackRock IBIT · Fidelity FBTC · ARKB · Bitwise · Bloomberg / Farside Investors 2026</div>
+  </section>
+
+  <!-- 24 · Estados comprando -->
+  <section class="slide" data-p="3" data-title="Estados comprando Bitcoin (incluyendo China)">
+    <div>
+      <div class="kicker"><span class="dot"></span>Bóvedas soberanas</div>
+      <h2 class="headline">Del Salvador a Washington</h2>
+      <p class="sub">El activo soberano digital empieza a aparecer en balances de Estados. EE.UU. formalizó reserva estratégica (mar-2025). China acumula vía decomisos. Bulgaria mantiene confiscación 2017.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>EE.UU.</b> · Strategic Bitcoin Reserve (EO mar-2025)</span><span class="v">~325K BTC</span></div>
+        <div class="row"><span><b>Bulgaria</b> · seizure 2017 (debatido)</span><span class="v">~213K BTC</span></div>
+        <div class="row"><span><b>China</b> · decomisos (PlusToken, etc.)*</span><span class="v">~190K BTC</span></div>
+        <div class="row"><span><b>Reino Unido</b> · BTC confiscado</span><span class="v">~61K BTC</span></div>
+        <div class="row"><span><b>Bhután</b> · minería estatal con hidroeléctrica</span><span class="v">~13K BTC</span></div>
+        <div class="row"><span><b>El Salvador</b> · curso legal desde 2021 · 1 BTC/día</span><span class="v">~6K+ BTC</span></div>
+        <div class="row"><span><b>Pakistán</b> · anunció Reserva Estratégica en 2026</span><span class="v">en construcción</span></div>
+        <div class="row"><span><b>Mubadala · Wisconsin · UAE</b> · vía ETF (13F)</span><span class="v">2024-26</span></div>
+      </div>
+    </div>
+    <div class="source">*China sin marco formal de reserva estratégica · USDOJ + EO Trump 06-mar-2025 · Pakistán anuncio 2026 · SEC 13F · Chainalysis Strategic Reserves 2026</div>
+  </section>
+
+  <!-- 25 · Mapa global adopción -->
+  <section class="slide" data-p="3" data-title="Mapa global de adopción">
+    <div>
+      <div class="kicker"><span class="dot"></span>Adopción asimétrica</div>
+      <h2 class="headline">Donde más duele,<br/>más se adopta</h2>
+      <p class="sub">Inflación, controles de capital, instituciones débiles → demanda real.</p>
+      <div class="notes">Argentina, Nigeria, Turquía, Vietnam, Venezuela. P2P, stablecoins en dólares y BTC. Adopción <b>desde abajo</b>, no desde la regulación.</div>
+    </div>
+    <div class="visual">
+      <div class="mapviz">
+        <div class="dot">USA</div>
+        <div class="dot hot">SLV</div>
+        <div class="dot hot">ARG</div>
+        <div class="dot">BR</div>
+        <div class="dot">EU</div>
+        <div class="dot">UK</div>
+        <div class="dot hot">NGA</div>
+        <div class="dot">RUS</div>
+        <div class="dot hot">TUR</div>
+        <div class="dot">CHN</div>
+        <div class="dot hot">IND</div>
+        <div class="dot">JPN</div>
+        <div class="dot gold">BTN</div>
+        <div class="dot hot">VEN</div>
+        <div class="dot hot">VNM</div>
+        <div class="dot">AUS</div>
+        <div class="dot">UAE</div>
+        <div class="dot">SGP</div>
+      </div>
+      <div class="bigword">MAPA</div>
+    </div>
+    <div class="source">Chainalysis Global Crypto Adoption Index · datos P2P / on-chain</div>
+  </section>
+
+  <!-- 26 · Riesgos del activo -->
+  <section class="slide" data-p="3" data-title="Riesgos a monitorear">
+    <div>
+      <div class="kicker"><span class="dot"></span>Asimetrías de riesgo</div>
+      <h2 class="headline">Variables a monitorear</h2>
+      <div class="notes" style="margin-top:24px">
+        <b>Volatilidad:</b> drawdowns históricos de 50-80% en ciclos previos. Perfil de retorno tipo venture asset.<br/>
+        <b>Regulación:</b> MiCA (EU), FATF, enforcement actions contra exchanges/custodios/miners impactan rampas fiat-cripto.<br/>
+        <b>Custodia:</b> pérdida de claves = pérdida del activo. Modelo distinto al tradicional.<br/>
+        <b>Concentración vía ETFs:</b> custodios institucionales recrean dependencia de terceros.
+      </div>
+    </div>
+    <div class="visual"><div class="route" style="border-color:rgba(215,67,47,.45)"></div><div class="btc" style="color:var(--red)">₿</div><div class="bigword">RIESGO</div></div>
+    <div class="source">Drawdowns históricos · MiCA · FATF · enforcement actions</div>
+  </section>
+
+  <!-- 27 · Escenario base -->
+  <section class="slide" data-p="3" data-title="Escenario base: reserva complementaria">
+    <div>
+      <div class="kicker"><span class="dot"></span>Trayectoria observada</div>
+      <div class="metric">1–5%</div>
+      <p class="sub">Adopción gradual como reserva complementaria global.<br/>Secuencia observada: individuos → empresas → fondos → Estados.</p>
+      <div class="notes">No es escenario de hiperbitcoinización. Es <b>asimilación tipo escalera</b>: cada vez que un grupo (Strategy, IBIT, EE.UU. con la reserva estratégica) cruza un umbral, baja el costo político del siguiente.</div>
+    </div>
+    <div class="visual"><div class="split"><div>$</div><div>₿</div></div><div class="bigword">ESCENARIO</div></div>
+    <div class="source">Adopción tipo escalera observada 2020-2025</div>
+  </section>
+
+  <!-- 28 · Cierre analítico -->
+  <section class="slide" data-p="3" data-title="Síntesis: tres tendencias en paralelo">
+    <div>
+      <div class="kicker"><span class="dot"></span>Síntesis</div>
+      <h2 class="headline">Tres tendencias<br/>en paralelo</h2>
+      <p class="sub"><b>1.</b> Competencia de monedas estatales (BRICS, CIPS, petroyuan).<br/><b>2.</b> El dólar pierde fuerza relativa y se defiende con SWIFT + poder militar.<br/><b>3.</b> Activos neutrales (oro físico, Bitcoin digital) capturan demanda de hedge.</p>
+      <div class="notes"><b>Implicancia:</b> en este escenario, la categoría que aprecia es la de los activos sin emisor y sin permiso — inconfiscables, libres y con oferta verificable. Oro y Bitcoin compiten dentro de esa categoría: oro para Estados con bóvedas; Bitcoin para individuos, empresas y la red digital.</div>
+    </div>
+    <div class="visual"><div class="split"><div style="color:var(--gold)">Au</div><div style="color:var(--orange)">₿</div></div><div class="bigword">NEUTRALIDAD</div></div>
+    <div class="source">Inconfiscables, libres, con oferta verificable</div>
+  </section>
+
+</div>
+
+<div class="progress" id="progress">
+  <div class="seg" data-p="1"><div class="fill"></div></div>
+  <div class="seg" data-p="2"><div class="fill"></div></div>
+  <div class="seg" data-p="3"><div class="fill"></div></div>
+</div>
+<div class="count" id="count">01 / 35</div>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true">
+  <div class="menu-head">
+    <div class="menu-title"><small>Extendida · preparación</small>¿Muere el patrón dólar?</div>
+    <button class="menu-close" id="menuClose">CERRAR ✕</button>
+  </div>
+  <div class="pillars">
+    <div class="pillar" data-p="1">
+      <h3><span class="dot"></span>Pilar 1 · Dólar y guerra</h3>
+      <p class="lede">Por qué el dólar manda y cómo sostiene la demanda por un token de exportación de déficit fiscal.</p>
+      <ol id="list1"></ol>
+    </div>
+    <div class="pillar" data-p="2">
+      <h3><span class="dot"></span>Pilar 2 · BRICS / China</h3>
+      <p class="lede">Competencia de monedas estatales: CIPS, yuan, locales, energía. Todas fiat, emisión infinita.</p>
+      <ol id="list2"></ol>
+    </div>
+    <div class="pillar" data-p="3">
+      <h3><span class="dot"></span>Pilar 3 · Oro / Bitcoin</h3>
+      <p class="lede">Activos neutrales, libres e inconfiscables. Competencia oro vs Bitcoin por la reserva del siglo.</p>
+      <ol id="list3"></ol>
+    </div>
+  </div>
+  <div class="menu-hint">
+    <span><kbd>←</kbd><kbd>→</kbd> navegar</span>
+    <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> ir a pilar</span>
+    <span><kbd>M</kbd> menú</span>
+    <span><kbd>Esc</kbd> cerrar</span>
+    <span><kbd>F</kbd> pantalla completa</span>
+    <span><kbd>Home</kbd><kbd>End</kbd> ir a extremos</span>
+  </div>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const pillarNames = {0:'APERTURA',1:'PILAR 1 · DÓLAR + GUERRA',2:'PILAR 2 · BRICS / CHINA',3:'PILAR 3 · ORO + BITCOIN'};
+  let i = Math.max(0, slides.findIndex(s => s.classList.contains('active')));
+  slides.forEach(s => s.classList.remove('active'));
+
+  const lists = {1:document.getElementById('list1'),2:document.getElementById('list2'),3:document.getElementById('list3')};
+  slides.forEach((s, idx) => {
+    const p = +s.dataset.p;
+    if (!lists[p]) return;
+    const li = document.createElement('li');
+    li.dataset.idx = idx;
+    li.innerHTML = `<span class="n">${String(idx+1).padStart(2,'0')}</span><span><span class="t">${s.dataset.title}</span></span>`;
+    li.addEventListener('click', () => { show(idx); closeMenu(); });
+    lists[p].appendChild(li);
+  });
+
+  const pillarTag = document.getElementById('pillarTag');
+  const pillarName = document.getElementById('pillarName');
+  const count = document.getElementById('count');
+  const progSegs = [...document.querySelectorAll('#progress .seg')];
+
+  function pillarCounts(){
+    const counts = {1:0,2:0,3:0}, indexInPillar = [];
+    slides.forEach((s,idx)=>{ const p=+s.dataset.p; if(p>=1&&p<=3){ counts[p]++; indexInPillar.push({p,n:counts[p]});} else indexInPillar.push({p:0,n:0}); });
+    return {counts, indexInPillar};
+  }
+  const {counts:pCounts, indexInPillar} = pillarCounts();
+
+  function show(n){
+    slides.forEach(s => s.classList.remove('active'));
+    i = (n + slides.length) % slides.length;
+    slides[i].classList.add('active');
+    const p = +slides[i].dataset.p;
+    pillarTag.dataset.p = p;
+    pillarName.textContent = pillarNames[p];
+    count.textContent = `${String(i+1).padStart(2,'0')} / ${slides.length}`;
+    progSegs.forEach(seg => {
+      const segP = +seg.dataset.p;
+      const fill = seg.querySelector('.fill');
+      if (segP < p) fill.style.width = '100%';
+      else if (segP > p) fill.style.width = '0%';
+      else {
+        const info = indexInPillar[i];
+        const pct = pCounts[segP] ? (info.n / pCounts[segP]) * 100 : 0;
+        fill.style.width = pct + '%';
+      }
+    });
+    document.querySelectorAll('.pillar li').forEach(li => li.classList.toggle('current', +li.dataset.idx === i));
+  }
+
+  const menu = document.getElementById('menu');
+  function openMenu(){ menu.classList.add('open'); }
+  function closeMenu(){ menu.classList.remove('open'); }
+  document.getElementById('menuBtn').addEventListener('click', openMenu);
+  document.getElementById('menuClose').addEventListener('click', closeMenu);
+  menu.addEventListener('click', e => { if (e.target === menu) closeMenu(); });
+
+  function jumpToPillar(p){
+    const idx = slides.findIndex(s => +s.dataset.p === p);
+    if (idx >= 0) show(idx);
+  }
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { if (menu.classList.contains('open')) closeMenu(); return; }
+    if (menu.classList.contains('open')) return;
+    if (['ArrowRight',' ','Enter','PageDown'].includes(e.key)) { e.preventDefault(); show(i+1); }
+    else if (['ArrowLeft','Backspace','PageUp'].includes(e.key)) { e.preventDefault(); show(i-1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length-1);
+    else if (e.key === '1') jumpToPillar(1);
+    else if (e.key === '2') jumpToPillar(2);
+    else if (e.key === '3') jumpToPillar(3);
+    else if (e.key === '0') show(0);
+    else if (e.key.toLowerCase() === 'm') openMenu();
+    else if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+  });
+
+  progSegs.forEach(seg => seg.addEventListener('click', () => jumpToPillar(+seg.dataset.p)));
+
+  show(0);
+</script>
+</body>
+</html>
