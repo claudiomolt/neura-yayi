@@ -102,12 +102,14 @@
     .timeline{position:absolute;inset:6% 4% 12% 4%;display:flex;flex-direction:column;justify-content:center}
     .timeline .events{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;width:100%}
     .timeline .events:before{content:"";position:absolute;left:9%;right:9%;top:calc(50% + 2px);height:3px;background:linear-gradient(90deg,#d7432f 0%,#ff8c00 50%,#d7ad45 70%,#d7432f 100%);box-shadow:0 0 16px rgba(255,140,0,.35);z-index:0}
+    .timeline.blue-line .events:before{background:linear-gradient(90deg,#2b66ff 0%,#5d8cff 45%,#d7ad45 65%,#2b66ff 100%);box-shadow:0 0 16px rgba(43,102,255,.4)}
     .timeline .event{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;padding:0 6px}
     .timeline .event .year{font:900 clamp(22px,3.2vw,56px)/1 'Archivo Black','Inter',sans-serif;color:var(--ink);letter-spacing:-.02em;margin-bottom:16px;text-shadow:0 0 30px rgba(255,140,0,.3)}
     .timeline .event .dot{width:22px;height:22px;border-radius:50%;border:4px solid #020812;box-shadow:0 0 24px currentColor;margin-bottom:18px;background:currentColor}
     .timeline .event.red{color:#d7432f}
     .timeline .event.orange{color:#ff8c00}
     .timeline .event.gold{color:#d7ad45}
+    .timeline .event.blue{color:#2b66ff}
     .timeline .event .country{font:800 clamp(10px,1.1vw,14px)/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;filter:brightness(1.4)}
     .timeline .event .what{font:600 clamp(11px,1.05vw,15px)/1.3 'Inter',ui-sans-serif;color:#e9e6dc}
     /* Slide con visual de fondo full-bleed (Russia chained, etc.) */
@@ -205,6 +207,18 @@
     .slide.bands-slide.active{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;padding-top:11vh;padding-bottom:7vh}
     .slide.bands-slide > div:first-child{flex:0 0 auto;display:flex;flex-direction:column;gap:10px}
     .newsbands{margin-bottom:0;flex-shrink:0}
+    /* Slide cierre: 2 títulos grandes brutalist apilados */
+    .slide.closing-slide.active{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:5vh;padding:6vh 6vw}
+    .slide.closing-slide > .block{display:flex;flex-direction:column;gap:10px;max-width:1200px}
+    .slide.closing-slide .headline{font-size:clamp(44px,min(7vw,14vh),130px);line-height:1;letter-spacing:-.025em;margin:0}
+    .slide.closing-slide .block:nth-child(1) .kicker{color:var(--gold)}
+    .slide.closing-slide .block:nth-child(1) .kicker .dot{background:var(--gold);box-shadow:0 0 14px var(--gold)}
+    .slide.closing-slide .block:nth-child(2) .kicker{color:var(--orange)}
+    .slide.closing-slide .block:nth-child(2) .kicker .dot{background:var(--orange);box-shadow:0 0 14px var(--orange)}
+
+    /* Slide tipo imagen: solo imagen centrada full-bleed */
+    .slide.image-slide.active{display:flex;align-items:center;justify-content:center;padding:6vh 6vw}
+    .slide.image-slide img{max-width:82vw;max-height:80vh;object-fit:contain;border-radius:12px;box-shadow:0 30px 100px rgba(0,0,0,.6)}
     /* Slide tipo timeline: titulo arriba, timeline abajo extendido full-width */
     .slide.timeline-slide.active{display:flex;flex-direction:column;align-items:stretch;padding-top:10vh;padding-bottom:7vh;gap:3vh}
     .slide.timeline-slide > div:first-child{flex:0 0 auto;display:flex;flex-direction:column;gap:10px;max-width:none}
@@ -344,228 +358,7 @@
       <p class="sub">Competencia de monedas en curso. Activos neutrales en alza.</p>
     </div>
     <div class="visual"><div class="web"><i></i><i></i><i></i><i></i><i></i></div></div>
-    <div class="source">Mayo 2026 · 25 slides</div>
-  </section>
-
-  <!-- 2 · P1 — Titulares de prensa: el dólar bajo presión -->
-  <section class="slide" data-p="1" data-title="Titulares · El dólar bajo presión">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 1 · Cómo entró en agenda</div>
-      <h2 class="headline">El dólar<br/>en los diarios</h2>
-      <p class="sub">La desdolarización dejó de ser tesis de minoría.<br/>Está en portadas, balances soberanos y debate académico.</p>
-    </div>
-    <div class="visual">
-      <div class="headlines three">
-        <div class="hl p1">
-          <div class="src">Financial Times</div>
-          <div class="h">Moody's quita el último triple-A a EE.UU.</div>
-          <div class="d">Feb 2026</div>
-        </div>
-        <div class="hl p1">
-          <div class="src">Wall Street Journal</div>
-          <div class="h">El gasto en intereses supera al gasto militar por primera vez</div>
-          <div class="d">Mar 2026</div>
-        </div>
-        <div class="hl p1">
-          <div class="src">Le Monde</div>
-          <div class="h">El arma del dólar inquieta a Pekín</div>
-          <div class="d">2025</div>
-        </div>
-      </div>
-    </div>
-    <div class="source">Recortes representativos · 2024-2026 · agenda mediática global sobre el rol del USD · titulares ilustrativos</div>
-  </section>
-
-  <!-- 3 · P1 — El dólar en 2000 (pico histórico) -->
-  <section class="slide" data-p="1" data-title="El dólar en 2000: pico histórico 71%">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 1 · Punto de partida</div>
-      <div class="metric">71%</div>
-      <p class="sub">de las reservas oficiales globales estaban en USD a inicio del siglo.<br/>El punto más alto en la era post-Bretton Woods.</p>
-    </div>
-    <div class="visual">
-      <svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg"
-           style="position:absolute;inset:3% 2% 10% 2%;width:96%;height:87%" preserveAspectRatio="xMidYMid meet">
-        <!-- Donut chart MUCHO MÁS GRANDE: composición reservas FX 2000 (IMF COFER) -->
-        <g transform="rotate(-90 320 250)">
-          <!-- USD 71% (624.55 de 879.65, C=2π·140) -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ff8c00" stroke-width="62"
-                  stroke-dasharray="624.55 879.65" stroke-dashoffset="0"/>
-          <!-- EUR/DEM 18% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#2b66ff" stroke-width="62"
-                  stroke-dasharray="158.34 879.65" stroke-dashoffset="-624.55"/>
-          <!-- JPY 6.5% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ef4444" stroke-width="62"
-                  stroke-dasharray="57.18 879.65" stroke-dashoffset="-782.89"/>
-          <!-- GBP 3% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#8b5cf6" stroke-width="62"
-                  stroke-dasharray="26.39 879.65" stroke-dashoffset="-840.07"/>
-          <!-- Otras (CHF 0.3% + otras 1.2%) = 1.5% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#9aa6b2" stroke-width="62"
-                  stroke-dasharray="13.19 879.65" stroke-dashoffset="-866.46"/>
-        </g>
-
-        <!-- Centro: 71% -->
-        <text x="320" y="260" text-anchor="middle" font-family="ui-sans-serif" font-weight="900"
-              font-size="78" fill="#d7ad45" letter-spacing="-3">71%</text>
-        <text x="320" y="290" text-anchor="middle" font-family="ui-monospace,monospace"
-              font-weight="800" font-size="13" letter-spacing="4" fill="#9aa6b2">USD · 2000</text>
-
-        <!-- Leader lines -->
-        <g fill="none" stroke-width="1.2" stroke-linecap="round">
-          <!-- USD: derecha -->
-          <path d="M 456,346 L 545,346 L 560,346" stroke="#ff8c00"/>
-          <!-- EUR: izquierda -->
-          <path d="M 156,187 L 70,187 L 60,187" stroke="#2b66ff"/>
-          <!-- JPY: arriba-izquierda -->
-          <path d="M 240,87 L 130,72 L 60,72" stroke="#ef4444"/>
-          <!-- GBP: arriba -->
-          <path d="M 288,71 L 288,40 L 245,28" stroke="#8b5cf6"/>
-          <!-- Otras: arriba-derecha -->
-          <path d="M 312,68 L 410,40 L 480,28" stroke="#9aa6b2"/>
-        </g>
-
-        <!-- Puntos en el borde de cada slice -->
-        <g stroke="#070a0f" stroke-width="2">
-          <circle cx="456" cy="346" r="4" fill="#ff8c00"/>
-          <circle cx="156" cy="187" r="4" fill="#2b66ff"/>
-          <circle cx="240" cy="87"  r="4" fill="#ef4444"/>
-          <circle cx="288" cy="71"  r="4" fill="#8b5cf6"/>
-          <circle cx="312" cy="68"  r="4" fill="#9aa6b2"/>
-        </g>
-
-        <!-- Labels grandes y legibles -->
-        <g font-family="ui-monospace,monospace" font-weight="800">
-          <!-- USD label (derecha) -->
-          <text x="565" y="338" font-size="16" fill="#ffc070">USD</text>
-          <text x="565" y="368" font-size="30" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">71%</text>
-
-          <!-- EUR/DEM label (izquierda) -->
-          <text x="55" y="178" text-anchor="end" font-size="15" fill="#7b9eff">EUR / DEM</text>
-          <text x="55" y="205" text-anchor="end" font-size="24" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">18%</text>
-
-          <!-- JPY label (arriba-izquierda) -->
-          <text x="55" y="62" text-anchor="end" font-size="15" fill="#ff9c8a">JPY</text>
-          <text x="55" y="86" text-anchor="end" font-size="22" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">6.5%</text>
-
-          <!-- GBP label (arriba) -->
-          <text x="240" y="20" text-anchor="end" font-size="15" fill="#c4a7ff">GBP</text>
-          <text x="245" y="44" text-anchor="end" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">3%</text>
-
-          <!-- Otras label (arriba-derecha) -->
-          <text x="485" y="20" font-size="15" fill="#c2cad3">Otras</text>
-          <text x="485" y="44" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">1.5%</text>
-        </g>
-
-        <!-- Footer notes -->
-        <text x="350" y="465" text-anchor="middle" fill="#728092"
-              font-family="ui-monospace,monospace" font-size="10.5" font-style="italic">
-          Euro recién lanzado (1999) · "Otras" incluye CHF 0.3% · reservas totales 2000 incluían oro ~10% y DEG ~3%
-        </text>
-      </svg>
-    </div>
-    <div class="source">IMF COFER Q4 2000 · Fed International Role of the U.S. Dollar series · World Gold Council histórico</div>
-  </section>
-
-  <!-- 3 · P1 — El dólar manda + pie chart composición -->
-  <section class="slide" data-p="1" data-title="El dólar todavía manda (mínimo 30 años)">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 1 · Dólar y guerra</div>
-      <div class="metric">56,77%</div>
-      <p class="sub">de reservas globales en USD (Q4 2025, mínimo en 30 años).<br/>~88% de pares FX involucran USD. ~80% del comercio se factura en USD.</p>
-    </div>
-    <div class="visual">
-      <svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg"
-           style="position:absolute;inset:3% 2% 10% 2%;width:96%;height:87%" preserveAspectRatio="xMidYMid meet">
-        <!-- Donut chart GRANDE: composición reservas FX Q4 2025 (IMF COFER) -->
-        <g transform="rotate(-90 320 250)">
-          <!-- USD 56.77% (499.36 de 879.65, C=2π·140) -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ff8c00" stroke-width="62"
-                  stroke-dasharray="499.36 879.65" stroke-dashoffset="0"/>
-          <!-- EUR 21% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#2b66ff" stroke-width="62"
-                  stroke-dasharray="184.73 879.65" stroke-dashoffset="-499.36"/>
-          <!-- JPY 5.5% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#ef4444" stroke-width="62"
-                  stroke-dasharray="48.38 879.65" stroke-dashoffset="-684.09"/>
-          <!-- GBP 5% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#8b5cf6" stroke-width="62"
-                  stroke-dasharray="43.98 879.65" stroke-dashoffset="-732.47"/>
-          <!-- CNY 2.2% -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#f59e0b" stroke-width="62"
-                  stroke-dasharray="19.35 879.65" stroke-dashoffset="-776.45"/>
-          <!-- Otras 9.53% (CAD + AUD + CHF + KRW + otras) -->
-          <circle cx="320" cy="250" r="140" fill="transparent" stroke="#9aa6b2" stroke-width="62"
-                  stroke-dasharray="83.85 879.65" stroke-dashoffset="-795.80"/>
-        </g>
-
-        <!-- Centro: 56,77% -->
-        <text x="320" y="260" text-anchor="middle" font-family="ui-sans-serif" font-weight="900"
-              font-size="68" fill="#d7ad45" letter-spacing="-3">56,77%</text>
-        <text x="320" y="290" text-anchor="middle" font-family="ui-monospace,monospace"
-              font-weight="800" font-size="13" letter-spacing="4" fill="#9aa6b2">USD · Q4 2025</text>
-
-        <!-- Leader lines -->
-        <g fill="none" stroke-width="1.2" stroke-linecap="round">
-          <!-- USD: derecha -->
-          <path d="M 488,288 L 555,288 L 565,288" stroke="#ff8c00"/>
-          <!-- EUR: izquierda-abajo -->
-          <path d="M 166,328 L 70,328 L 60,328" stroke="#2b66ff"/>
-          <!-- JPY: izquierda-media -->
-          <path d="M 159,189 L 80,180 L 60,180" stroke="#ef4444"/>
-          <!-- GBP: izquierda-arriba -->
-          <path d="M 187,140 L 95,95 L 60,90" stroke="#8b5cf6"/>
-          <!-- CNY: arriba-centro-izq -->
-          <path d="M 215,113 L 215,50 L 200,28" stroke="#f59e0b"/>
-          <!-- Otras: arriba-derecha -->
-          <path d="M 270,85 L 380,40 L 460,28" stroke="#9aa6b2"/>
-        </g>
-
-        <!-- Puntos en el borde de cada slice -->
-        <g stroke="#070a0f" stroke-width="2">
-          <circle cx="488" cy="288" r="4" fill="#ff8c00"/>
-          <circle cx="166" cy="328" r="4" fill="#2b66ff"/>
-          <circle cx="159" cy="189" r="4" fill="#ef4444"/>
-          <circle cx="187" cy="140" r="4" fill="#8b5cf6"/>
-          <circle cx="215" cy="113" r="4" fill="#f59e0b"/>
-          <circle cx="270" cy="85"  r="4" fill="#9aa6b2"/>
-        </g>
-
-        <!-- Labels grandes y legibles -->
-        <g font-family="ui-monospace,monospace" font-weight="800">
-          <!-- USD label (derecha) -->
-          <text x="565" y="280" font-size="16" fill="#ffc070">USD</text>
-          <text x="565" y="310" font-size="26" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">56,77%</text>
-
-          <!-- EUR label (izquierda-abajo) -->
-          <text x="55" y="320" text-anchor="end" font-size="15" fill="#7b9eff">EUR</text>
-          <text x="55" y="346" text-anchor="end" font-size="24" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">21%</text>
-
-          <!-- JPY label (izquierda-media) -->
-          <text x="55" y="170" text-anchor="end" font-size="15" fill="#ff9c8a">JPY</text>
-          <text x="55" y="195" text-anchor="end" font-size="22" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">5.5%</text>
-
-          <!-- GBP label (izquierda-arriba) -->
-          <text x="55" y="80" text-anchor="end" font-size="15" fill="#c4a7ff">GBP</text>
-          <text x="55" y="105" text-anchor="end" font-size="22" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">5%</text>
-
-          <!-- CNY label (arriba) -->
-          <text x="195" y="20" text-anchor="end" font-size="15" fill="#fbbf24">CNY</text>
-          <text x="200" y="44" text-anchor="end" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">2.2%</text>
-
-          <!-- Otras label (arriba-derecha) -->
-          <text x="465" y="20" font-size="15" fill="#c2cad3">Otras</text>
-          <text x="465" y="44" font-size="20" font-family="ui-sans-serif" font-weight="900" fill="#e9e6dc" letter-spacing="-1">9,53%</text>
-        </g>
-
-        <!-- Footer notes -->
-        <text x="350" y="465" text-anchor="middle" fill="#728092"
-              font-family="ui-monospace,monospace" font-size="10.5" font-style="italic">
-          "Otras" incluye CAD · AUD · CHF · KRW · resto · + reservas totales incluyen oro (~20%) y DEG (~3%)
-        </text>
-      </svg>
-    </div>
-    <div class="source">IMF COFER Q4 2025 · Fed International Role of the U.S. Dollar · BIS Triennial · World Gold Council</div>
+    <div class="source">Mayo 2026 · 20 slides</div>
   </section>
 
   <!-- 4 · P1 — Caída del USD 2000-2025 (line chart) -->
@@ -739,147 +532,6 @@
            style="position:absolute;inset:6% 6% 16% 6%;width:88%;height:78%;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5)) brightness(1.05)"/>
     </div>
     <div class="source">~US$8T Treasuries en manos extranjeras (TIC) · déficit primario proyectado prom. ~7% PIB próximos 10 años (CBO)</div>
-  </section>
-
-  <!-- 6 · P1 — Déficit fiscal EE.UU. histórico -->
-  <section class="slide" data-p="1" data-title="Déficit fiscal EE.UU. histórico 1980-2025">
-    <div>
-      <div class="kicker"><span class="dot"></span>Magnitud histórica</div>
-      <h2 class="headline">~US$1.8T<br/>por año</h2>
-      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.35">
-        FY2025: <b style="color:#ff8c00">US$1.8T</b> de déficit · <b style="color:#ff8c00">5.9% PIB</b><br/>
-        Deuda total: <b style="color:#d7ad45">US$37.6T+</b> (+2.2T en 1 año)<br/>
-        Deuda/PIB cruza <b style="color:#d7432f">99.8%</b> (35% en 1980)
-      </p>
-      <div style="margin-top:18px;padding:12px 14px;border-left:3px solid #d7432f;background:rgba(215,67,47,.10);border-radius:0 8px 8px 0;font:600 13px/1.5 ui-sans-serif;color:#e9e6dc;max-width:540px">
-        <b style="color:#ff9c8a">Hitos FY2025:</b><br/>
-        · Intereses <b>US$970B</b> &gt; gasto militar (~US$905B)<br/>
-        · Intereses ya son el #2 gasto federal (detrás de Social Security)<br/>
-        · Déficit <b>5.9% PIB</b> vs promedio 50 años de <b>3.8%</b><br/>
-        · Superado solo 8 veces desde 1946
-      </div>
-    </div>
-    <div class="visual">
-      <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
-           style="position:absolute;inset:5% 4% 14% 4%;width:92%;height:80%" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="deficitG" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#d7432f" stop-opacity="0"/>
-            <stop offset="60%" stop-color="#d7432f" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#d7432f" stop-opacity="0.05"/>
-          </linearGradient>
-          <linearGradient id="surplusG" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#3ecf8e" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-
-        <!-- Título -->
-        <text x="360" y="28" text-anchor="middle" fill="#c2cad3"
-              font-family="ui-monospace,monospace" font-weight="800" font-size="13"
-              letter-spacing="3">DÉFICIT FISCAL EE.UU. · 1980–2025 · US$ MILES DE MILLONES</text>
-
-        <!-- Grid horizontal -->
-        <g stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,4">
-          <line x1="80" y1="86"  x2="680" y2="86"/>
-          <line x1="80" y1="148" x2="680" y2="148"/>
-          <line x1="80" y1="270" x2="680" y2="270"/>
-          <line x1="80" y1="374" x2="680" y2="374"/>
-        </g>
-
-        <!-- Línea cero (resaltada) -->
-        <line x1="80" y1="106" x2="680" y2="106" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
-
-        <!-- Y-axis labels -->
-        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="end">
-          <text x="72" y="90" fill="#3ecf8e">+300</text>
-          <text x="72" y="110">0</text>
-          <text x="72" y="190">-1.000</text>
-          <text x="72" y="270">-2.000</text>
-          <text x="72" y="378">-3.000</text>
-        </g>
-
-        <!-- X-axis labels -->
-        <g fill="#728092" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">
-          <text x="80" y="403">1980</text>
-          <text x="213" y="403">1990</text>
-          <text x="347" y="403">2000</text>
-          <text x="480" y="403">2010</text>
-          <text x="613" y="403">2020</text>
-          <text x="680" y="403">2025</text>
-        </g>
-
-        <!-- Área bajo la línea (déficit) -->
-        <path d="M 80,112 L 147,124 L 213,125 L 240,131 L 280,120 L 320,100 L 347,86 L 373,119 L 440,120 L 453,145 L 467,227 L 480,217 L 507,199 L 533,147 L 573,163 L 600,190 L 613,374 L 627,344 L 640,224 L 653,251 L 667,263 L 680,260 L 680,106 L 80,106 Z"
-              fill="url(#deficitG)"/>
-
-        <!-- Pequeño área de superávit (1998-2001) -->
-        <path d="M 320,106 L 320,100 L 347,86 L 373,106 Z" fill="url(#surplusG)"/>
-
-        <!-- Línea principal -->
-        <polyline points="80,112 147,124 213,125 240,131 280,120 320,100 347,86 373,119 440,120 453,145 467,227 480,217 507,199 533,147 573,163 600,190 613,374 627,344 640,224 653,251 667,263 680,260"
-                  fill="none" stroke="#ff8c00" stroke-width="2.5" stroke-linejoin="round"/>
-
-        <!-- Puntos de datos -->
-        <g stroke="#070a0f" stroke-width="2">
-          <!-- años principales -->
-          <circle cx="80"  cy="112" r="3.5" fill="#ff8c00"/>
-          <circle cx="213" cy="125" r="3.5" fill="#ff8c00"/>
-          <circle cx="280" cy="120" r="3.5" fill="#ff8c00"/>
-          <!-- Pico superávit -->
-          <circle cx="347" cy="86" r="6" fill="#3ecf8e"/>
-          <!-- GFC -->
-          <circle cx="467" cy="227" r="6" fill="#d7432f"/>
-          <!-- COVID peak -->
-          <circle cx="613" cy="374" r="7" fill="#d7432f"/>
-          <!-- 2024-2025 -->
-          <circle cx="667" cy="263" r="4" fill="#ff8c00"/>
-          <circle cx="680" cy="260" r="6" fill="#d7ad45"/>
-        </g>
-
-        <!-- Anotación: superávit Clinton -->
-        <g font-family="ui-monospace,monospace">
-          <line x1="347" y1="86" x2="347" y2="55" stroke="#3ecf8e" stroke-width="1" stroke-dasharray="2,2"/>
-          <rect x="290" y="38" width="120" height="22" fill="rgba(62,207,142,0.18)"
-                stroke="#3ecf8e" stroke-width="1" rx="4"/>
-          <text x="350" y="53" text-anchor="middle" fill="#7dffc1" font-weight="800" font-size="11">SUPERÁVIT 2000</text>
-        </g>
-
-        <!-- Anotación: GFC -->
-        <g font-family="ui-monospace,monospace">
-          <line x1="467" y1="227" x2="475" y2="252" stroke="#d7432f" stroke-width="1" stroke-dasharray="2,2"/>
-          <rect x="420" y="252" width="115" height="22" fill="rgba(215,67,47,0.18)"
-                stroke="#d7432f" stroke-width="1" rx="4"/>
-          <text x="478" y="267" text-anchor="middle" fill="#ff9c8a" font-weight="800" font-size="11">2009 · GFC −1.4T</text>
-        </g>
-
-        <!-- Anotación: COVID -->
-        <g font-family="ui-monospace,monospace">
-          <line x1="613" y1="374" x2="540" y2="358" stroke="#d7432f" stroke-width="1" stroke-dasharray="2,2"/>
-          <rect x="430" y="346" width="115" height="22" fill="rgba(215,67,47,0.22)"
-                stroke="#d7432f" stroke-width="1.4" rx="4"/>
-          <text x="487" y="361" text-anchor="middle" fill="#ff9c8a" font-weight="800" font-size="11">2020 · COVID −3.1T</text>
-        </g>
-
-        <!-- Anotación: FY2025 final -->
-        <g font-family="ui-monospace,monospace">
-          <line x1="680" y1="260" x2="650" y2="295" stroke="#d7ad45" stroke-width="1.4" stroke-dasharray="2,2"/>
-          <rect x="528" y="295" width="155" height="52" fill="rgba(215,173,69,0.22)"
-                stroke="#d7ad45" stroke-width="1.4" rx="4"/>
-          <text x="605" y="310" text-anchor="middle" fill="#f0d18a" font-weight="800" font-size="13">FY2025 · -1.8T</text>
-          <text x="605" y="326" text-anchor="middle" fill="#9aa6b2" font-size="10">5.9% PIB · deuda 99.8% PIB</text>
-          <text x="605" y="340" text-anchor="middle" fill="#9aa6b2" font-size="10">intereses &gt; gasto militar</text>
-        </g>
-
-        <!-- Footer -->
-        <text x="360" y="432" text-anchor="middle" fill="#728092"
-              font-family="ui-monospace,monospace" font-size="10" font-style="italic">
-          datos FY · negativo = déficit · solo 8 años desde 1946 con déficit &gt; 5.9% PIB · pico FY2020 (COVID)
-        </text>
-      </svg>
-      <div class="bigword">DÉFICIT</div>
-    </div>
-    <div class="source">US Treasury · CBO Monthly Budget Review FY2025 (nov-2025) · OMB Historical Tables · CRFB · FRED</div>
   </section>
 
   <!-- 9 · P1 — Rusia encadenada (US$300B congelado, fondo full-bleed) -->
@@ -1364,6 +1016,25 @@
     </div>
     <div class="source">EIA · IEA Oil Market Report · CSIS Energy Security · Lloyd's market reports · CBO Monthly Budget Review FY2025</div>
   </section>
+  <!-- 13 · P2 — El Yuan como moneda global -->
+  <section class="slide" data-p="2" data-title="El Yuan como moneda global">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
+      <h2 class="headline">El Yuan<br/>no escaló</h2>
+      <p class="sub">A pesar del push de Beijing, el yuan sigue siendo marginal como moneda global.<br/>Su pico fue 2022. Desde entonces, <b style="color:#ff8c00">cae en reservas</b>.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">1.93%</span><span class="t">CNY en reservas globales (Q3 2025)</span><span class="src">IMF COFER · pico fue ~2.83% en 2022</span></div>
+        <div class="f"><span class="n">3%</span><span class="t">CNY en pagos SWIFT (jun-2025)</span><span class="src">SWIFT RMB Tracker · vs USD 48%, EUR 24%</span></div>
+        <div class="f"><span class="n">US$24.5T</span><span class="t">Volumen anual CIPS 2024 (+43% YoY)</span><span class="src">PBOC · CIPS Annual Report</span></div>
+        <div class="f"><span class="n">30×</span><span class="t">CIPS ~$60B/día · CHIPS ~$1.800B/día</span><span class="src">Liquidación diaria CIPS vs CHIPS</span></div>
+      </div>
+      <div class="bigword">YUAN</div>
+    </div>
+    <div class="source">IMF COFER Q3 2025 · SWIFT RMB Tracker jun-2025 · PBOC CIPS Annual Report 2024 · BBVA Research</div>
+  </section>
+
   <!-- 12 · Transición — La guerra monetaria -->
   <section class="slide bands-slide" data-p="2" data-title="La guerra monetaria">
     <div>
@@ -1387,60 +1058,49 @@
     <div class="source">Wall Street Journal · Reuters · 2025-2026 · titulares representativos</div>
   </section>
 
-  <!-- 13 · P2 — El Yuan como moneda global -->
-  <section class="slide" data-p="2" data-title="El Yuan como moneda global">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 2 · Competencia de monedas estatales</div>
-      <h2 class="headline">El Yuan<br/>no escaló</h2>
-      <p class="sub">A pesar del push de Beijing, el yuan sigue siendo marginal como moneda global.<br/>Su pico fue 2022. Desde entonces, <b style="color:#ff8c00">cae en reservas</b>.</p>
-    </div>
-    <div class="visual">
-      <div class="facts">
-        <div class="f"><span class="n">1.93%</span><span class="t">CNY en reservas globales (Q3 2025)</span><span class="src">IMF COFER · pico fue ~2.83% en 2022</span></div>
-        <div class="f"><span class="n">3%</span><span class="t">CNY en pagos SWIFT (jun-2025)</span><span class="src">SWIFT RMB Tracker · vs USD 48%, EUR 24%</span></div>
-        <div class="f"><span class="n">US$24.5T</span><span class="t">Volumen anual CIPS 2024 (+43% YoY)</span><span class="src">PBOC · CIPS Annual Report</span></div>
-        <div class="f"><span class="n">30×</span><span class="t">CIPS ~$60B/día · CHIPS ~$1.800B/día</span><span class="src">Liquidación diaria CIPS vs CHIPS</span></div>
-      </div>
-      <div class="bigword">YUAN</div>
-    </div>
-    <div class="source">IMF COFER Q3 2025 · SWIFT RMB Tracker jun-2025 · PBOC CIPS Annual Report 2024 · BBVA Research</div>
-  </section>
-
-  <!-- 8 · P2 — Yuan + CIPS + petroyuan + M2 -->
-  <section class="slide" data-p="2" data-title="Yuan + CIPS + petroyuan">
-    <div>
-      <div class="kicker"><span class="dot"></span>China construye el carril</div>
-      <h2 class="headline">Yuan + CIPS<br/>+ petroyuan</h2>
-      <p class="sub">El carril paralelo crece. Pero la masa monetaria también.</p>
-    </div>
-    <div class="visual">
-      <div class="facts">
-        <div class="f"><span class="n">~US$43T</span><span class="t">M2 China (~315T yuanes)</span><span class="src">PBOC · 2024</span></div>
-        <div class="f"><span class="n">~US$21T</span><span class="t">M2 EE.UU.</span><span class="src">Fed H.6 · 2024</span></div>
-        <div class="f"><span class="n">47% / 4.5%</span><span class="t">USD vs Yuan en SWIFT</span><span class="src">SWIFT RMB Tracker 2024</span></div>
-        <div class="f"><span class="n">~6×</span><span class="t">Crecimiento M2 China 2008-2024</span><span class="src">PBOC series largas</span></div>
-      </div>
-      <div class="bigword">BEIJING</div>
-    </div>
-    <div class="source">PBOC · CIPS Quarterly · SWIFT RMB Tracker · Shanghai INE</div>
-  </section>
-
-  <!-- 16 · P2 — BRICS+: países y capital previsto -->
-  <section class="slide" data-p="2" data-title="BRICS+: países y capital previsto">
+  <!-- 10 · P2 — BRICS+ (timeline-slide: titulo arriba + linea de tiempo full-width abajo) -->
+  <section class="slide timeline-slide" data-p="2" data-title="BRICS+: países y capital previsto">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 2 · BRICS / China</div>
       <h2 class="headline">BRICS+</h2>
-      <p class="sub">10 países plenos · <b style="color:#ff8c00">~28% PIB global nominal</b> · <b style="color:#ff8c00">~36% PIB PPP</b> (mayor que G7) · <b style="color:#ff8c00">~45% población mundial</b>.<br/>Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.</p>
+      <p class="sub" style="font-size:clamp(13px,1.3vw,18px);line-height:1.4">
+        10 países plenos · <b style="color:#2b66ff">~28% PIB global nominal</b> · <b style="color:#2b66ff">~36% PIB PPP</b> (mayor que G7) · <b style="color:#2b66ff">~45% población mundial</b>. Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.
+      </p>
     </div>
     <div class="visual">
-      <div class="buyers">
-        <div class="row"><span><b>2010 · Fundadores</b></span><span class="v">Brasil · Rusia · India · China · Sudáfrica</span></div>
-        <div class="row"><span><b>2024 · Expansión BRICS+</b></span><span class="v">Egipto · Etiopía · Irán · EAU</span></div>
-        <div class="row"><span><b>2025 · Indonesia</b></span><span class="v">4to país más poblado del mundo</span></div>
-        <div class="row"><span><b>Socios (partner countries)</b></span><span class="v">Bielorrusia · Bolivia · Cuba · Kazajistán · Tailandia · Malasia · Nigeria · Uganda · Uzbekistán</span></div>
-        <div class="row"><span><b>NDB · Banco de Desarrollo BRICS</b></span><span class="v">US$100B autorizados · US$50B suscritos</span></div>
-        <div class="row"><span><b>CRA · Reserva contingente</b></span><span class="v">US$100B (China $41B · BRI $18B c/u)</span></div>
-        <div class="row"><span><b>BRICS Pay / Bridge</b></span><span class="v">CBDC + monedas locales (pilotos)</span></div>
+      <div class="timeline blue-line">
+        <div class="events">
+          <div class="event blue">
+            <div class="year">2009</div>
+            <div class="dot"></div>
+            <div class="country">BRIC</div>
+            <div class="what">Brasil · Rusia · India · China</div>
+          </div>
+          <div class="event blue">
+            <div class="year">2010</div>
+            <div class="dot"></div>
+            <div class="country">+ Sudáfrica</div>
+            <div class="what">5 plenos · BRICS</div>
+          </div>
+          <div class="event gold">
+            <div class="year">2014</div>
+            <div class="dot"></div>
+            <div class="country">NDB + CRA</div>
+            <div class="what">US$200B institucional</div>
+          </div>
+          <div class="event blue">
+            <div class="year">2024</div>
+            <div class="dot"></div>
+            <div class="country">+ 4 países</div>
+            <div class="what">Egipto · Etiopía · Irán · EAU</div>
+          </div>
+          <div class="event blue">
+            <div class="year">2025</div>
+            <div class="dot"></div>
+            <div class="country">+ Indonesia</div>
+            <div class="what">10 plenos · +9 socios</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="source">BRICS Summit Kazán 2024 · BRICS Summit Rio 2025 · NDB & CRA founding agreements 2014 · IMF / WB</div>
@@ -1456,6 +1116,7 @@
         · USD perdió <b style="color:#ff8c00">~86%</b> · CNY <b style="color:#f59e0b">~85%</b><br/>
         · GBP perdió <b style="color:#8b5cf6">~93%</b> · INR <b style="color:#14b8a6">~97%</b><br/>
         · CHF (el mejor) perdió <b style="color:#3ecf8e">~65%</b><br/>
+        · EUR perdió <b style="color:#2b66ff">~48%</b> (desde 1999)<br/>
         · ARS perdió <b style="color:#d7432f">prácticamente todo</b>
       </p>
     </div>
@@ -1512,9 +1173,14 @@
         <!-- JPY (rojo) -->
         <polyline points="80,80 180,239 291,266 402,284 513,287 624,290 680,296"
                   fill="none" stroke="#ef4444" stroke-width="2" stroke-linejoin="round"/>
-        <!-- DEM/EUR (azul) -->
-        <polyline points="80,80 180,188 291,233 402,272 513,296 624,311 680,323"
-                  fill="none" stroke="#2b66ff" stroke-width="2" stroke-linejoin="round"/>
+        <!-- EUR (azul) - rebasado a 1999=100, arranca en y=80 y decline -->
+        <polyline points="391,80 402,86 513,134 624,176 680,224"
+                  fill="none" stroke="#2b66ff" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- Marca de lanzamiento EUR (1999) -->
+        <circle cx="391" cy="80" r="5" fill="#2b66ff" stroke="#070a0f" stroke-width="2"/>
+        <line x1="391" y1="76" x2="391" y2="58" stroke="#2b66ff" stroke-width="1" stroke-dasharray="2,2" opacity="0.7"/>
+        <rect x="345" y="40" width="92" height="18" fill="rgba(43,102,255,0.22)" stroke="#2b66ff" stroke-width="0.9" rx="3"/>
+        <text x="391" y="52" text-anchor="middle" fill="#7b9eff" font-weight="800" font-size="9.5" font-family="ui-monospace,monospace">1999 · EUR = 100</text>
         <!-- CNY (amber, BRICS) -->
         <polyline points="80,80 180,95 291,230 402,296 513,314 624,329 680,335"
                   fill="none" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
@@ -1536,9 +1202,9 @@
           <!-- JPY -->
           <circle cx="680" cy="296" r="4" fill="#ef4444" stroke="#070a0f" stroke-width="2"/>
           <text x="690" y="299" fill="#ff9c8a">JPY · 28</text>
-          <!-- EUR -->
-          <circle cx="680" cy="323" r="4" fill="#2b66ff" stroke="#070a0f" stroke-width="2"/>
-          <text x="690" y="320" fill="#7b9eff">EUR · 19</text>
+          <!-- EUR (rebasado 1999=100, ahora ~52) -->
+          <circle cx="680" cy="224" r="4" fill="#2b66ff" stroke="#070a0f" stroke-width="2"/>
+          <text x="690" y="227" fill="#7b9eff">EUR · 52</text>
           <!-- CNY -->
           <circle cx="680" cy="335" r="4" fill="#f59e0b" stroke="#070a0f" stroke-width="2"/>
           <text x="690" y="332" fill="#fbbf24">CNY · 15</text>
@@ -1562,7 +1228,7 @@
             <rect width="11" height="11" fill="#ef4444"/><text x="16" y="10" fill="#e9e6dc">JPY Japón</text>
           </g>
           <g transform="translate(258,432)">
-            <rect width="11" height="11" fill="#2b66ff"/><text x="16" y="10" fill="#e9e6dc">EUR / DEM</text>
+            <rect width="11" height="11" fill="#2b66ff"/><text x="16" y="10" fill="#e9e6dc">EUR (1999+)</text>
           </g>
           <g transform="translate(353,432)">
             <rect width="11" height="11" fill="#f59e0b"/><text x="16" y="10" fill="#e9e6dc">CNY Yuan</text>
@@ -1665,50 +1331,14 @@
     <div class="source">World Gold Council · Central Bank Gold Reserves Survey 2025 · 76% de bancos centrales esperan mayor share de oro en 5 años</div>
   </section>
 
-  <!-- 19 · P3 — Oro: bancos centrales -->
-  <section class="slide" data-p="3" data-title="Oro: bancos centrales compran">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales</div>
-      <div class="metric">+1.000t</div>
-      <p class="sub">por año compran los bancos centrales (2022-2024).<br/>2022: récord histórico (1.082t).<br/>Sin riesgo de contraparte estatal.</p>
-    </div>
-    <div class="visual"><div class="bars"><b></b><b></b><b></b><b></b><b></b></div><div class="bigword">ORO</div></div>
-    <div class="source">World Gold Council · Central Bank Gold Demand 2022-2024</div>
+  <!-- 15 · P3 — Oro vs Tesoro (imagen centrada) -->
+  <section class="slide image-slide" data-p="3" data-title="Oro vs Tesoro">
+    <img src="imagenes/oro-vs-tesoro.png" alt="Oro vs Tesoro"/>
   </section>
 
-  <!-- 10 · P3 — Oferta histórica: oro vs Bitcoin (NUEVA) -->
-  <section class="slide" data-p="3" data-title="Oferta histórica: oro vs Bitcoin">
-    <div>
-      <div class="kicker"><span class="dot"></span>Competencia de activos neutrales</div>
-      <h2 class="headline">Oferta histórica:<br/>oro vs Bitcoin</h2>
-      <p class="sub">Oro: crece ~1.5–2% anual sin techo definido.<br/>Bitcoin: cap absoluto 21M, emisión decae cada 4 años.</p>
-    </div>
-    <div class="visual">
-      <div class="vsgrid">
-        <div class="col gold">
-          <h4><small>Activo físico</small>ORO</h4>
-          <div class="row"><span class="l">Stock total minado</span><span class="v">~213.000 t</span></div>
-          <div class="row"><span class="l">Stock en 1900</span><span class="v">~30.000 t</span></div>
-          <div class="row"><span class="l">Stock en 2000</span><span class="v">~140.000 t</span></div>
-          <div class="row"><span class="l">Oferta minera 2024</span><span class="v">~3.500 t</span></div>
-          <div class="row"><span class="l">Inflación anual</span><span class="v">~1.5–2%</span></div>
-          <div class="row"><span class="l">Stock-to-flow</span><span class="v">~62</span></div>
-          <div class="row"><span class="l">Techo de oferta</span><span class="v">indefinido</span></div>
-        </div>
-        <div class="col btc">
-          <h4><small>Activo digital</small>BITCOIN</h4>
-          <div class="row"><span class="l">Cap absoluto</span><span class="v">21.000.000 BTC</span></div>
-          <div class="row"><span class="l">En circulación (may-2026)</span><span class="v">~20.01M (~95.3%)</span></div>
-          <div class="row"><span class="l">Halvings ya ocurridos</span><span class="v">4 (2012-2016-2020-2024)</span></div>
-          <div class="row"><span class="l">Emisión nueva 2024</span><span class="v">~165.000 BTC</span></div>
-          <div class="row"><span class="l">Inflación post-halving abr-2024</span><span class="v">~0.82%</span></div>
-          <div class="row"><span class="l">Stock-to-flow</span><span class="v">~117</span></div>
-          <div class="row"><span class="l">Última emisión prevista</span><span class="v">año 2140</span></div>
-        </div>
-      </div>
-      <div class="bigword">OFERTA</div>
-    </div>
-    <div class="source">World Gold Council · USGS · blockchain.com · Bitcoin protocol consensus rules</div>
+  <!-- 17 · P3 — Kevin Warsh (imagen centrada full-bleed) -->
+  <section class="slide image-slide" data-p="3" data-title="Kevin Warsh">
+    <img src="imagenes/kevin-warsh.jpeg" alt="Kevin Warsh"/>
   </section>
 
   <!-- 11 · P3 — Bitcoin 21M + datos -->
@@ -1816,15 +1446,17 @@
     <div class="source">*China sin marco formal de reserva estratégica · expedientes del USDOJ · Orden ejecutiva de Trump 6-mar-2025 · SEC 13F Q1 2026 · Chainalysis · seguimiento de reservas estratégicas</div>
   </section>
 
-  <!-- 14 · Cierre analítico -->
-  <section class="slide" data-p="3" data-title="Síntesis: tres tendencias en paralelo">
-    <div>
-      <div class="kicker"><span class="dot"></span>Síntesis</div>
-      <h2 class="headline">Tres tendencias<br/>en paralelo</h2>
-      <p class="sub"><b>1.</b> Competencia de monedas estatales (BRICS, CIPS, petroyuan).<br/><b>2.</b> El dólar defiende posición con SWIFT y poder militar.<br/><b>3.</b> Activos neutrales (oro físico, Bitcoin digital) capturan demanda de cobertura.</p>
+  <!-- 21 · Cierre — 2 titulos brutalist -->
+  <section class="slide closing-slide" data-p="3" data-title="Cierre · Activos neutrales y custodia">
+    <div class="block">
+      <div class="kicker"><span class="dot"></span>La tendencia es</div>
+      <h2 class="headline">Activos neutrales.</h2>
     </div>
-    <div class="visual"><div class="split"><div style="color:var(--gold)">Au</div><div style="color:var(--orange)">₿</div></div><div class="bigword">NEUTRALIDAD</div></div>
-    <div class="source">Inconfiscables, libres, con oferta verificable. Esa es la categoría que aprecia.</div>
+    <div class="block">
+      <div class="kicker"><span class="dot"></span>La pregunta es</div>
+      <h2 class="headline">¿Quién tiene<br/>la custodia?</h2>
+    </div>
+    <div class="source">Inconfiscables, libres, con oferta verificable.</div>
   </section>
 
 </div>
@@ -1834,11 +1466,11 @@
   <div class="seg" data-p="2"><div class="fill"></div></div>
   <div class="seg" data-p="3"><div class="fill"></div></div>
 </div>
-<div class="count" id="count">01 / 25</div>
+<div class="count" id="count">01 / 20</div>
 
 <div class="menu" id="menu" role="dialog" aria-modal="true">
   <div class="menu-head">
-    <div class="menu-title"><small>Neura · 25 slides</small>Termina el patrón dolar?</div>
+    <div class="menu-title"><small>Neura · 20 slides</small>Termina el patrón dolar?</div>
     <button class="menu-close" id="menuClose">CERRAR ✕</button>
   </div>
   <div class="pillars">
