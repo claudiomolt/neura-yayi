@@ -6,7 +6,7 @@
   <title>Competencia de monedas — Neura</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@400..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@400..900&display=swap">
   <style>
     :root{
       --bg:#070a0f; --panel:#0e1624; --ink:#f3f0e8; --muted:#9aa6b2;
@@ -24,7 +24,7 @@
     @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
     .kicker{font:700 13px/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:18px;display:flex;align-items:center;gap:14px}
     .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 14px var(--orange)}
-    .headline{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-optical-sizing:auto;font-variation-settings:"opsz" 144,"SOFT" 100;font-weight:600;font-size:clamp(52px,7.4vw,128px);line-height:.88;letter-spacing:-.04em;margin:0;max-width:950px}
+    .headline{font-family:'Archivo Black','Inter',ui-sans-serif,system-ui,sans-serif;font-weight:400;font-size:clamp(56px,8vw,140px);line-height:.92;letter-spacing:-.02em;margin:0;max-width:950px;text-transform:none}
     .metric{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;font-weight:900;font-size:clamp(82px,13vw,220px);line-height:.82;letter-spacing:-.06em;color:var(--gold);text-shadow:0 0 40px rgba(215,173,69,.25)}
     .sub{font:500 clamp(18px,2vw,34px)/1.35 'Inter',ui-sans-serif,system-ui,sans-serif;color:var(--muted);max-width:760px;margin-top:28px}
     .source{position:absolute;left:6vw;bottom:34px;font:600 12px/1.4 ui-monospace,monospace;color:#728092;letter-spacing:.04em;max-width:60vw}
@@ -96,6 +96,42 @@
     .chart .group.america2 .head b{color:#f0d18a}.chart .group.america2 .head b .dot{background:#d7ad45;color:#d7ad45}
     .chart .group.america2 .b{background:linear-gradient(90deg,#a07f1e,#f0d18a);box-shadow:0 0 10px rgba(215,173,69,.25)}
     .chart .totalbar{display:flex;justify-content:space-between;align-items:baseline;padding:6px 12px;background:linear-gradient(90deg,rgba(215,173,69,.15),rgba(255,140,0,.05));border:1px solid rgba(215,173,69,.35);border-radius:8px;margin-bottom:4px}
+    /* Slide con visual ancho (para charts densos como bycontinent) */
+    .slide.wide-visual{grid-template-columns:.7fr 1.3fr}
+    /* Timeline horizontal */
+    .timeline{position:absolute;inset:6% 4% 12% 4%;display:flex;flex-direction:column;justify-content:center}
+    .timeline .events{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;width:100%}
+    .timeline .events:before{content:"";position:absolute;left:9%;right:9%;top:calc(50% + 2px);height:3px;background:linear-gradient(90deg,#d7432f 0%,#ff8c00 50%,#d7ad45 70%,#d7432f 100%);box-shadow:0 0 16px rgba(255,140,0,.35);z-index:0}
+    .timeline .event{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;padding:0 6px}
+    .timeline .event .year{font:900 clamp(22px,3.2vw,56px)/1 'Archivo Black','Inter',sans-serif;color:var(--ink);letter-spacing:-.02em;margin-bottom:16px;text-shadow:0 0 30px rgba(255,140,0,.3)}
+    .timeline .event .dot{width:22px;height:22px;border-radius:50%;border:4px solid #020812;box-shadow:0 0 24px currentColor;margin-bottom:18px;background:currentColor}
+    .timeline .event.red{color:#d7432f}
+    .timeline .event.orange{color:#ff8c00}
+    .timeline .event.gold{color:#d7ad45}
+    .timeline .event .country{font:800 clamp(10px,1.1vw,14px)/1.2 ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;filter:brightness(1.4)}
+    .timeline .event .what{font:600 clamp(11px,1.05vw,15px)/1.3 'Inter',ui-sans-serif;color:#e9e6dc}
+    /* Slide con visual de fondo full-bleed (Russia chained, etc.) */
+    .slide.bg-slide{grid-template-columns:1fr;align-items:start;padding-top:9vh}
+    .slide.bg-slide > .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:1;background:#040810;overflow:hidden;min-height:0}
+    .slide.bg-slide > .visual:before{background:radial-gradient(circle at 30% 30%,#1a4060,transparent 35%),radial-gradient(circle at 70% 65%,#2a1a18,transparent 35%);opacity:.25;filter:blur(20px);animation:drift 14s infinite alternate ease-in-out;mask-image:none}
+    .slide.bg-slide > .visual:after{display:none}
+    .slide.bg-slide > div{max-width:1100px}
+    .slide.bg-slide .metric{text-shadow:0 0 60px rgba(255,140,0,.35),0 6px 28px rgba(0,0,0,.95)}
+    .slide.bg-slide .sub{text-shadow:0 2px 14px rgba(0,0,0,.95);color:#e6dfd0}
+    .slide.bg-slide .kicker{text-shadow:0 0 22px rgba(255,140,0,.5)}
+    /* Variante "bycontinent": grid 2x2 con cada continente en card */
+    .chart.bycontinent{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:8px;inset:3% 3% 8% 3%}
+    .chart.bycontinent > .totalbar{grid-column:1/-1;grid-row:1;margin:0;padding:6px 14px}
+    .chart.bycontinent > .totalbar b{font-size:11px}
+    .chart.bycontinent > .totalbar span{font-size:13px}
+    .chart.bycontinent .group{padding:9px 11px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-height:0;display:flex;flex-direction:column;gap:4px}
+    .chart.bycontinent .group .head{flex-direction:column;align-items:flex-start;gap:1px;padding-bottom:5px;margin-bottom:3px;border-bottom:1px solid var(--line)}
+    .chart.bycontinent .group .head b{font-size:9.5px;letter-spacing:.12em;line-height:1.25;white-space:nowrap}
+    .chart.bycontinent .group .head span{font-size:11px;letter-spacing:.02em;line-height:1.2;white-space:nowrap;color:var(--gold);font-weight:800}
+    .chart.bycontinent .bar{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:8px;row-gap:1px;align-items:baseline}
+    .chart.bycontinent .bar .n{grid-column:1;grid-row:1;text-align:left;font:700 10px/1.15 ui-sans-serif;color:#e9e6dc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .chart.bycontinent .bar .v{grid-column:2;grid-row:1;font:800 10px ui-monospace,monospace;color:var(--gold);letter-spacing:.02em;white-space:nowrap}
+    .chart.bycontinent .bar .barwrap{grid-column:1/-1;grid-row:2;height:4px;margin-top:1px}
     .chart .totalbar b{font:800 11px ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
     .chart .totalbar span{font:900 14px ui-sans-serif;color:#ffe79b;letter-spacing:-.02em}
     .chart .restogrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
@@ -125,6 +161,13 @@
     .vsgrid .row .l{color:#9aa6b2;font:600 clamp(10px,.95vw,12px)/1.3}
     .vsgrid .row .v{color:var(--ink);font:800 clamp(11px,1.05vw,14px)/1.3;text-align:right}
 
+    /* dcards: tarjetas compactas con titular + implicancia (usado en Ormuz) */
+    .dcards{display:flex;flex-direction:column;gap:7px;margin-top:18px;max-width:600px}
+    .dcards .dc{padding:9px 13px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.04);border-left:3px solid var(--p1)}
+    .dcards .dc .t{font:800 clamp(12px,1.1vw,15px)/1.25 'Inter',ui-sans-serif;color:var(--ink);margin-bottom:3px;letter-spacing:.005em}
+    .dcards .dc .m{font:500 clamp(10.5px,.95vw,12.5px)/1.4 'Inter',ui-sans-serif;color:#bcc4cf}
+    .dcards .dc .m b{color:#ffc070;font-weight:800}
+
     /* headlines collage: portadas/recortes de prensa */
     .headlines{position:absolute;inset:5% 5% 13% 5%;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:10px}
     .headlines .hl{position:relative;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.015));display:flex;flex-direction:column;justify-content:space-between;transform:rotate(var(--r,0deg));box-shadow:0 10px 24px rgba(0,0,0,.35);transition:transform .25s ease}
@@ -140,10 +183,75 @@
     .headlines .hl.p2{border-left:3px solid var(--p2)} .headlines .hl.p2 .src{color:#7b9eff}
     .headlines .hl.p3{border-left:3px solid var(--p3)} .headlines .hl.p3 .src{color:#f0d18a}
     .headlines .hl.big .h{font-size:clamp(15px,1.9vw,28px);line-height:1.05;font-weight:700;font-variation-settings:"opsz" 90,"SOFT" 50}
+    /* Variante "three": 3 noticias grandes con meta-row (medium + fecha) y headline al ancho completo */
+    .headlines.three{grid-template-columns:1fr;grid-template-rows:repeat(3,minmax(0,1fr));gap:14px}
+    .headlines.three .hl{padding:18px 24px;transform:none;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;column-gap:14px;row-gap:10px;overflow:hidden;align-items:start}
+    .headlines.three .hl:hover{transform:translateY(-2px)}
+    .headlines.three .hl .src{font:800 11px/1.2 ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:#ffc070;grid-column:1;grid-row:1;display:flex;align-items:center;gap:8px;margin:0}
+    .headlines.three .hl .d{font:700 10.5px ui-monospace,monospace;letter-spacing:.1em;color:#9aa6b2;grid-column:2;grid-row:1;margin:0;align-self:center}
+    .headlines.three .hl .h{grid-column:1/-1;grid-row:2;font:600 clamp(17px,2vw,27px)/1.22 'Inter',ui-sans-serif,system-ui,sans-serif;font-variation-settings:normal;color:var(--ink);margin:0;letter-spacing:-.01em;align-self:center}
+    .headlines.war-three .hl .h{font-size:clamp(26px,3.4vw,48px);line-height:1.08;font-weight:800;letter-spacing:-.03em}
+    /* newsbands: 3 titulares horizontales a pantalla completa */
+    .newsbands{display:flex;flex-direction:column;justify-content:flex-end;align-self:end;margin:0 -6vw 40px -6vw}
+    .newsbands .nb{display:grid;grid-template-columns:140px 1fr;align-items:center;gap:28px;padding:18px 6vw;border-top:1px solid var(--line)}
+    .newsbands .nb:last-child{border-bottom:1px solid var(--line)}
+    .newsbands .nb .ns{font:800 10.5px/1.5 ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;display:flex;flex-direction:column;gap:2px}
+    .newsbands .nb .nd{font:600 9px/1 ui-monospace,monospace;letter-spacing:.12em;color:#728092;text-transform:uppercase}
+    .newsbands .nb .nh{font:800 clamp(24px,3vw,42px)/1.08 'Inter',ui-sans-serif;letter-spacing:-.03em;color:var(--ink)}
+    .newsbands .nb.p1 .ns{color:#ff9c8a} .newsbands .nb.p1{border-left:4px solid var(--p1)}
+    .newsbands .nb.p2 .ns{color:#7b9eff} .newsbands .nb.p2{border-left:4px solid var(--p2)}
+    .newsbands .nb.p3 .ns{color:#f0d18a} .newsbands .nb.p3{border-left:4px solid var(--p3)}
+    /* slide de bandas: titulo arriba con padding para no chocar con navbar, bands abajo */
+    .slide.bands-slide.active{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;padding-top:11vh;padding-bottom:7vh}
+    .slide.bands-slide > div:first-child{flex:0 0 auto;display:flex;flex-direction:column;gap:10px}
+    .newsbands{margin-bottom:0;flex-shrink:0}
+    /* Slide tipo timeline: titulo arriba, timeline abajo extendido full-width */
+    .slide.timeline-slide.active{display:flex;flex-direction:column;align-items:stretch;padding-top:10vh;padding-bottom:7vh;gap:3vh}
+    .slide.timeline-slide > div:first-child{flex:0 0 auto;display:flex;flex-direction:column;gap:10px;max-width:none}
+    .slide.timeline-slide > div:first-child .headline{font-size:clamp(40px,5.8vw,100px);line-height:1;letter-spacing:-.02em;margin:0;max-width:none}
+    .slide.timeline-slide > div:first-child .sub{max-width:1100px;margin-top:4px}
+    .slide.timeline-slide > .visual{flex:1;position:relative;min-height:auto;width:100%;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015));overflow:hidden;display:flex;align-items:center;box-shadow:0 30px 100px rgba(0,0,0,.45)}
+    .slide.timeline-slide .timeline{position:relative;inset:auto;width:100%;padding:4%}
 
     .title-slide{grid-template-columns:1fr}
-    .title-slide .headline{font-size:clamp(64px,9.2vw,150px);font-variation-settings:"opsz" 144,"SOFT" 50;letter-spacing:-.05em}
-    .title-slide .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:.72}
+    .title-slide .headline{font-size:clamp(56px,11.5vw,230px);letter-spacing:-.04em;line-height:.9;text-shadow:0 0 90px rgba(255,140,0,.4),0 6px 28px rgba(0,0,0,.95);max-width:96vw}
+    .title-slide .sub{text-shadow:0 2px 16px rgba(0,0,0,.95);color:#e6dfd0}
+    .title-slide .kicker{text-shadow:0 0 22px rgba(255,140,0,.6)}
+    .title-slide .visual{position:absolute;inset:0;border:0;border-radius:0;z-index:-1;opacity:1;background:#0a0303;overflow:hidden}
+    .title-slide .visual .web{display:none}
+    /* Fondo prendido fuego: capa base */
+    .title-slide .visual:before{
+      content:"";position:absolute;inset:0;filter:none;opacity:1;animation:fireBase 4.2s infinite alternate ease-in-out;
+      background:
+        radial-gradient(ellipse 28% 30% at 50% 90%,#ffd95a 0%,transparent 55%),
+        radial-gradient(ellipse 45% 48% at 26% 102%,#ff8c00 0%,transparent 60%),
+        radial-gradient(ellipse 45% 48% at 74% 102%,#ff6b00 0%,transparent 60%),
+        radial-gradient(ellipse 70% 60% at 50% 108%,#ff3a14 0%,transparent 55%),
+        radial-gradient(ellipse 90% 100% at 50% 130%,#9c1500 0%,transparent 60%),
+        linear-gradient(to top,#2a0700 0%,#0d0303 55%,#000 100%);
+    }
+    /* Fondo prendido fuego: capa flicker */
+    .title-slide .visual:after{
+      content:"";position:absolute;inset:0;mask-image:none;background-image:none;background-size:auto;
+      mix-blend-mode:screen;animation:fireFlicker 2.6s infinite alternate ease-in-out;
+      background:
+        radial-gradient(ellipse 40% 50% at 50% 110%,rgba(255,210,80,.85) 0%,transparent 45%),
+        radial-gradient(ellipse 28% 38% at 32% 106%,rgba(255,140,0,.7) 0%,transparent 60%),
+        radial-gradient(ellipse 28% 42% at 68% 106%,rgba(255,80,30,.7) 0%,transparent 60%),
+        radial-gradient(ellipse 18% 24% at 50% 100%,rgba(255,255,200,.5) 0%,transparent 55%);
+    }
+    @keyframes fireBase{
+      0%{transform:translateY(0) scaleY(1);opacity:.9}
+      50%{transform:translateY(-1.2%) scaleY(1.04);opacity:1}
+      100%{transform:translateY(.4%) scaleY(.98);opacity:.93}
+    }
+    @keyframes fireFlicker{
+      0%{transform:translateY(0) scale(1);opacity:.78}
+      25%{transform:translateY(-2.5%) scale(1.06);opacity:.97}
+      50%{transform:translateY(-.8%) scale(.97);opacity:.82}
+      75%{transform:translateY(-3.2%) scale(1.05);opacity:1}
+      100%{transform:translateY(-1.5%) scale(1.02);opacity:.88}
+    }
 
     /* Máscara de dólar: la palabra se rellena con un gradiente verde billete USD */
     .dolar-mask{
@@ -218,7 +326,7 @@
 <body>
 
 <div class="topbar">
-  <div class="brand">NEURA · ¿MUERE EL PATRÓN DÓLAR?</div>
+  <div class="brand">NEURA · TERMINA EL PATRÓN DOLAR?</div>
   <div class="pillar-tag" id="pillarTag" data-p="0"><span class="pip"></span><span id="pillarName">APERTURA</span></div>
   <button class="menu-btn" id="menuBtn" aria-label="Abrir índice">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -229,14 +337,14 @@
 <div class="deck" id="deck">
 
   <!-- 1 · Apertura -->
-  <section class="slide title-slide active" data-p="0" data-title="¿Muere el patrón dólar?">
+  <section class="slide title-slide active" data-p="0" data-title="Termina el patrón dolar?">
     <div>
       <div class="kicker"><span class="dot"></span>Dólar · BRICS · Oro · Bitcoin</div>
-      <h1 class="headline">¿Muere el<br/>patrón <span class="dolar-mask">dólar</span>?</h1>
+      <h1 class="headline">Termina el<br/>patrón dolar?</h1>
       <p class="sub">Competencia de monedas en curso. Activos neutrales en alza.</p>
     </div>
     <div class="visual"><div class="web"><i></i><i></i><i></i><i></i><i></i></div></div>
-    <div class="source">Mayo 2026 · 20 slides</div>
+    <div class="source">Mayo 2026 · 25 slides</div>
   </section>
 
   <!-- 2 · P1 — Titulares de prensa: el dólar bajo presión -->
@@ -244,49 +352,24 @@
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 1 · Cómo entró en agenda</div>
       <h2 class="headline">El dólar<br/>en los diarios</h2>
-      <p class="sub">De-dollarization dejó de ser tesis de minoría.<br/>Está en portadas, balances soberanos y debate académico.</p>
+      <p class="sub">La desdolarización dejó de ser tesis de minoría.<br/>Está en portadas, balances soberanos y debate académico.</p>
     </div>
     <div class="visual">
-      <div class="headlines">
-        <div class="hl big p1" style="--r:-1.2deg">
+      <div class="headlines three">
+        <div class="hl p1">
           <div class="src">Financial Times</div>
-          <div class="h">Moody's strips US of last triple-A as deficit hits $1.8T</div>
+          <div class="h">Moody's quita el último triple-A a EE.UU.</div>
           <div class="d">Feb 2026</div>
         </div>
-        <div class="hl p1" style="--r:1.4deg">
-          <div class="src">Bloomberg</div>
-          <div class="h">Treasury auction tail widens as foreign buyers fade</div>
-          <div class="d">Abr 2026</div>
-        </div>
-        <div class="hl p1" style="--r:-.6deg">
-          <div class="src">WSJ</div>
-          <div class="h">Interest costs surpass defense spending for first time</div>
+        <div class="hl p1">
+          <div class="src">Wall Street Journal</div>
+          <div class="h">El gasto en intereses supera al gasto militar por primera vez</div>
           <div class="d">Mar 2026</div>
         </div>
-        <div class="hl p1" style="--r:.8deg">
-          <div class="src">The Economist</div>
-          <div class="h">The exorbitant burden</div>
-          <div class="d">Cover · Dic 2025</div>
-        </div>
-        <div class="hl wide p1" style="--r:-.4deg">
-          <div class="src">Reuters</div>
-          <div class="h">BRICS nations expand local-currency settlement framework</div>
-          <div class="d">Ene 2026</div>
-        </div>
-        <div class="hl p1" style="--r:1.6deg">
-          <div class="src">CNBC</div>
-          <div class="h">Fed cuts rates as labor data softens; dollar index near 5-year low</div>
-          <div class="d">May 2026</div>
-        </div>
-        <div class="hl p1" style="--r:-1deg">
+        <div class="hl p1">
           <div class="src">Le Monde</div>
-          <div class="h">L'arme du dollar inquiète Pékin</div>
+          <div class="h">El arma del dólar inquieta a Pekín</div>
           <div class="d">2025</div>
-        </div>
-        <div class="hl p1" style="--r:.3deg">
-          <div class="src">Nikkei Asia</div>
-          <div class="h">Yuan settlement of Saudi oil reaches new milestone</div>
-          <div class="d">2026</div>
         </div>
       </div>
     </div>
@@ -590,54 +673,50 @@
     <div class="source">IMF COFER (Currency Composition of Official Foreign Exchange Reserves) · series 2000-Q4 2025 · USD share 56,77%</div>
   </section>
 
-  <!-- 4 · P1 — Top tenedores de USD (gráfico por continentes) -->
-  <section class="slide" data-p="1" data-title="Top tenedores de dólares por continente">
+  <!-- 6 · P1 — Top tenedores de USD (gráfico 2x2 por continentes) -->
+  <section class="slide wide-visual" data-p="1" data-title="Top tenedores de dólares por continente">
     <div>
       <div class="kicker"><span class="dot"></span>Quién financia al dólar</div>
-      <h2 class="headline">Mayores tenedores<br/>por continente</h2>
+      <h2 class="headline">US$13T<br/>distribuidos</h2>
       <p class="sub">Total global de reservas: <b style="color:#d7ad45">~US$13T</b> (Q3 2025).<br/>Asia · Pacífico · ME concentra <b style="color:#ff8c00">~69%</b> de las reservas mundiales.</p>
     </div>
     <div class="visual">
-      <div class="chart">
-        <div class="totalbar"><b>TOTAL GLOBAL · Q3 2025</b><span>~US$13.0T</span></div>
+      <div class="chart bycontinent">
+        <div class="totalbar"><b>TOTAL GLOBAL · Q3 2025</b><span>~US$13,0T</span></div>
 
         <div class="group asia">
-          <div class="head"><b><span class="dot"></span>ASIA · PACÍFICO · MEDIO ORIENTE</b><span>~US$8.95T · 69%</span></div>
-          <div class="bar"><span class="n">China</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">$3.2T</span></div>
-          <div class="bar"><span class="n">Japón</span><div class="barwrap"><div class="b" style="width:39%"></div></div><span class="v">$1.25T</span></div>
-          <div class="bar"><span class="n">Taiwán·HK·Corea·Singapur</span><div class="barwrap"><div class="b" style="width:56%"></div></div><span class="v">~$1.79T</span></div>
+          <div class="head"><b><span class="dot"></span>ASIA · PAC.</b><span>~$8,95T · 69%</span></div>
+          <div class="bar"><span class="n">China</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">$3,2T</span></div>
+          <div class="bar"><span class="n">Tigres asiát.</span><div class="barwrap"><div class="b" style="width:56%"></div></div><span class="v">~$1,79T</span></div>
+          <div class="bar"><span class="n">Japón</span><div class="barwrap"><div class="b" style="width:39%"></div></div><span class="v">$1,25T</span></div>
           <div class="bar"><span class="n">India</span><div class="barwrap"><div class="b" style="width:21%"></div></div><span class="v">$680B</span></div>
-          <div class="bar"><span class="n">Arabia Saudita</span><div class="barwrap"><div class="b" style="width:13.5%"></div></div><span class="v">$430B</span></div>
-          <div class="note">Tigres asiáticos: Taiwán $580B · HK $425B · Corea S. $415B · Singapur $370B · + Tailandia $220B · Israel $220B · EAU $180B · Turquía $165B · Indonesia $140B · Irán $130B · resto ~$895B</div>
+          <div class="bar"><span class="n">Arabia S.</span><div class="barwrap"><div class="b" style="width:13.5%"></div></div><span class="v">$430B</span></div>
         </div>
 
         <div class="group europa">
-          <div class="head"><b><span class="dot"></span>EUROPA</b><span>~US$2.80T · 22%</span></div>
-          <div class="bar"><span class="n">Suiza</span><div class="barwrap"><div class="b" style="width:28%"></div></div><span class="v">$895B</span></div>
-          <div class="bar"><span class="n">Rusia</span><div class="barwrap"><div class="b" style="width:19%"></div></div><span class="v">$600B</span></div>
-          <div class="bar"><span class="n">Eurozona pooled</span><div class="barwrap"><div class="b" style="width:12.5%"></div></div><span class="v">~$400B</span></div>
-          <div class="bar"><span class="n">Polonia</span><div class="barwrap"><div class="b" style="width:6.3%"></div></div><span class="v">$200B</span></div>
-          <div class="bar"><span class="n">Reino Unido</span><div class="barwrap"><div class="b" style="width:5.3%"></div></div><span class="v">$170B</span></div>
-          <div class="note">~US$300B de Rusia congelados desde 2022 · + Chequia $140B · Dinamarca $95B · Noruega $77B · Rumania $80B · Suecia $60B · Hungría $50B · ~$500B</div>
+          <div class="head"><b><span class="dot"></span>EUROPA</b><span>~$2,80T · 22%</span></div>
+          <div class="bar"><span class="n">Suiza</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">$895B</span></div>
+          <div class="bar"><span class="n">Rusia*</span><div class="barwrap"><div class="b" style="width:67%"></div></div><span class="v">$600B</span></div>
+          <div class="bar"><span class="n">Eurozona</span><div class="barwrap"><div class="b" style="width:45%"></div></div><span class="v">~$400B</span></div>
+          <div class="bar"><span class="n">Polonia</span><div class="barwrap"><div class="b" style="width:22%"></div></div><span class="v">$200B</span></div>
+          <div class="bar"><span class="n">Reino Unido</span><div class="barwrap"><div class="b" style="width:19%"></div></div><span class="v">$170B</span></div>
         </div>
 
         <div class="group america">
-          <div class="head"><b><span class="dot"></span>AMÉRICA (NORTE + SUR)</b><span>~US$970B · 7.5%</span></div>
-          <div class="bar"><span class="n">Brasil</span><div class="barwrap"><div class="b" style="width:11%"></div></div><span class="v">$350B</span></div>
-          <div class="bar"><span class="n">México</span><div class="barwrap"><div class="b" style="width:7%"></div></div><span class="v">$220B</span></div>
-          <div class="bar"><span class="n">Canadá</span><div class="barwrap"><div class="b" style="width:4%"></div></div><span class="v">$130B</span></div>
-          <div class="bar"><span class="n">Perú·Colombia·Chile</span><div class="barwrap"><div class="b" style="width:5.7%"></div></div><span class="v">~$182B</span></div>
-          <div class="bar"><span class="n">Argentina</span><div class="barwrap"><div class="b" style="width:0.9%"></div></div><span class="v">~$28B</span></div>
-          <div class="note">+ Uruguay $20B · Bolivia · Ecuador · Paraguay · Rep. Dominicana · resto ~$60B</div>
+          <div class="head"><b><span class="dot"></span>AMÉRICA</b><span>~$970B · 7,5%</span></div>
+          <div class="bar"><span class="n">Brasil</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">$350B</span></div>
+          <div class="bar"><span class="n">México</span><div class="barwrap"><div class="b" style="width:63%"></div></div><span class="v">$220B</span></div>
+          <div class="bar"><span class="n">Perú·Col·Chile</span><div class="barwrap"><div class="b" style="width:52%"></div></div><span class="v">~$182B</span></div>
+          <div class="bar"><span class="n">Canadá</span><div class="barwrap"><div class="b" style="width:37%"></div></div><span class="v">$130B</span></div>
+          <div class="bar"><span class="n">Argentina</span><div class="barwrap"><div class="b" style="width:8%"></div></div><span class="v">~$28B</span></div>
         </div>
 
         <div class="group africa">
-          <div class="head"><b><span class="dot"></span>ÁFRICA</b><span>~US$400B · 3%</span></div>
-          <div class="bar"><span class="n">Libia</span><div class="barwrap"><div class="b" style="width:2.5%"></div></div><span class="v">$80B</span></div>
-          <div class="bar"><span class="n">Argelia</span><div class="barwrap"><div class="b" style="width:2.2%"></div></div><span class="v">$70B</span></div>
-          <div class="bar"><span class="n">Sudáfrica</span><div class="barwrap"><div class="b" style="width:1.9%"></div></div><span class="v">$60B</span></div>
-          <div class="bar"><span class="n">Egipto · Nigeria · Marruecos</span><div class="barwrap"><div class="b" style="width:3.3%"></div></div><span class="v">~$107B</span></div>
-          <div class="note">+ Angola $15B · Kenia · Etiopía · Ghana · Costa de Marfil · resto continente ~$83B</div>
+          <div class="head"><b><span class="dot"></span>ÁFRICA</b><span>~$400B · 3%</span></div>
+          <div class="bar"><span class="n">Egipto·Nig·Mar</span><div class="barwrap"><div class="b" style="width:100%"></div></div><span class="v">~$107B</span></div>
+          <div class="bar"><span class="n">Libia</span><div class="barwrap"><div class="b" style="width:75%"></div></div><span class="v">$80B</span></div>
+          <div class="bar"><span class="n">Argelia</span><div class="barwrap"><div class="b" style="width:65%"></div></div><span class="v">$70B</span></div>
+          <div class="bar"><span class="n">Sudáfrica</span><div class="barwrap"><div class="b" style="width:56%"></div></div><span class="v">$60B</span></div>
         </div>
       </div>
     </div>
@@ -803,120 +882,509 @@
     <div class="source">US Treasury · CBO Monthly Budget Review FY2025 (nov-2025) · OMB Historical Tables · CRFB · FRED</div>
   </section>
 
-  <!-- 7 · P1 — Estrecho de Ormuz + decisiones de países -->
-  <section class="slide" data-p="1" data-title="Estrecho de Ormuz: el cuello del sistema">
-    <div>
-      <div class="kicker"><span class="dot"></span>El cuello del sistema</div>
-      <h2 class="headline">Estrecho<br/>de Ormuz</h2>
-      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.4">
-        <b style="color:#ff8c00">~20%</b> del petróleo mundial · <b style="color:#ff8c00">~21M</b> barriles/día<br/>
-        <b style="color:#ff8c00">33 km</b> en su punto más estrecho · todo denominado en USD<br/>
-        <span style="color:#9aa6b2">Un solo punto geográfico mueve la inflación global.</span>
-      </p>
-    </div>
-    <div class="visual">
-      <div class="buyers">
-        <div class="row"><span><b>Irán</b> · amenaza con cerrarlo</span><span class="v">minas · misiles · 5to convoy</span></div>
-        <div class="row"><span><b>Arabia Saudita</b> · bypass</span><span class="v">pipeline E-W ~5 Mb/d</span></div>
-        <div class="row"><span><b>EAU</b> · bypass</span><span class="v">pipeline Fujairah ~1.8 Mb/d</span></div>
-        <div class="row"><span><b>EE.UU.</b> · mantiene tránsito</span><span class="v">5ta Flota · Bahrain</span></div>
-        <div class="row"><span><b>China</b> · mayor cliente</span><span class="v">~50% del crudo · bilateraliza en yuan</span></div>
-        <div class="row"><span><b>India</b> · 2do cliente</span><span class="v">busca alternativas · Rusia</span></div>
-        <div class="row"><span><b>Rusia</b> · beneficiada por crisis</span><span class="v">suministro alternativo</span></div>
-      </div>
-    </div>
-    <div class="source">EIA · IEA Oil Market Report · CSIS Energy Security · Lloyd's market reports</div>
-  </section>
-
-  <!-- 5 · P1 — US$300B Rusia -->
-  <section class="slide" data-p="1" data-title="Sanciones: US$300B congelado">
+  <!-- 9 · P1 — Rusia encadenada (US$300B congelado, fondo full-bleed) -->
+  <section class="slide bg-slide" data-p="1" data-title="Sanciones: US$300B congelado">
     <div>
       <div class="kicker"><span class="dot"></span>Reserva = activo político</div>
       <div class="metric">US$300B</div>
       <p class="sub">reservas rusas congeladas tras 2022.<br/>REPO Act (2024): EE.UU. autoriza usar los intereses para financiar Ucrania.</p>
     </div>
-    <div class="visual"><div class="ice"></div><div class="lock">▣</div><div class="bigword">CONGELADO</div></div>
-    <div class="source">Reuters · The Economist · REPO Act 2024</div>
+    <div class="visual">
+      <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"
+           xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:0;width:100%;height:100%">
+        <defs>
+          <!-- Gradientes US -->
+          <linearGradient id="usDollarG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8b04a"/>
+            <stop offset="45%" stop-color="#d7ad45"/>
+            <stop offset="100%" stop-color="#6e4e12"/>
+          </linearGradient>
+          <linearGradient id="usFlagBg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0a3066" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#020812" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="usGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3a6db0" stop-opacity="0.32"/>
+            <stop offset="100%" stop-color="#3a6db0" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- Gradientes Rusia -->
+          <linearGradient id="rusLand" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5a1f10" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#1a0805" stop-opacity="0.9"/>
+          </linearGradient>
+          <linearGradient id="rusIce" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#9bc8e8" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="#3a5870" stop-opacity="0.05"/>
+          </linearGradient>
+          <radialGradient id="rusFrost" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#bfe6ff" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#bfe6ff" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- Gradiente cadenas -->
+          <linearGradient id="chainG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2a323d"/>
+            <stop offset="45%" stop-color="#9aa6b2"/>
+            <stop offset="55%" stop-color="#c0ccd8"/>
+            <stop offset="100%" stop-color="#2a323d"/>
+          </linearGradient>
+
+          <filter id="dollarShadow"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity="0.7"/></filter>
+
+          <!-- Star symbol -->
+          <symbol id="usStar" viewBox="-12 -12 24 24">
+            <polygon points="0,-11 3.2,-3.4 10.5,-3.4 4.7,1.3 6.5,10.5 0,5.5 -6.5,10.5 -4.7,1.3 -10.5,-3.4 -3.2,-3.4" fill="currentColor"/>
+          </symbol>
+        </defs>
+
+        <!-- Fondo base -->
+        <rect width="1600" height="900" fill="#040810"/>
+
+        <!-- Glow lado US (izquierda) y frost lado Rusia (derecha) -->
+        <circle cx="320" cy="450" r="520" fill="url(#usGlow)"/>
+        <circle cx="1280" cy="450" r="480" fill="url(#rusFrost)"/>
+
+        <!-- Franjas US flag (sutiles en fondo izquierdo) -->
+        <g opacity="0.07">
+          <rect x="0" y="150" width="640" height="55" fill="#bd2027"/>
+          <rect x="0" y="265" width="640" height="55" fill="#bd2027"/>
+          <rect x="0" y="380" width="640" height="55" fill="#bd2027"/>
+          <rect x="0" y="495" width="640" height="55" fill="#bd2027"/>
+          <rect x="0" y="610" width="640" height="55" fill="#bd2027"/>
+          <rect x="0" y="725" width="640" height="55" fill="#bd2027"/>
+        </g>
+        <rect x="0" y="0" width="640" height="900" fill="url(#usFlagBg)"/>
+
+        <!-- Estrellas (canton US) -->
+        <g fill="#e6dfd0" opacity="0.55">
+          <use href="#usStar" x="80" y="80" width="22" height="22"/>
+          <use href="#usStar" x="160" y="80" width="22" height="22"/>
+          <use href="#usStar" x="240" y="80" width="22" height="22"/>
+          <use href="#usStar" x="320" y="80" width="22" height="22"/>
+          <use href="#usStar" x="120" y="135" width="22" height="22"/>
+          <use href="#usStar" x="200" y="135" width="22" height="22"/>
+          <use href="#usStar" x="280" y="135" width="22" height="22"/>
+          <use href="#usStar" x="80" y="190" width="22" height="22"/>
+          <use href="#usStar" x="160" y="190" width="22" height="22"/>
+          <use href="#usStar" x="240" y="190" width="22" height="22"/>
+          <use href="#usStar" x="320" y="190" width="22" height="22"/>
+        </g>
+
+        <!-- Símbolo $ gigante (poder US) -->
+        <g filter="url(#dollarShadow)">
+          <text x="350" y="660" font-size="640" font-weight="900"
+                font-family="'Archivo Black','Inter',ui-sans-serif"
+                fill="url(#usDollarG)" text-anchor="middle"
+                letter-spacing="-30">$</text>
+        </g>
+
+        <!-- Etiquetas US -->
+        <text x="350" y="760" text-anchor="middle" fill="#bfe6ff"
+              font-size="34" font-weight="900"
+              font-family="'Archivo Black','Inter',ui-sans-serif"
+              letter-spacing="14" opacity="0.95">EE.UU.</text>
+        <text x="350" y="800" text-anchor="middle" fill="#9aa6b2"
+              font-size="12" font-weight="800"
+              font-family="ui-monospace,monospace"
+              letter-spacing="7" opacity="0.75">OFAC · SWIFT · TREASURY</text>
+
+        <!-- ========== CADENAS de US a Rusia ========== -->
+        <!-- Cadena superior -->
+        <g opacity="0.93">
+          <line x1="620" y1="390" x2="1480" y2="390"
+                stroke="url(#chainG)" stroke-width="22"
+                stroke-dasharray="36,7" stroke-linecap="round"/>
+          <line x1="620" y1="390" x2="1480" y2="390"
+                stroke="#0a0e14" stroke-width="11"
+                stroke-dasharray="36,7" stroke-linecap="round" opacity="0.4"/>
+        </g>
+        <!-- Cadena central (más gruesa) -->
+        <g opacity="0.97">
+          <line x1="610" y1="500" x2="1490" y2="500"
+                stroke="url(#chainG)" stroke-width="34"
+                stroke-dasharray="50,10" stroke-linecap="round"/>
+          <line x1="610" y1="500" x2="1490" y2="500"
+                stroke="#0a0e14" stroke-width="19"
+                stroke-dasharray="50,10" stroke-linecap="round" opacity="0.45"/>
+        </g>
+        <!-- Cadena inferior -->
+        <g opacity="0.93">
+          <line x1="620" y1="610" x2="1480" y2="610"
+                stroke="url(#chainG)" stroke-width="22"
+                stroke-dasharray="36,7" stroke-linecap="round"/>
+          <line x1="620" y1="610" x2="1480" y2="610"
+                stroke="#0a0e14" stroke-width="11"
+                stroke-dasharray="36,7" stroke-linecap="round" opacity="0.4"/>
+        </g>
+
+        <!-- Sello BLOQUEADO (diagonal) -->
+        <g transform="rotate(-10 800 260)">
+          <rect x="620" y="232" width="360" height="56" rx="6"
+                fill="rgba(189,32,39,0.32)" stroke="#bd2027" stroke-width="3.5"/>
+          <text x="800" y="272" text-anchor="middle" fill="#ff7060"
+                font-size="36" font-weight="900"
+                font-family="'Archivo Black','Inter',ui-sans-serif"
+                letter-spacing="8">BLOQUEADO</text>
+        </g>
+
+        <!-- ========== CANDADO central ========== -->
+        <g transform="translate(800,500)">
+          <path d="M -48,-15 L -48,-65 A 48,48 0 0 1 48,-65 L 48,-15"
+                stroke="#2a323d" stroke-width="18" fill="none"
+                stroke-linecap="round"/>
+          <path d="M -42,-15 L -42,-62 A 42,42 0 0 1 42,-62 L 42,-15"
+                stroke="url(#chainG)" stroke-width="13" fill="none"
+                stroke-linecap="round"/>
+          <rect x="-70" y="-15" width="140" height="110" rx="10"
+                fill="#3a4350" stroke="#1a1f28" stroke-width="3"/>
+          <rect x="-66" y="-11" width="132" height="102" rx="8"
+                fill="url(#chainG)" opacity="0.6"/>
+          <circle cx="0" cy="30" r="11" fill="#0a0e14"/>
+          <rect x="-4" y="30" width="8" height="32" fill="#0a0e14"/>
+          <rect x="-62" y="-8" width="6" height="95" fill="rgba(255,255,255,0.18)" rx="2"/>
+          <rect x="56" y="-8" width="4" height="95" fill="rgba(0,0,0,0.4)" rx="2"/>
+        </g>
+
+        <!-- ========== RUSIA (derecha) congelada ========== -->
+        <g opacity="0.95">
+          <!-- Mapa Rusia compacto a la derecha -->
+          <path d="M 980,380
+                   C 1020,360 1060,355 1100,360
+                   C 1140,365 1180,360 1220,365
+                   C 1260,370 1300,368 1340,375
+                   C 1380,382 1430,395 1470,408
+                   C 1500,418 1520,440 1525,470
+                   C 1528,500 1518,530 1500,555
+                   C 1480,575 1455,590 1420,595
+                   C 1385,598 1355,602 1325,598
+                   C 1295,594 1265,608 1235,612
+                   C 1205,615 1175,605 1145,608
+                   C 1115,612 1090,620 1060,618
+                   C 1030,615 1005,605 985,600
+                   C 970,592 965,575 968,555
+                   C 970,525 968,495 972,465
+                   C 975,432 977,408 980,380 Z"
+                fill="url(#rusLand)" stroke="#d7432f" stroke-width="2" stroke-opacity="0.6"/>
+          <!-- Costa norte detalle jagged -->
+          <path d="M 1000,380 L 1035,368 L 1070,378 L 1105,365 L 1140,375 L 1175,365
+                   L 1215,368 L 1255,365 L 1295,372 L 1335,380 L 1375,392 L 1420,405
+                   L 1465,415"
+                stroke="#d7432f" stroke-width="1.2" stroke-opacity="0.7" fill="none"/>
+          <!-- РОССИЯ -->
+          <text x="1240" y="495" text-anchor="middle"
+                fill="#3a0a05" font-size="58" font-weight="900"
+                font-family="ui-sans-serif" letter-spacing="12" opacity="0.55">РОССИЯ</text>
+        </g>
+
+        <!-- Capa ice/frost sobre Rusia -->
+        <rect x="950" y="350" width="600" height="280"
+              fill="url(#rusIce)" opacity="0.7"
+              style="mix-blend-mode:screen"/>
+
+        <!-- Cristales de hielo -->
+        <g fill="#bfe6ff" opacity="0.6">
+          <polygon points="1030,370 1038,360 1046,370 1038,380"/>
+          <polygon points="1180,378 1188,366 1196,378 1188,390"/>
+          <polygon points="1330,400 1338,388 1346,400 1338,412"/>
+          <polygon points="1450,425 1458,413 1466,425 1458,437"/>
+          <polygon points="1080,605 1088,617 1096,605 1088,593"/>
+          <polygon points="1280,612 1288,624 1296,612 1288,600"/>
+          <polygon points="1420,600 1428,612 1436,600 1428,588"/>
+        </g>
+
+        <!-- Etiqueta Rusia -->
+        <text x="1240" y="700" text-anchor="middle" fill="#bfe6ff"
+              font-size="20" font-weight="900"
+              font-family="'Archivo Black','Inter',ui-sans-serif"
+              letter-spacing="10" opacity="0.85">RUSIA</text>
+        <text x="1240" y="730" text-anchor="middle" fill="#9aa6b2"
+              font-size="11" font-weight="800"
+              font-family="ui-monospace,monospace"
+              letter-spacing="6" opacity="0.7">CONGELADA · FEB 2022 →</text>
+
+        <!-- Partículas frost -->
+        <g fill="#bfe6ff" opacity="0.55">
+          <circle cx="900" cy="790" r="2.5"/>
+          <circle cx="1050" cy="810" r="3"/>
+          <circle cx="1200" cy="790" r="2.5"/>
+          <circle cx="1350" cy="810" r="3"/>
+          <circle cx="1480" cy="790" r="2.5"/>
+          <circle cx="980" cy="160" r="2.5"/>
+          <circle cx="1180" cy="170" r="3"/>
+          <circle cx="1380" cy="160" r="2.5"/>
+        </g>
+
+        <!-- ========== Etiquetas top/bottom ========== -->
+        <text x="350" y="50" text-anchor="middle" fill="#bfe6ff"
+              font-size="12" font-weight="800"
+              font-family="ui-monospace,monospace"
+              letter-spacing="8" opacity="0.7">PODER SANCIONADOR</text>
+        <text x="800" y="50" text-anchor="middle" fill="#ff9c8a"
+              font-size="11" font-weight="800"
+              font-family="ui-monospace,monospace"
+              letter-spacing="6" opacity="0.7">SWIFT · REPO ACT · OFAC SDN</text>
+      </svg>
+    </div>
+    <div class="source">Reuters · The Economist · REPO Act (Public Law 118-50) · CSIS Russia Sanctions Tracker</div>
   </section>
 
-  <!-- 11 · P1 — Weaponization del dólar (NUEVA) -->
-  <section class="slide" data-p="1" data-title="Weaponization del dólar">
+  <!-- 10 · P1 — El dólar como arma (timeline-slide: titulo arriba + timeline full-width abajo) -->
+  <section class="slide timeline-slide" data-p="1" data-title="El dólar como arma">
     <div>
       <div class="kicker"><span class="dot"></span>Reserva = activo político</div>
-      <h2 class="headline">El dólar<br/>como arma</h2>
-      <p class="sub" style="font-size:clamp(15px,1.55vw,22px);line-height:1.4">
-        De Rusia 2022 a <b style="color:#ff8c00">+12.000 entidades</b> en la lista OFAC.<br/>
-        El acceso al sistema en USD es un permiso que se puede revocar.<br/>
-        Cada congelamiento empuja al resto a buscar alternativas.
+      <h2 class="headline">El dólar como arma</h2>
+      <p class="sub" style="font-size:clamp(13px,1.3vw,18px);line-height:1.4">
+        Cada congelamiento empuja al resto a buscar alternativas. El acceso al sistema en USD es un permiso que se puede revocar.
       </p>
     </div>
     <div class="visual">
-      <div class="buyers">
-        <div class="row"><span><b>2012</b> · Irán fuera de SWIFT</span><span class="v">primera vez · sanciones nucleares</span></div>
-        <div class="row"><span><b>2014</b> · Rusia (Crimea)</span><span class="v">Visa · Mastercard cortados</span></div>
-        <div class="row"><span><b>2018</b> · Irán fuera de SWIFT (2da vez)</span><span class="v">Trump unilateral · JCPOA roto</span></div>
-        <div class="row"><span><b>2019</b> · Venezuela · CITGO</span><span class="v">activos PDVSA bloqueados en EE.UU.</span></div>
-        <div class="row"><span><b>2022</b> · Rusia post-Ucrania</span><span class="v">US$300B reservas · 7 bancos fuera SWIFT</span></div>
-        <div class="row"><span><b>2024</b> · REPO Act</span><span class="v">intereses de reservas rusas → Ucrania</span></div>
-        <div class="row"><span><b>2025</b> · OFAC SDN List</span><span class="v">cruza 12.000 entidades sancionadas</span></div>
-        <div class="row"><span><b>2026</b> · Sanciones secundarias a China</span><span class="v">export controls · empresas off-list</span></div>
+      <div class="timeline">
+        <div class="events">
+          <div class="event orange">
+            <div class="year">2012</div>
+            <div class="dot"></div>
+            <div class="country">Irán</div>
+            <div class="what">SWIFT</div>
+          </div>
+          <div class="event red">
+            <div class="year">2014</div>
+            <div class="dot"></div>
+            <div class="country">Rusia</div>
+            <div class="what">Visa &amp; Master</div>
+          </div>
+          <div class="event orange">
+            <div class="year">2018</div>
+            <div class="dot"></div>
+            <div class="country">Irán</div>
+            <div class="what">SWIFT</div>
+          </div>
+          <div class="event gold">
+            <div class="year">2019</div>
+            <div class="dot"></div>
+            <div class="country">Venezuela</div>
+            <div class="what">PDVSA bloqueada</div>
+          </div>
+          <div class="event red">
+            <div class="year">2022</div>
+            <div class="dot"></div>
+            <div class="country">Rusia</div>
+            <div class="what">$300B bloqueados</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="source">OFAC SDN List · CSIS Russia Sanctions Tracker · Atlantic Council Sanctions Map · REPO Act (Public Law 118-50)</div>
   </section>
-
-  <!-- 12 · P2 — Titulares de prensa: BRICS y el carril paralelo -->
-  <section class="slide" data-p="2" data-title="Titulares · BRICS y el carril paralelo">
+  <!-- 11 · P1 — Estrecho de Ormuz: mapa grande + 3 datos clave -->
+  <section class="slide" data-p="1" data-title="Estrecho de Ormuz: el cuello del sistema">
     <div>
-      <div class="kicker"><span class="dot"></span>Pilar 2 · Lo que ya pasó</div>
-      <h2 class="headline">El carril<br/>paralelo, en prensa</h2>
-      <p class="sub">BRICS pasó de bloque retórico a institucionalidad funcional.<br/>CIPS, yuan settlement y NDB ya son noticia operativa, no proyección.</p>
-    </div>
-    <div class="visual">
-      <div class="headlines">
-        <div class="hl big p2" style="--r:1.2deg">
-          <div class="src">South China Morning Post</div>
-          <div class="h">CIPS surpasses ¥175T in annual yuan settlement volume</div>
-          <div class="d">2026</div>
+      <div class="kicker"><span class="dot"></span>El cuello del sistema</div>
+      <h2 class="headline">Estrecho<br/>de Ormuz</h2>
+      <p class="sub" style="font-size:clamp(13px,1.3vw,18px);line-height:1.4;margin-top:16px;max-width:600px">
+        <b style="color:#ff8c00">~20%</b> del petróleo mundial · <b style="color:#ff8c00">~21M</b> barriles/día.<br/>
+        <b style="color:#d7ad45">~US$1,6B/día</b> · <b style="color:#d7ad45">~US$600B/año</b> circulan por <b style="color:#ff8c00">33 km</b>.<br/>
+        Una geografía es un activo monetario.
+      </p>
+      <div class="dcards">
+        <div class="dc">
+          <div class="t">Irán amenaza con cerrarlo</div>
+          <div class="m">Minas, misiles, convoyes. Cada amago: spike del crudo <b>+15–30%</b> · inflación global · la Fed retrasa cortes · USD se fortalece corto plazo y empuja al resto a buscar alternativas.</div>
         </div>
-        <div class="hl p2" style="--r:-1.4deg">
-          <div class="src">Al Jazeera</div>
-          <div class="h">Saudi-China oil deals settled outside SWIFT</div>
-          <div class="d">2025</div>
+        <div class="dc">
+          <div class="t">Pipelines bypass desvían 32% del flujo</div>
+          <div class="m">Arabia Saudita East-West <b>~5 Mb/d</b> a Yanbu + EAU Habshan-Fujairah <b>~1,8 Mb/d</b> = <b>~6,8 Mb/d</b> ya no pasan por Ormuz. Reduce el premium geográfico, no la denominación del barril.</div>
         </div>
-        <div class="hl p2" style="--r:.8deg">
-          <div class="src">Reuters</div>
-          <div class="h">Indonesia joins BRICS as 10th full member</div>
-          <div class="d">Ene 2025</div>
-        </div>
-        <div class="hl p2" style="--r:-.6deg">
-          <div class="src">Bloomberg</div>
-          <div class="h">Russia, China sign 30-year gas deal priced in yuan</div>
-          <div class="d">2026</div>
-        </div>
-        <div class="hl wide p2" style="--r:1deg">
-          <div class="src">Folha de São Paulo</div>
-          <div class="h">Cúpula do BRICS em Kazan amplia rede com 9 países parceiros</div>
-          <div class="d">Out 2024</div>
-        </div>
-        <div class="hl p2" style="--r:-1.1deg">
-          <div class="src">Tehran Times</div>
-          <div class="h">Iran-UAE trade via local currencies hits record</div>
-          <div class="d">2025</div>
-        </div>
-        <div class="hl p2" style="--r:.4deg">
-          <div class="src">The Hindu</div>
-          <div class="h">India explores rupee invoicing for Russian crude imports</div>
-          <div class="d">2024</div>
-        </div>
-        <div class="hl p2" style="--r:-.8deg">
-          <div class="src">PBOC</div>
-          <div class="h">CIPS adds 30 new participants in 2025; coverage 119 countries</div>
-          <div class="d">Sep 2025</div>
+        <div class="dc">
+          <div class="t">China factura crudo en yuan</div>
+          <div class="m">Acuerdos Arabia–China y EAU–China en moneda local. Cada barril en yuan = <b>menos demanda estructural</b> de USD para commodities. Petro-yuan como gradiente del fin del petro-dólar.</div>
         </div>
       </div>
     </div>
-    <div class="source">Recortes representativos · 2024-2026 · agenda mediática sobre BRICS, CIPS y yuan · titulares ilustrativos</div>
+    <div class="visual">
+      <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"
+           xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;inset:3% 3% 9% 3%;width:94%;height:88%">
+        <defs>
+          <linearGradient id="ormSea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#08152e"/>
+            <stop offset="100%" stop-color="#020812"/>
+          </linearGradient>
+          <linearGradient id="ormIran" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4a2818" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#28140a" stop-opacity="0.95"/>
+          </linearGradient>
+          <linearGradient id="ormArab" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#4a3818" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#28200a" stop-opacity="0.95"/>
+          </linearGradient>
+          <linearGradient id="ormOilFlow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ff8c00" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#ff8c00" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#ff8c00" stop-opacity="0"/>
+          </linearGradient>
+          <marker id="ormOilArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0,0 L 10,5 L 0,10 z" fill="#ff8c00"/>
+          </marker>
+        </defs>
+
+        <!-- Mar de fondo -->
+        <rect width="800" height="600" fill="url(#ormSea)"/>
+
+        <!-- IRÁN (norte) -->
+        <path d="M -10,-10 L 810,-10 L 810,180
+                 C 770,195 720,210 670,218
+                 C 620,228 580,222 540,238
+                 C 500,248 450,238 400,248
+                 C 350,258 300,253 250,248
+                 C 200,243 150,253 100,263
+                 L -10,278 Z"
+              fill="url(#ormIran)" stroke="#d7432f" stroke-width="1.5" stroke-opacity="0.55"/>
+
+        <!-- PENÍNSULA ARÁBIGA (sur) -->
+        <path d="M -10,610 L 810,610 L 810,480
+                 C 760,470 710,460 680,442
+                 C 660,428 650,423 640,423
+                 L 580,423
+                 C 560,423 540,418 510,428
+                 C 480,438 440,433 400,423
+                 C 360,413 320,418 280,428
+                 C 240,438 200,433 160,423
+                 C 120,413 60,423 -10,438 Z"
+              fill="url(#ormArab)" stroke="#d7ad45" stroke-width="1.5" stroke-opacity="0.55"/>
+
+        <!-- Península de Musandam (Omán) -->
+        <path d="M 580,425
+                 C 575,380 580,335 595,308
+                 C 612,283 632,272 652,272
+                 C 670,275 682,295 687,322
+                 C 692,357 686,398 670,418
+                 C 655,428 640,428 580,425 Z"
+              fill="url(#ormArab)" stroke="#d7ad45" stroke-width="1.5" stroke-opacity="0.7"/>
+
+        <!-- Halo del flujo de petróleo -->
+        <path d="M 50,335 Q 400,310 750,335"
+              stroke="url(#ormOilFlow)" stroke-width="34" fill="none"
+              stroke-linecap="round" opacity="0.45"/>
+
+        <!-- Línea del flujo de petróleo -->
+        <path d="M 70,335 L 720,335"
+              stroke="#ff8c00" stroke-width="3" fill="none"
+              marker-end="url(#ormOilArrow)" opacity="0.95"/>
+
+        <!-- Etiqueta de flujo diario -->
+        <rect x="305" y="290" width="200" height="34" rx="5"
+              fill="rgba(255,140,0,0.18)" stroke="#ff8c00" stroke-width="1.2"/>
+        <text x="405" y="305" text-anchor="middle" fill="#ffc070"
+              font-size="9.5" font-weight="800"
+              font-family="ui-monospace,monospace" letter-spacing="2.5">FLUJO DIARIO</text>
+        <text x="405" y="320" text-anchor="middle" fill="#ffe79b"
+              font-size="14" font-weight="900"
+              font-family="ui-sans-serif">~21M BBL · ~20% MUNDIAL</text>
+
+        <!-- Chokepoint -->
+        <g>
+          <circle cx="630" cy="293" r="50" fill="none"
+                  stroke="#ff4444" stroke-width="2"
+                  stroke-dasharray="4,3" opacity="0.85"/>
+          <circle cx="630" cy="293" r="5" fill="#ff4444"/>
+          <line x1="630" y1="298" x2="630" y2="222"
+                stroke="#ff4444" stroke-width="1" stroke-dasharray="3,3" opacity="0.85"/>
+          <line x1="630" y1="298" x2="630" y2="370"
+                stroke="#ff4444" stroke-width="1" stroke-dasharray="3,3" opacity="0.85"/>
+          <rect x="563" y="153" width="135" height="38" rx="4"
+                fill="rgba(255,68,68,0.2)" stroke="#ff4444" stroke-width="1.2"/>
+          <text x="630" y="170" text-anchor="middle" fill="#ff9c8a"
+                font-size="10" font-weight="800"
+                font-family="ui-monospace,monospace" letter-spacing="2.5">CHOKEPOINT</text>
+          <text x="630" y="186" text-anchor="middle" fill="#ffd0c4"
+                font-size="15" font-weight="900"
+                font-family="ui-sans-serif">33 km</text>
+        </g>
+
+        <!-- Pipeline Saudi East-West (a Yanbu en el Mar Rojo) -->
+        <path d="M 200,440 L 130,470 L 60,500 L -10,518"
+              stroke="#d7ad45" stroke-width="3" stroke-dasharray="6,3"
+              fill="none" opacity="0.9"/>
+        <circle cx="200" cy="440" r="4" fill="#d7ad45"/>
+        <rect x="22" y="528" width="178" height="22" rx="3"
+              fill="rgba(215,173,69,0.2)" stroke="#d7ad45" stroke-width="0.8"/>
+        <text x="111" y="543" text-anchor="middle" fill="#f0d18a"
+              font-size="9.5" font-weight="800"
+              font-family="ui-monospace,monospace" letter-spacing="1.5">→ YANBU · ~5 Mb/d</text>
+
+        <!-- Pipeline UAE Habshan-Fujairah -->
+        <path d="M 540,478 L 650,470 L 720,438"
+              stroke="#d7ad45" stroke-width="3" stroke-dasharray="6,3"
+              fill="none" opacity="0.9"/>
+        <circle cx="540" cy="478" r="4" fill="#d7ad45"/>
+        <rect x="585" y="490" width="190" height="22" rx="3"
+              fill="rgba(215,173,69,0.2)" stroke="#d7ad45" stroke-width="0.8"/>
+        <text x="680" y="505" text-anchor="middle" fill="#f0d18a"
+              font-size="9.5" font-weight="800"
+              font-family="ui-monospace,monospace" letter-spacing="1.5">→ FUJAIRAH · ~1,8 Mb/d</text>
+
+        <!-- 5ta Flota EE.UU. en Bahréin -->
+        <g>
+          <circle cx="270" cy="392" r="10" fill="rgba(191,230,255,0.2)"
+                  stroke="#bfe6ff" stroke-width="1.5"/>
+          <text x="270" y="397" text-anchor="middle"
+                fill="#bfe6ff" font-size="11">⚓</text>
+          <rect x="198" y="411" width="148" height="22" rx="3"
+                fill="rgba(191,230,255,0.14)" stroke="#bfe6ff" stroke-width="0.8"/>
+          <text x="272" y="426" text-anchor="middle" fill="#bfe6ff"
+                font-size="9.5" font-weight="800"
+                font-family="ui-monospace,monospace" letter-spacing="1.5">5TA FLOTA · BAHRÉIN</text>
+        </g>
+
+        <!-- Etiquetas de países -->
+        <text x="400" y="92" text-anchor="middle" fill="#e9e6dc"
+              font-size="38" font-weight="900"
+              font-family="ui-sans-serif" letter-spacing="8" opacity="0.85">IRÁN</text>
+        <text x="160" y="582" fill="#e9e6dc" font-size="15" font-weight="800"
+              font-family="ui-sans-serif" letter-spacing="3" opacity="0.85">ARABIA SAUDITA</text>
+        <text x="475" y="555" fill="#e9e6dc" font-size="15" font-weight="800"
+              font-family="ui-sans-serif" letter-spacing="3" opacity="0.85">EAU</text>
+        <text x="660" y="585" fill="#e9e6dc" font-size="14" font-weight="800"
+              font-family="ui-sans-serif" letter-spacing="2" opacity="0.85">OMÁN</text>
+
+        <!-- Mares -->
+        <text x="380" y="245" text-anchor="middle" fill="#7b9eff"
+              font-size="10" font-style="italic" letter-spacing="2.5"
+              font-family="ui-monospace,monospace" opacity="0.75">GOLFO PÉRSICO</text>
+        <text x="770" y="380" text-anchor="end" fill="#7b9eff"
+              font-size="10" font-style="italic" letter-spacing="2.5"
+              font-family="ui-monospace,monospace" opacity="0.75">GOLFO DE OMÁN</text>
+
+        <!-- Título del mapa -->
+        <text x="20" y="32" fill="#ff8c00" font-size="10.5" font-weight="800"
+              font-family="ui-monospace,monospace" letter-spacing="3">ESTRECHO DE ORMUZ · MAYO 2026</text>
+      </svg>
+    </div>
+    <div class="source">EIA · IEA Oil Market Report · CSIS Energy Security · Lloyd's market reports · CBO Monthly Budget Review FY2025</div>
+  </section>
+  <!-- 12 · Transición — La guerra monetaria -->
+  <section class="slide bands-slide" data-p="2" data-title="La guerra monetaria">
+    <div>
+      <div class="kicker"><span class="dot"></span>El frente global</div>
+      <h2 class="headline">La guerra<br/>monetaria</h2>
+    </div>
+    <div class="newsbands">
+      <div class="nb p1">
+        <div class="ns">Reuters<span class="nd">2024</span></div>
+        <div class="nh">Occidente congela US$300B en reservas rusas; REPO Act se activa</div>
+      </div>
+      <div class="nb p2">
+        <div class="ns">Reuters<span class="nd">2026</span></div>
+        <div class="nh">Rusia y China acuerdan 30 años de gas denominado en yuanes</div>
+      </div>
+      <div class="nb p3">
+        <div class="ns">Wall Street Journal<span class="nd">2024</span></div>
+        <div class="nh">Bancos centrales compran oro al mayor ritmo en 55 años</div>
+      </div>
+    </div>
+    <div class="source">Wall Street Journal · Reuters · 2025-2026 · titulares representativos</div>
   </section>
 
   <!-- 13 · P2 — El Yuan como moneda global -->
@@ -931,11 +1399,51 @@
         <div class="f"><span class="n">1.93%</span><span class="t">CNY en reservas globales (Q3 2025)</span><span class="src">IMF COFER · pico fue ~2.83% en 2022</span></div>
         <div class="f"><span class="n">3%</span><span class="t">CNY en pagos SWIFT (jun-2025)</span><span class="src">SWIFT RMB Tracker · vs USD 48%, EUR 24%</span></div>
         <div class="f"><span class="n">US$24.5T</span><span class="t">Volumen anual CIPS 2024 (+43% YoY)</span><span class="src">PBOC · CIPS Annual Report</span></div>
-        <div class="f"><span class="n">30×</span><span class="t">CIPS ~$60B/día · CHIPS ~$1.800B/día</span><span class="src">CIPS vs CHIPS daily settlement</span></div>
+        <div class="f"><span class="n">30×</span><span class="t">CIPS ~$60B/día · CHIPS ~$1.800B/día</span><span class="src">Liquidación diaria CIPS vs CHIPS</span></div>
       </div>
       <div class="bigword">YUAN</div>
     </div>
     <div class="source">IMF COFER Q3 2025 · SWIFT RMB Tracker jun-2025 · PBOC CIPS Annual Report 2024 · BBVA Research</div>
+  </section>
+
+  <!-- 8 · P2 — Yuan + CIPS + petroyuan + M2 -->
+  <section class="slide" data-p="2" data-title="Yuan + CIPS + petroyuan">
+    <div>
+      <div class="kicker"><span class="dot"></span>China construye el carril</div>
+      <h2 class="headline">Yuan + CIPS<br/>+ petroyuan</h2>
+      <p class="sub">El carril paralelo crece. Pero la masa monetaria también.</p>
+    </div>
+    <div class="visual">
+      <div class="facts">
+        <div class="f"><span class="n">~US$43T</span><span class="t">M2 China (~315T yuanes)</span><span class="src">PBOC · 2024</span></div>
+        <div class="f"><span class="n">~US$21T</span><span class="t">M2 EE.UU.</span><span class="src">Fed H.6 · 2024</span></div>
+        <div class="f"><span class="n">47% / 4.5%</span><span class="t">USD vs Yuan en SWIFT</span><span class="src">SWIFT RMB Tracker 2024</span></div>
+        <div class="f"><span class="n">~6×</span><span class="t">Crecimiento M2 China 2008-2024</span><span class="src">PBOC series largas</span></div>
+      </div>
+      <div class="bigword">BEIJING</div>
+    </div>
+    <div class="source">PBOC · CIPS Quarterly · SWIFT RMB Tracker · Shanghai INE</div>
+  </section>
+
+  <!-- 16 · P2 — BRICS+: países y capital previsto -->
+  <section class="slide" data-p="2" data-title="BRICS+: países y capital previsto">
+    <div>
+      <div class="kicker"><span class="dot"></span>Pilar 2 · BRICS / China</div>
+      <h2 class="headline">BRICS+</h2>
+      <p class="sub">10 países plenos · <b style="color:#ff8c00">~28% PIB global nominal</b> · <b style="color:#ff8c00">~36% PIB PPP</b> (mayor que G7) · <b style="color:#ff8c00">~45% población mundial</b>.<br/>Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.</p>
+    </div>
+    <div class="visual">
+      <div class="buyers">
+        <div class="row"><span><b>2010 · Fundadores</b></span><span class="v">Brasil · Rusia · India · China · Sudáfrica</span></div>
+        <div class="row"><span><b>2024 · Expansión BRICS+</b></span><span class="v">Egipto · Etiopía · Irán · EAU</span></div>
+        <div class="row"><span><b>2025 · Indonesia</b></span><span class="v">4to país más poblado del mundo</span></div>
+        <div class="row"><span><b>Socios (partner countries)</b></span><span class="v">Bielorrusia · Bolivia · Cuba · Kazajistán · Tailandia · Malasia · Nigeria · Uganda · Uzbekistán</span></div>
+        <div class="row"><span><b>NDB · Banco de Desarrollo BRICS</b></span><span class="v">US$100B autorizados · US$50B suscritos</span></div>
+        <div class="row"><span><b>CRA · Reserva contingente</b></span><span class="v">US$100B (China $41B · BRI $18B c/u)</span></div>
+        <div class="row"><span><b>BRICS Pay / Bridge</b></span><span class="v">CBDC + monedas locales (pilotos)</span></div>
+      </div>
+    </div>
+    <div class="source">BRICS Summit Kazán 2024 · BRICS Summit Rio 2025 · NDB & CRA founding agreements 2014 · IMF / WB</div>
   </section>
 
   <!-- 11 · P2 — Todas fiat, emisión infinita + chart poder adquisitivo -->
@@ -1081,78 +1589,38 @@
     <div class="source">CPI nacionales (BLS / Eurostat / SNB / BoJ / ONS) · BCRA series largas · estimaciones FRED · datos 1971-2025</div>
   </section>
 
-  <!-- 8 · P2 — Yuan + CIPS + petroyuan + M2 -->
-  <section class="slide" data-p="2" data-title="Yuan + CIPS + petroyuan">
-    <div>
-      <div class="kicker"><span class="dot"></span>China construye el carril</div>
-      <h2 class="headline">Yuan + CIPS<br/>+ petroyuan</h2>
-      <p class="sub">El carril paralelo crece. Pero la masa monetaria también.</p>
-    </div>
-    <div class="visual">
-      <div class="facts">
-        <div class="f"><span class="n">~US$43T</span><span class="t">M2 China (~315T yuanes)</span><span class="src">PBOC · 2024</span></div>
-        <div class="f"><span class="n">~US$21T</span><span class="t">M2 EE.UU.</span><span class="src">Fed H.6 · 2024</span></div>
-        <div class="f"><span class="n">47% / 4.5%</span><span class="t">USD vs Yuan en SWIFT</span><span class="src">SWIFT RMB Tracker 2024</span></div>
-        <div class="f"><span class="n">~6×</span><span class="t">Crecimiento M2 China 2008-2024</span><span class="src">PBOC series largas</span></div>
-      </div>
-      <div class="bigword">BEIJING</div>
-    </div>
-    <div class="source">PBOC · CIPS Quarterly · SWIFT RMB Tracker · Shanghai INE</div>
-  </section>
-
-  <!-- 16 · P2 — BRICS+: países y capital previsto -->
-  <section class="slide" data-p="2" data-title="BRICS+: países y capital previsto">
-    <div>
-      <div class="kicker"><span class="dot"></span>Pilar 2 · BRICS / China</div>
-      <h2 class="headline">BRICS+</h2>
-      <p class="sub">10 países plenos · <b style="color:#ff8c00">~28% PIB global nominal</b> · <b style="color:#ff8c00">~36% PIB PPP</b> (mayor que G7) · <b style="color:#ff8c00">~45% población mundial</b>.<br/>Institución propia: NDB con <b style="color:#d7ad45">US$100B</b> de capital autorizado.</p>
-    </div>
-    <div class="visual">
-      <div class="buyers">
-        <div class="row"><span><b>2010 · Fundadores</b></span><span class="v">Brasil · Rusia · India · China · Sudáfrica</span></div>
-        <div class="row"><span><b>2024 · Expansión BRICS+</b></span><span class="v">Egipto · Etiopía · Irán · EAU</span></div>
-        <div class="row"><span><b>2025 · Indonesia</b></span><span class="v">4to país más poblado del mundo</span></div>
-        <div class="row"><span><b>Socios (partner countries)</b></span><span class="v">Bielorrusia · Bolivia · Cuba · Kazajistán · Tailandia · Malasia · Nigeria · Uganda · Uzbekistán</span></div>
-        <div class="row"><span><b>NDB · Banco de Desarrollo BRICS</b></span><span class="v">US$100B autorizados · US$50B suscritos</span></div>
-        <div class="row"><span><b>CRA · Reserva contingente</b></span><span class="v">US$100B (China $41B · BRI $18B c/u)</span></div>
-        <div class="row"><span><b>BRICS Pay / Bridge</b></span><span class="v">CBDC + monedas locales (pilotos)</span></div>
-      </div>
-    </div>
-    <div class="source">BRICS Summit Kazán 2024 · BRICS Summit Rio 2025 · NDB & CRA founding agreements 2014 · IMF / WB</div>
-  </section>
-
   <!-- 17 · P3 — Titulares de prensa: Oro y Bitcoin -->
   <section class="slide" data-p="3" data-title="Titulares · Oro y Bitcoin">
     <div>
       <div class="kicker"><span class="dot"></span>Pilar 3 · Activos neutrales en prensa</div>
       <h2 class="headline">La categoría<br/>neutral, en prensa</h2>
-      <p class="sub">Bancos centrales acumulan oro. Estados anuncian reservas de Bitcoin.<br/>Wall Street compra vía ETF. La narrativa de hedge entra al mainstream.</p>
+      <p class="sub">Bancos centrales acumulan oro. Estados anuncian reservas de Bitcoin.<br/>Wall Street compra vía ETF. La narrativa de cobertura se vuelve agenda central.</p>
     </div>
     <div class="visual">
       <div class="headlines">
         <div class="hl big p3" style="--r:-1deg">
           <div class="src">Wall Street Journal</div>
-          <div class="h">Central banks buy gold at fastest pace in 55 years</div>
+          <div class="h">Los bancos centrales compran oro al ritmo más alto en 55 años</div>
           <div class="d">2024</div>
         </div>
         <div class="hl p3" style="--r:1.5deg">
           <div class="src">Bloomberg</div>
-          <div class="h">Bitcoin ETFs cross $50B AUM in record-breaking launch</div>
+          <div class="h">Los ETFs spot de Bitcoin superan US$50B en AUM en un lanzamiento récord</div>
           <div class="d">Ene 2024</div>
         </div>
         <div class="hl p3" style="--r:-.6deg">
           <div class="src">Reuters</div>
-          <div class="h">Trump signs executive order establishing US Strategic Bitcoin Reserve</div>
+          <div class="h">Trump firma orden ejecutiva: EE.UU. crea Reserva Estratégica de Bitcoin</div>
           <div class="d">Mar 2025</div>
         </div>
         <div class="hl p3" style="--r:1deg">
           <div class="src">WGC Survey</div>
-          <div class="h">76% of central banks expect higher gold allocation in 5 years</div>
+          <div class="h">76% de los bancos centrales espera mayor asignación a oro en 5 años</div>
           <div class="d">2025</div>
         </div>
         <div class="hl wide p3" style="--r:-1.2deg">
           <div class="src">Nikkei Asia</div>
-          <div class="h">Japan's Metaplanet adopts Bitcoin treasury strategy, follows Strategy playbook</div>
+          <div class="h">Metaplanet adopta estrategia de tesorería en Bitcoin siguiendo el modelo de Strategy</div>
           <div class="d">2025</div>
         </div>
         <div class="hl p3" style="--r:.8deg">
@@ -1162,12 +1630,12 @@
         </div>
         <div class="hl p3" style="--r:-.4deg">
           <div class="src">Pakistan Today</div>
-          <div class="h">Pakistan unveils Strategic Bitcoin Reserve framework</div>
+          <div class="h">Pakistán presenta marco para una Reserva Estratégica de Bitcoin</div>
           <div class="d">2026</div>
         </div>
         <div class="hl p3" style="--r:1.3deg">
           <div class="src">Financial Times</div>
-          <div class="h">Gold overtakes Treasuries as #2 global reserve asset for first time in 30 years</div>
+          <div class="h">El oro supera a los Treasuries como #2 activo global de reserva por primera vez en 30 años</div>
           <div class="d">2025</div>
         </div>
       </div>
@@ -1262,12 +1730,12 @@
     <div class="source">Bitcoin Whitepaper (Satoshi, 2008) · consenso de red</div>
   </section>
 
-  <!-- 18 · P3 — Empresas con Bitcoin en treasury (verificado may-2026) -->
-  <section class="slide" data-p="3" data-title="Empresas con Bitcoin en treasury">
+  <!-- 22 · P3 — Empresas con Bitcoin en tesorería (verificado may-2026) -->
+  <section class="slide" data-p="3" data-title="Empresas con Bitcoin en tesorería">
     <div>
       <div class="kicker"><span class="dot"></span>Treasuries corporativos · verificado mayo 2026</div>
       <h2 class="headline">Empresas con BTC en balance</h2>
-      <p class="sub">Empresas públicas combinadas: <b style="color:#ff8c00">~1.188M BTC</b> (~5.6% del supply en circulación).<br/>Strategy es el mayor holder corporativo del mundo — adquirió 3.376 BTC el 27-abr-2026.</p>
+      <p class="sub">Empresas públicas combinadas: <b style="color:#ff8c00">~1.188M BTC</b> (~5,6% de la oferta en circulación).<br/>Strategy es el mayor tenedor corporativo del mundo — adquirió 3.376 BTC el 27-abr-2026.</p>
     </div>
     <div class="visual">
       <div class="buyers">
@@ -1278,7 +1746,7 @@
         <div class="row"><span><b>Bullish</b> (BLSH)</span><span class="v">~24.300 BTC</span></div>
         <div class="row"><span><b>Tesla</b></span><span class="v">~11.500 BTC</span></div>
         <div class="row"><span><b>Block · GameStop · Semler · Riot · CleanSpark · Coinbase</b></span><span class="v">treasuries adicionales</span></div>
-        <div class="row" style="background:rgba(43,102,255,.08);border-color:rgba(43,102,255,.3)"><span><b>Nota:</b> BlackRock IBIT (~775K BTC) es un ETF spot, NO treasury corporativo · ver slide 19</span><span class="v">→</span></div>
+        <div class="row" style="background:rgba(43,102,255,.08);border-color:rgba(43,102,255,.3)"><span><b>Nota:</b> BlackRock IBIT (~775K BTC) es un ETF spot, NO tesorería corporativa · ver slide 23</span><span class="v">→</span></div>
       </div>
     </div>
     <div class="source">SEC filings 10-K/8-K · bitcointreasuries.net · bitbo.io · CoinMarketCap Public Bitcoin Treasuries · datos verificados 12-may-2026</div>
@@ -1319,7 +1787,7 @@
           <div class="bar"><span class="n">ARK 21Shares</span><div class="barwrap"><div class="b" style="width:13%"></div></div><span class="v">$6.5B</span></div>
           <div class="bar"><span class="n">Bitwise BITB</span><div class="barwrap"><div class="b" style="width:12%"></div></div><span class="v">$6B</span></div>
           <div class="bar"><span class="n">Invesco · WisdomTree · Franklin · VanEck · Hashdex · Valkyrie</span><div class="barwrap"><div class="b" style="width:25%"></div></div><span class="v">~$12.5B</span></div>
-          <div class="note">vs Strategy treasury corporativo ~819K BTC · ETFs en conjunto ya superaron al mayor holder corporativo del mundo</div>
+          <div class="note">vs tesorería corporativa de Strategy ~819K BTC · los ETFs en conjunto ya superaron al mayor tenedor corporativo del mundo</div>
         </div>
       </div>
     </div>
@@ -1329,23 +1797,23 @@
   <!-- 24 · P3 — Estados con Bitcoin (refinado, sin ETFs) -->
   <section class="slide" data-p="3" data-title="Estados con Bitcoin">
     <div>
-      <div class="kicker"><span class="dot"></span>Soberanos como holders</div>
+      <div class="kicker"><span class="dot"></span>Soberanos como tenedores</div>
       <h2 class="headline">Estados<br/>en la red</h2>
-      <p class="sub">Reservas estratégicas, decomisos judiciales, minería estatal y compras programáticas.<br/>El soberano deja de ser solo regulador y pasa a ser <b style="color:#d7ad45">holder</b>.</p>
+      <p class="sub">Reservas estratégicas, decomisos judiciales, minería estatal y compras programáticas.<br/>El soberano deja de ser solo regulador y pasa a ser <b style="color:#d7ad45">tenedor</b>.</p>
     </div>
     <div class="visual">
       <div class="buyers">
-        <div class="row"><span><b>EE.UU.</b> · Strategic Bitcoin Reserve (EO mar-2025)</span><span class="v">~325K BTC</span></div>
-        <div class="row"><span><b>Bulgaria</b> · seizure PlusToken 2017 (debatido)</span><span class="v">~213K BTC</span></div>
+        <div class="row"><span><b>EE.UU.</b> · Reserva Estratégica de Bitcoin (EO mar-2025)</span><span class="v">~325K BTC</span></div>
+        <div class="row"><span><b>Bulgaria</b> · decomiso PlusToken 2017 (debatido)</span><span class="v">~213K BTC</span></div>
         <div class="row"><span><b>China</b> · decomisos sin marco formal*</span><span class="v">~190K BTC</span></div>
         <div class="row"><span><b>Reino Unido</b> · BTC confiscado en investigaciones</span><span class="v">~61K BTC</span></div>
         <div class="row"><span><b>Bhután</b> · minería estatal hidroeléctrica</span><span class="v">~13K BTC</span></div>
         <div class="row"><span><b>El Salvador</b> · 1 BTC/día desde 2021</span><span class="v">~6K+ BTC</span></div>
-        <div class="row"><span><b>Pakistán</b> · Strategic Bitcoin Reserve (anunciada 2026)</span><span class="v">framework</span></div>
+        <div class="row"><span><b>Pakistán</b> · Reserva Estratégica de Bitcoin (anunciada 2026)</span><span class="v">marco</span></div>
         <div class="row" style="background:rgba(43,102,255,.08);border-color:rgba(43,102,255,.3)"><span><b>Soberanos vía ETF (13F)</b> · Mubadala (UAE), Wisconsin Investment Board</span><span class="v">posiciones spot</span></div>
       </div>
     </div>
-    <div class="source">*China sin marco formal de reserva estratégica · USDOJ filings · EO Trump 6-mar-2025 · SEC 13F Q1 2026 · Chainalysis Strategic Reserves Tracker</div>
+    <div class="source">*China sin marco formal de reserva estratégica · expedientes del USDOJ · Orden ejecutiva de Trump 6-mar-2025 · SEC 13F Q1 2026 · Chainalysis · seguimiento de reservas estratégicas</div>
   </section>
 
   <!-- 14 · Cierre analítico -->
@@ -1353,7 +1821,7 @@
     <div>
       <div class="kicker"><span class="dot"></span>Síntesis</div>
       <h2 class="headline">Tres tendencias<br/>en paralelo</h2>
-      <p class="sub"><b>1.</b> Competencia de monedas estatales (BRICS, CIPS, petroyuan).<br/><b>2.</b> El dólar defiende posición con SWIFT y poder militar.<br/><b>3.</b> Activos neutrales (oro físico, Bitcoin digital) capturan demanda de hedge.</p>
+      <p class="sub"><b>1.</b> Competencia de monedas estatales (BRICS, CIPS, petroyuan).<br/><b>2.</b> El dólar defiende posición con SWIFT y poder militar.<br/><b>3.</b> Activos neutrales (oro físico, Bitcoin digital) capturan demanda de cobertura.</p>
     </div>
     <div class="visual"><div class="split"><div style="color:var(--gold)">Au</div><div style="color:var(--orange)">₿</div></div><div class="bigword">NEUTRALIDAD</div></div>
     <div class="source">Inconfiscables, libres, con oferta verificable. Esa es la categoría que aprecia.</div>
@@ -1370,7 +1838,7 @@
 
 <div class="menu" id="menu" role="dialog" aria-modal="true">
   <div class="menu-head">
-    <div class="menu-title"><small>Neura · 25 slides</small>¿Muere el patrón dólar?</div>
+    <div class="menu-title"><small>Neura · 25 slides</small>Termina el patrón dolar?</div>
     <button class="menu-close" id="menuClose">CERRAR ✕</button>
   </div>
   <div class="pillars">
